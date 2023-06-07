@@ -1,0 +1,11 @@
+{
+  "name": "cabmanager",
+  "version": "1.0.0",
+  "description": "Cab Management built under Afour",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "Pratham Bhatia",
+  "license": "ISC"
+}
