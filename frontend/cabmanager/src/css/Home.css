@@ -1,7 +1,7 @@
 .formInput {}
 
-.TaxiGif {
-    @media (max-width:899px) {
+@media (max-width:899px) {
+    .TaxiGif {
         display: none;
         visibility: hidden;
         width: 0px;

@@ -5,6 +5,7 @@ import Login from './registrationComponents/Login';
 
 export default function Home() {
     const [current, setCurrent] = useState(0);
+    //Change this url to the api call in backend.
     const [logURL, setURL] = useState("/adminlogin")
     useEffect(() => {
         if (current) {
