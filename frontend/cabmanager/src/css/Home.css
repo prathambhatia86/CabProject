@@ -1,0 +1,9 @@
+.formInput {}
+
+.TaxiGif {
+    @media (max-width:899px) {
+        display: none;
+        visibility: hidden;
+        width: 0px;
+    }
+}
