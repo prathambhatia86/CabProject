@@ -1,14 +1,14 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 import Home from './components/Home'
-import Driver from './components/driverComponents/Driver';
+import AdminHomepage from './components/adminHomepage';
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
   }, {
     path: "/homepage",
-    element: <Driver />,
+    element: <AdminHomepage />,
   },
   {
     path: ""
