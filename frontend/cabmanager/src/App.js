@@ -7,9 +7,12 @@ const router = createBrowserRouter([
     path: "/",
     element: <Home />,
   }, {
-    path: "/driver",
+    path: "/homepage",
     element: <Driver />,
   },
+  {
+    path: ""
+  }
 ]);
 export default function App() {
   return (
