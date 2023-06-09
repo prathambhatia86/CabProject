@@ -8,17 +8,18 @@ const router = createBrowserRouter([
     element: <Home />,
   }, {
     path: "/homepage",
-    element: <AdminHomepage />,
+    element: <AdminHomepage  />,
   },
   {
     path: ""
   }
 ]);
 export default function App() {
+  
   return (
     <div>
       <React.StrictMode>
-        <RouterProvider router={router} />
+        <RouterProvider router={router}  />
       </React.StrictMode>
     </div>
   )
