@@ -29,10 +29,12 @@ export default function AdminHomepage(props) {
     changeSelectedState('4');
     changeNavState(false);
   }
-  
+  let width=window.innerWidth;
+  if (width>=1250)
+  width=250
   return (
     <div>
-      <div id="mySidebar" className={`${styles.sidebar}`} style={{ display: (navState === false ? 'none':'block') }}>
+      <div id="mySidebar" className={`${styles.sidebar}`} style={{ width: (navState === true ? width:'0px') }}>
         <i className={`${styles.closebtn}`} onClick={toggleNav}>×</i>
         <br />
         <div onClick={driverDetails} >enter driver details</div>
