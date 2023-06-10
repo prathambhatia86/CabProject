@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form, Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
 
@@ -6,15 +6,19 @@ export default function Login(props) {
     const navigate = useNavigate();
     const handleSubmit = event => {
         event.preventDefault();
-        axios.get(props.action, {
-        }).then(({ data }) => {
-            /*if (!data.isAuth) {
-                alert(data.error);
-            }*/
-            console.log(data);
-            navigate('/homepage');
+        axios.post(props.action, formdata).then(({ data }) => {
+            props.curr ? navigate('/driver?id=' + formdata.email) : navigate('/homepage');
+        }).catch((err) => {
+            alert(err.response.data.message);
         });
     };
+    const [formdata, setFormData] = useState({ email: "", password: "" });
+    const handleChange = (event) => {
+        let newData = ({
+            ...formdata, [event.target.name]: event.target.value
+        });
+        setFormData(newData);
+    }
     return (
         <div className="container py-5 h-100" >
             <div className="row d-flex justify-content-center align-items-center h-100" >
@@ -25,12 +29,12 @@ export default function Login(props) {
                                 <h3 className="mb-5">Log in As {props.curr ? "a Driver" : "an Admin"}</h3>
 
                                 <div className="form-outline mb-4">
-                                    <input type="email formInput" id="typeEmailX-2" className="form-control form-control-lg" />
+                                    <input type="email formInput" id="typeEmailX-2" className="form-control form-control-lg" value={formdata.email} name="email" onChange={handleChange} required />
                                     <label className="form-label" htmlFor="typeEmailX-2">Email</label>
                                 </div>
 
                                 <div className="form-outline mb-4">
-                                    <input type="password" id="typePasswordX-2" className="form-control form-control-lg" />
+                                    <input type="password" id="typePasswordX-2" className="form-control form-control-lg" name="password" value={formdata.password} onChange={handleChange} required />
                                     <label className="form-label" htmlFor="typePasswordX-2">Password</label>
                                 </div>
 
