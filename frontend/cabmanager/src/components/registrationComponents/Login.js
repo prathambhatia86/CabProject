@@ -7,7 +7,7 @@ export default function Login(props) {
     const handleSubmit = event => {
         event.preventDefault();
         axios.post(props.action, formdata).then(({ data }) => {
-            props.curr ? navigate('/driver?id=' + formdata.email) : navigate('/homepage');
+            props.curr ? navigate('/driver/' + formdata.email) : navigate('/homepage');
         }).catch((err) => {
             alert(err.response.data.message);
         });

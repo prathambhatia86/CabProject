@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser());
 
 app.post('/adminlogin', loginController.adminLogin);
+app.post('/driverlogin', loginController.driverLogin);
 
 const port = 5000;
 app.listen(port, () => console.log(`App backend listening on port : ${port}!`));
