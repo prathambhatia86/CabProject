@@ -9,21 +9,22 @@ export default function AdminHomepage(props) {
   const [selectedState, changeSelectedState] = useState('1')
   const toggleNav = () => {
     changeNavState((prev) => {
-
       return (!prev);
     });
+  }
+
+  const sidebarReset = () => {
+    changeNavState(false);
+    if (document.getElementById('driverSidebar').classList.contains("show")) document.getElementById('driverSidebar').classList.toggle("show");
+    if (document.getElementById('cabSidebar').classList.contains("show")) document.getElementById('cabSidebar').classList.toggle("show")
   }
   const driverDetails = () => {
     changeSelectedState('1');
     document.getElementById('driverSidebar').classList.toggle("show");
-    //Commented out for Now
-    //changeNavState(false);
   }
   const cabDetails = () => {
     changeSelectedState('2');
     document.getElementById('cabSidebar').classList.toggle("show");
-    //Commented out for Now
-    //changeNavState(false);
   }
   const driverChange = () => {
     changeSelectedState('3');
@@ -42,34 +43,34 @@ export default function AdminHomepage(props) {
         <i className={`${styles.closebtn}`} onClick={toggleNav}>×</i>
         <br />
         <div>
-          <div onClick={driverDetails} >
+          <span onClick={driverDetails} >
             Driver
-          </div>
+          </span>
           <div className="container-fluid collapse row" id="driverSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
-            <div className="col">
+            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
               Click me!
             </div>
-            <div className="col">
+            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
               Click me!
             </div>
-            <div className="col">
+            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
               Click me!
             </div>
           </div>
         </div>
         <br />
         <div className="container">
-          <div onClick={cabDetails}>
+          <span onClick={cabDetails}>
             Cab
-          </div>
+          </span>
           <div className="container-fluid collapse row" id="cabSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
-            <div className="col">
+            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
               Click me!
             </div>
-            <div className="col">
+            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
               Click me!
             </div>
-            <div className="col">
+            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
               Click me!
             </div>
           </div>

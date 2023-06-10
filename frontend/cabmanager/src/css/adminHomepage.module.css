@@ -30,7 +30,7 @@ body {
 }
 
 .sidebar div:hover {
-  color: blue;
+  color: rgb(85, 85, 255);
 }
 
 .sidebar .closebtn {
@@ -40,8 +40,8 @@ body {
   font-size: 36px;
   margin-left: 50px;
   cursor: pointer;
-
 }
+
 
 .openbtn {
   font-size: 20px;
@@ -50,6 +50,8 @@ body {
   color: black;
   padding: 10px 15px;
   border: 10px;
+  border-bottom-right-radius: 50%;
+  border-top-right-radius: 50%;
 }
 
 .openbtn:hover {
@@ -57,9 +59,14 @@ body {
   color: beige;
 }
 
+
 #main {
   transition: margin-left .5s;
   padding: 16px;
+}
+
+div.subMenuOptions{
+  font-size:18px;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -74,3 +81,4 @@ body {
     font-size: 18px;
   }
 }
+

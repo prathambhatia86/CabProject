@@ -8,7 +8,7 @@ export default function Cab(props) {
         <div className="row d-flex justify-content-center  h-100">
           <div className="col-xl-9">
 
-            <div className="card" style={{ borderRadius: '15px', boxShadow: '2.5px 1.5px 1.5px rgb(152, 152, 8)' }} >
+            <div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }} >
               <h1 className="text-yellow mb-4 text-center py-4" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Enter Cab Details</h1>
               <div className="card-body">
 

@@ -8,11 +8,11 @@ export default function Driver(props) {
         <div className="row d-flex justify-content-center  h-100">
           <div className="col-xl-9">
 
-            <div className="card" style={{ borderRadius: '15px' }}>
+            <div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
               <h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Enter Driver Details</h1>
               <div className="card-body">
 
-                <div className="row align-items-center pt-4 pb-3">
+                <div className="row align-items-center pt-2 pb-3">
                   <div className="col-md-3 ps-5">
 
                     <h6 className="mb-0 fw-bolder">Driver name</h6>
@@ -54,8 +54,6 @@ export default function Driver(props) {
 
                   </div>
                 </div>
-
-                <hr className="mx-n3" />
 
                 <hr className="mx-n3" />
 

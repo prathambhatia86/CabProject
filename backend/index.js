@@ -4,17 +4,11 @@ const cookieParser = require("cookie-parser");
 const path = require('path');
 const loginController = require('./controllers/loginController');
 const db = require('./config/db');
+const cors = require('cors');
 db();
 require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
 app.use(express.json())
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-    );
-    next();
-});
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser());
