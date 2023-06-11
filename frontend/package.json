@@ -4,7 +4,9 @@
   "description": "Cab Management built under Afour",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "test": "nodemon index.js",
+    "build": "npm run build --prefix cabmanager",
+    "start":"npm start --prefix cabmanager"
   },
   "author": "Pratham Bhatia",
   "license": "ISC"

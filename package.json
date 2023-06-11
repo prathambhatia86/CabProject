@@ -1,0 +1,22 @@
+{
+  "name": "cabproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm start --prefix backend",
+    "client": "npm start --prefix frontend",
+    "test": "concurrently 'npm:server' 'npm:client' ",
+    "deploy": "npm run build --prefix frontend && npm start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prathambhatia86/CabProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prathambhatia86/CabProject/issues"
+  },
+  "homepage": "https://github.com/prathambhatia86/CabProject#readme"
+}
