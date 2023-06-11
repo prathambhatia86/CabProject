@@ -1,4 +1,39 @@
+import { useState } from "react";
+const API_URL='http://localhost:5000';
 export default function Driver(props) {
+  const [email,changeEmail]=useState("");
+  const [password,changePassword]=useState("");
+  const [name,changeName]=useState("");
+   const [contact,changeContact]=useState("");
+   const nameAltered=(event)=>{
+      changeName(event.target.value);
+   }
+   const emailAltered=(event)=>{
+    changeEmail(event.target.value);
+   }
+   const passwordAltered=(event)=>{
+    changePassword(event.target.value);
+   }
+   const contactAltered=(event)=>{
+    changeContact(event.target.value);
+   }
+   const submitResponse=async(event)=>{
+    const values={
+        name:name,
+        email:email,
+        password:password,
+        contact:contact,
+    }
+    return await fetch(`${API_URL}/driverRegistration`,{
+      method:"post",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(values),
+    }
+    )
+  }
+  
   if (props.select !== '1')
     return ('');
   return (
@@ -20,27 +55,15 @@ export default function Driver(props) {
                   </div>
                   <div className="col-md-9 pe-5">
 
-                    <input type="text" className="form-control form-control-lg" />
+                    <input type="text" className="form-control form-control-lg" onChange={nameAltered} />
 
                   </div>
                 </div>
 
                 <hr className="mx-n3" />
 
-                <div className="row align-items-center py-3">
-                  <div className="col-md-3 ps-5">
 
-                    <h6 className="mb-0 fw-bolder">Driver ID-number</h6>
-
-                  </div>
-                  <div className="col-md-9 pe-5">
-
-                    <input type="text" className="form-control form-control-lg" />
-
-                  </div>
-                </div>
-
-                <hr className="mx-n3" />
+                
 
                 <div className="row align-items-center py-3">
                   <div className="col-md-3 ps-5">
@@ -50,7 +73,21 @@ export default function Driver(props) {
                   </div>
                   <div className="col-md-9 pe-5">
 
-                    <input type="email" className="form-control form-control-lg" />
+                    <input type="email" className="form-control form-control-lg" onChange={emailAltered} />
+
+                  </div>
+                </div>
+
+                <hr className="mx-n3" />
+                <div className="row align-items-center py-3">
+                  <div className="col-md-3 ps-5">
+
+                    <h6 className="mb-0 fw-bolder">Driver password</h6>
+
+                  </div>
+                  <div className="col-md-9 pe-5">
+
+                    <input type="password" className="form-control form-control-lg" onChange={passwordAltered}/>
 
                   </div>
                 </div>
@@ -65,7 +102,7 @@ export default function Driver(props) {
                   </div>
                   <div className="col-md-9 pe-5">
 
-                    <input type="text" className="form-control form-control-lg" />
+                    <input type="text" className="form-control form-control-lg" onChange={contactAltered} />
 
                   </div>
                 </div>
@@ -73,7 +110,7 @@ export default function Driver(props) {
                 <hr className="mx-n3" />
 
                 <div className="px-5 py-4 text-center">
-                  <button type="submit" className="btn btn-primary btn-lg" >Submit</button>
+                  <button type="submit" className="btn btn-primary btn-lg" onClick={submitResponse}>Submit</button>
                 </div>
 
               </div>

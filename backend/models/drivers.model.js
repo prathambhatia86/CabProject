@@ -7,12 +7,15 @@ const Driver_collection = require('mongoose').model("Drivers", new Schema({
     email: {
         type: String,
         required: true
-    }, password: {
+    }, 
+    password: {
         type: String,
         required: true
-    }, contact: {
+    }, 
+    contact: {
         type: Number,
         required: true
     }
 }));
+
 module.exports = Driver_collection;

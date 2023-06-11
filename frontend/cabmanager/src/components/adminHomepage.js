@@ -20,11 +20,11 @@ export default function AdminHomepage(props) {
   }
   const driverDetails = () => {
     changeSelectedState('1');
-    document.getElementById('driverSidebar').classList.toggle("show");
+  
   }
   const cabDetails = () => {
     changeSelectedState('2');
-    document.getElementById('cabSidebar').classList.toggle("show");
+
   }
   const driverChange = () => {
     changeSelectedState('3');
@@ -39,14 +39,14 @@ export default function AdminHomepage(props) {
     width = 250
   return (
     <div>
-      <div id="mySidebar" className={`${styles.sidebar}`} style={{ width: (navState === true ? width : '0px') }}>
+      <div id="mySidebar" className={`${styles.sidebar}  ` } style={{ width: (navState === true ? width : '0px') }}>
         <i className={`${styles.closebtn}`} onClick={toggleNav}>×</i>
         <br />
         <div>
-          <span onClick={driverDetails} >
-            Driver
+          <span onClick={driverDetails} data-bs-toggle="collapse" data-bs-target="#driverSidebar">
+            Driver ↧
           </span>
-          <div className="container-fluid collapse row" id="driverSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
+          <div className="container-fluid collapse row " id="driverSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
             <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
               Click me!
             </div>
@@ -60,8 +60,8 @@ export default function AdminHomepage(props) {
         </div>
         <br />
         <div className="container">
-          <span onClick={cabDetails}>
-            Cab
+          <span onClick={cabDetails} data-bs-toggle="collapse" data-bs-target="#cabSidebar">
+            Cab ↧
           </span>
           <div className="container-fluid collapse row" id="cabSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
             <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
