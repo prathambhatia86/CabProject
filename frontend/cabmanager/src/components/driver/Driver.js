@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const API_URL='http://localhost:5000';
 export default function Driver(props) {
   const [email,changeEmail]=useState("");
@@ -12,11 +12,57 @@ export default function Driver(props) {
     changeEmail(event.target.value);
    }
    const passwordAltered=(event)=>{
+   
     changePassword(event.target.value);
+
    }
    const contactAltered=(event)=>{
+    event.target.value=event.target.value.replace(/[^0-9]/g, '');
     changeContact(event.target.value);
    }
+   const [invalidEmail,trackInvalidEmail]=useState(false);
+   const [invalidPassword,trackInvalidPassword]=useState(false);
+   const [invalidName,trackInvalidName]=useState(false);
+   const [invalidContact,trackInvalidContact]=useState(false);
+  //  const [blockButton,trackInvalidButton]=useState(false);
+   useEffect(()=>{
+
+    let timer=setTimeout(()=>{
+      let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/; 
+      if(!email.match(pattern))
+      {
+trackInvalidEmail(true);
+      }
+      else
+      trackInvalidEmail(false);
+      if(password.trim().length<6)
+      {
+        trackInvalidPassword(true);
+      }
+      else
+      trackInvalidPassword(false);
+      if(name.trim().length==0)
+      {
+        trackInvalidName(true);
+      }
+      else
+      trackInvalidName(false);
+      if(contact.trim().length!=10)
+      {
+        trackInvalidContact(true);
+      }
+      else
+      trackInvalidContact(false);
+     
+     
+},500);
+return ()=>{
+  clearTimeout(timer);
+};
+   },
+   [email,password,name,contact]
+   );
+   let blockButton=(invalidContact|invalidEmail|invalidName|invalidPassword);
    const submitResponse=async(event)=>{
     const values={
         name:name,
@@ -59,7 +105,7 @@ export default function Driver(props) {
 
                   </div>
                 </div>
-
+                <span class="help-block" style={{display:(invalidName==true?'block':'none')}}>Please enter the correct name</span>
                 <hr className="mx-n3" />
 
 
@@ -77,7 +123,7 @@ export default function Driver(props) {
 
                   </div>
                 </div>
-
+                <span class="help-block" style={{display:(invalidEmail==true?'block':'none')}}>Please enter the correct email</span>
                 <hr className="mx-n3" />
                 <div className="row align-items-center py-3">
                   <div className="col-md-3 ps-5">
@@ -91,7 +137,7 @@ export default function Driver(props) {
 
                   </div>
                 </div>
-
+                <span class="help-block" style={{display:(invalidPassword==true?'block':'none')}}>Please enter the correct password</span>
                 <hr className="mx-n3" />
 
                 <div className="row align-items-center py-3">
@@ -102,15 +148,15 @@ export default function Driver(props) {
                   </div>
                   <div className="col-md-9 pe-5">
 
-                    <input type="text" className="form-control form-control-lg" onChange={contactAltered} />
+                    <input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} />
 
                   </div>
                 </div>
-
+                <span class="help-block" style={{display:(invalidContact==true?'block':'none')}}>Please enter the correct mobile number</span>
                 <hr className="mx-n3" />
 
                 <div className="px-5 py-4 text-center">
-                  <button type="submit" className="btn btn-primary btn-lg" onClick={submitResponse}>Submit</button>
+                  <button type="submit" className="btn btn-primary btn-lg" onClick={submitResponse} disabled={blockButton}>Submit</button>
                 </div>
 
               </div>
