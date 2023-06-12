@@ -1,13 +1,18 @@
 import React, { useState } from 'react'
 import { Form, Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
+import { useSelector, useDispatch } from 'react-redux'
+import { login, logout } from '../store/user';
 
 export default function Login(props) {
     const navigate = useNavigate();
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch()
     const handleSubmit = event => {
         event.preventDefault();
         axios.post(props.action, formdata).then(({ data }) => {
-            props.curr ? navigate('/driver/' + formdata.email) : navigate('/homepage');
+            dispatch(login(data));
+            props.curr ? navigate('/driver') : navigate('/homepage');
         }).catch((err) => {
             alert(err.response.data.message);
         });

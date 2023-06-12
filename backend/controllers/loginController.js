@@ -15,7 +15,7 @@ const driverLogin = (req, res) => {
                 return;
             }
             if (req.body.email === data.email && req.body.password === data.password) {
-                res.status(200).json({ isAuth: true });
+                res.status(200).json({ user: { ...[data._doc][0], isAuth: true } });
             } else {
                 res.status(401).json({ message: "The entered credentials are Invalid!" });
             }

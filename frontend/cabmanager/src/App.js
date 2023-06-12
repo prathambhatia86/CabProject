@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 import Home from './components/Home'
 import AdminHomepage from './components/adminHomepage';
 import DriverHomePage from './components/driverHomePage/DriverHomePage';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -12,7 +13,7 @@ const router = createBrowserRouter([
     element: <AdminHomepage />,
   },
   {
-    path: "/driver/:id",
+    path: "/driver",
     element: <DriverHomePage />
   }
 ]);
