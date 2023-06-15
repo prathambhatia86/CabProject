@@ -1,85 +1,81 @@
 import { useEffect, useState } from "react";
-const API_URL='http://localhost:5000';
+import styles from "../../css/driverPageAdmin.module.css"
+const API_URL = 'http://localhost:5000';
 export default function Driver(props) {
-  const [email,changeEmail]=useState("");
-  const [password,changePassword]=useState("");
-  const [name,changeName]=useState("");
-   const [contact,changeContact]=useState("");
-   const nameAltered=(event)=>{
-      changeName(event.target.value);
-   }
-   const emailAltered=(event)=>{
+  const [email, changeEmail] = useState("");
+  const [password, changePassword] = useState("");
+  const [name, changeName] = useState("");
+  const [contact, changeContact] = useState("");
+  const nameAltered = (event) => {
+    changeName(event.target.value);
+  }
+  const emailAltered = (event) => {
     changeEmail(event.target.value);
-   }
-   const passwordAltered=(event)=>{
-   
+  }
+  const passwordAltered = (event) => {
+
     changePassword(event.target.value);
 
-   }
-   const contactAltered=(event)=>{
-    event.target.value=event.target.value.replace(/[^0-9]/g, '');
+  }
+  const contactAltered = (event) => {
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
     changeContact(event.target.value);
-   }
-   const [invalidEmail,trackInvalidEmail]=useState(false);
-   const [invalidPassword,trackInvalidPassword]=useState(false);
-   const [invalidName,trackInvalidName]=useState(false);
-   const [invalidContact,trackInvalidContact]=useState(false);
+  }
+  const [invalidEmail, trackInvalidEmail] = useState(false);
+  const [invalidPassword, trackInvalidPassword] = useState(false);
+  const [invalidName, trackInvalidName] = useState(false);
+  const [invalidContact, trackInvalidContact] = useState(false);
   //  const [blockButton,trackInvalidButton]=useState(false);
-   useEffect(()=>{
+  useEffect(() => {
 
-    let timer=setTimeout(()=>{
-      let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/; 
-      if(!email.match(pattern))
-      {
-trackInvalidEmail(true);
+    let timer = setTimeout(() => {
+      let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+      if (!email.match(pattern)) {
+        trackInvalidEmail(true);
       }
       else
-      trackInvalidEmail(false);
-      if(password.trim().length<6)
-      {
+        trackInvalidEmail(false);
+      if (password.trim().length < 6) {
         trackInvalidPassword(true);
       }
       else
-      trackInvalidPassword(false);
-      if(name.trim().length==0)
-      {
+        trackInvalidPassword(false);
+      if (name.trim().length == 0) {
         trackInvalidName(true);
       }
       else
-      trackInvalidName(false);
-      if(contact.trim().length!=10)
-      {
+        trackInvalidName(false);
+      if (contact.trim().length != 10) {
         trackInvalidContact(true);
       }
       else
-      trackInvalidContact(false);
-     
-     
-},500);
-return ()=>{
-  clearTimeout(timer);
-};
-   },
-   [email,password,name,contact]
-   );
-   let blockButton=(invalidContact|invalidEmail|invalidName|invalidPassword);
-   const submitResponse=async(event)=>{
-    const values={
-        name:name,
-        email:email,
-        password:password,
-        contact:contact,
+        trackInvalidContact(false);
+
+
+    }, 500);
+    return () => {
+      clearTimeout(timer);
+    };
+  },
+    [email, password, name, contact]
+  );
+  let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
+  const submitResponse = async (event) => {
+    const values = {
+      name: name,
+      email: email,
+      password: password,
+      contact: contact,
     }
-    return await fetch(`${API_URL}/driverRegistration`,{
-      method:"post",
-      headers:{
-        "Content-Type":"application/json"
+    return await fetch(`${API_URL}/driverRegistration`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json"
       },
-      body:JSON.stringify(values),
+      body: JSON.stringify(values),
     }
     )
   }
-  
   if (props.select !== '1')
     return ('');
   return (
@@ -96,7 +92,7 @@ return ()=>{
                 <div className="row align-items-center pt-2 pb-3">
                   <div className="col-md-3 ps-5">
 
-                    <h6 className="mb-0 fw-bolder">Driver name</h6>
+                    <h6 className="mb-0 fw-bolder text-center">Driver name</h6>
 
                   </div>
                   <div className="col-md-9 pe-5">
@@ -105,16 +101,16 @@ return ()=>{
 
                   </div>
                 </div>
-                <span class="help-block" style={{display:(invalidName==true?'block':'none')}}>Please enter the correct name</span>
+                <span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct name</span>
                 <hr className="mx-n3" />
 
 
-                
+
 
                 <div className="row align-items-center py-3">
                   <div className="col-md-3 ps-5">
 
-                    <h6 className="mb-0 fw-bolder">Driver E-mail</h6>
+                    <h6 className="mb-0 fw-bolder  text-center">Driver E-mail</h6>
 
                   </div>
                   <div className="col-md-9 pe-5">
@@ -123,27 +119,27 @@ return ()=>{
 
                   </div>
                 </div>
-                <span class="help-block" style={{display:(invalidEmail==true?'block':'none')}}>Please enter the correct email</span>
+                <span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
                 <hr className="mx-n3" />
                 <div className="row align-items-center py-3">
                   <div className="col-md-3 ps-5">
 
-                    <h6 className="mb-0 fw-bolder">Driver password</h6>
+                    <h6 className="mb-0 fw-bolder  text-center">Driver password</h6>
 
                   </div>
                   <div className="col-md-9 pe-5">
 
-                    <input type="password" className="form-control form-control-lg" onChange={passwordAltered}/>
+                    <input type="password" className="form-control form-control-lg" onChange={passwordAltered} />
 
                   </div>
                 </div>
-                <span class="help-block" style={{display:(invalidPassword==true?'block':'none')}}>Please enter the correct password</span>
+                <span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidPassword == true ? 'block' : 'none') }}>Please enter the correct password</span>
                 <hr className="mx-n3" />
 
                 <div className="row align-items-center py-3">
                   <div className="col-md-3 ps-5">
 
-                    <h6 className="mb-0 fw-bolder">Driver mobile number</h6>
+                    <h6 className="mb-0 fw-bolder  text-center">Driver mobile number</h6>
 
                   </div>
                   <div className="col-md-9 pe-5">
@@ -152,7 +148,7 @@ return ()=>{
 
                   </div>
                 </div>
-                <span class="help-block" style={{display:(invalidContact==true?'block':'none')}}>Please enter the correct mobile number</span>
+                <span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidContact == true ? 'block' : 'none') }}>Please enter the correct mobile number</span>
                 <hr className="mx-n3" />
 
                 <div className="px-5 py-4 text-center">

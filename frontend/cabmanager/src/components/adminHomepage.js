@@ -21,7 +21,7 @@ export default function AdminHomepage(props) {
   }
   const driverDetails = () => {
     changeSelectedState('1');
-  
+
   }
   const cabDetails = () => {
     changeSelectedState('2');
@@ -52,7 +52,7 @@ export default function AdminHomepage(props) {
     width = 250
   return (
     <div>
-      <div id="mySidebar" className={`${styles.sidebar}  ` } style={{ width: (navState === true ? width : '0px') }}>
+      <div id="mySidebar" className={`${styles.sidebar}  `} style={{ width: (navState === true ? width : '0px') }}>
         <i className={`${styles.closebtn}`} onClick={toggleNav}>×</i>
         <br />
         <div>
@@ -101,7 +101,7 @@ export default function AdminHomepage(props) {
         <Driver select={selectedState} />
         <CabAssignments select={selectedState} />
         <DriverAssignments select={selectedState} />
-        <UpdateDriver select ={selectedState} />
+        <UpdateDriver select={selectedState} />
       </div>
     </div >
   )
