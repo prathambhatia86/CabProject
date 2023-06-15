@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const path = require('path');
 const loginController = require('./controllers/loginController');
 const driverRegistrationController=require('./controllers/driverRegistrationController')
+const driverUpdationController=require('./controllers/driverUpdationController');
 const db = require('./config/db');
 const cors = require('cors');
 db();
@@ -17,5 +18,7 @@ app.use(express.static(path.join(__dirname,'public')))
 app.post('/adminlogin', loginController.adminLogin);
 app.post('/driverlogin', loginController.driverLogin);
 app.post('/driverRegistration',driverRegistrationController.driverRegistration);
+app.get('/driverNames',driverUpdationController.getNames);
+app.post('/driverUpdate',driverUpdationController.driverUpdate);
 const port = 5000;
 app.listen(port, () => console.log(`App backend listening on port : ${port}!`));

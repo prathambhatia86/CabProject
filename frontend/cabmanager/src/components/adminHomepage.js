@@ -2,8 +2,9 @@ import { useState } from "react";
 import styles from "../css/adminHomepage.module.css"
 import Cab from "./cab/Cab";
 import Driver from "./driver/Driver";
-import UpdateCab from "./updateCab/UpdateCab";
-import UpdateDriver from "./updateDriver/UpdateDriver";
+import UpdateDriver from "./driver/UpdateDriver";
+import CabAssignments from "./updateCab/UpdateCab";
+import DriverAssignments from "./updateDriver/UpdateDriver";
 export default function AdminHomepage(props) {
   const [navState, changeNavState] = useState(false);
   const [selectedState, changeSelectedState] = useState('1')
@@ -34,6 +35,18 @@ export default function AdminHomepage(props) {
     changeSelectedState('4');
     changeNavState(false);
   }
+  const driverAdd = () => {
+    changeSelectedState('1');
+    changeNavState(false);
+  }
+  const driverUpdate = () => {
+    changeSelectedState('5');
+    changeNavState(false);
+  }
+  const driverDelete = () => {
+    changeSelectedState('6');
+    changeNavState(false);
+  }
   let width = window.innerWidth;
   if (width >= 1250)
     width = 250
@@ -47,14 +60,14 @@ export default function AdminHomepage(props) {
             Driver ↧
           </span>
           <div className="container-fluid collapse row " id="driverSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
-            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
-              Click me!
+            <div className={`col ${styles.subMenuOptions}`} onClick={driverAdd}>
+              enter new driver!
             </div>
-            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
-              Click me!
+            <div className={`col ${styles.subMenuOptions}`} onClick={driverUpdate}>
+              Update driver details!
             </div>
-            <div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
-              Click me!
+            <div className={`col ${styles.subMenuOptions}`} onClick={driverDelete}>
+              remove a driver!
             </div>
           </div>
         </div>
@@ -86,8 +99,9 @@ export default function AdminHomepage(props) {
       <div className="container-fluid" style={{ paddingTop: "4rem" }}>
         <Cab select={selectedState} />
         <Driver select={selectedState} />
-        <UpdateCab select={selectedState} />
-        <UpdateDriver select={selectedState} />
+        <CabAssignments select={selectedState} />
+        <DriverAssignments select={selectedState} />
+        <UpdateDriver select ={selectedState} />
       </div>
     </div >
   )

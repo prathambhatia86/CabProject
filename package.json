@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/prathambhatia86/CabProject/issues"
   },
-  "homepage": "https://github.com/prathambhatia86/CabProject#readme"
+  "homepage": "https://github.com/prathambhatia86/CabProject#readme",
+  "dependencies": {
+    "react-bootstrap-typeahead": "^6.2.3"
+  }
 }
