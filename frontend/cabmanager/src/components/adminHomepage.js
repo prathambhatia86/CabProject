@@ -92,6 +92,7 @@ export default function AdminHomepage(props) {
         <div onClick={driverChange}>Driver Assignments</div>
         <br />
         <div onClick={cabChange} >Cab Assignments</div>
+        <div className="position-relative bottom-0 text-danger" style={{ width: 'inherit' }}>Logout</div>
       </div>
 
 

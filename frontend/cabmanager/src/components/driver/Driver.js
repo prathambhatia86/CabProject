@@ -101,7 +101,7 @@ export default function Driver(props) {
 
                   </div>
                 </div>
-                <span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct name</span>
+                <span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct name</span>
                 <hr className="mx-n3" />
 
 
