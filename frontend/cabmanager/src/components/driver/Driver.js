@@ -29,15 +29,33 @@ export default function Driver(props) {
 
 	//States which track if any of the data field still does not match the required format
 	const [invalidEmail, trackInvalidEmail] = useState(false);
+	const [emailAlreadyExist, trackEmailAlreadyExist] = useState(false);
 	const [invalidPassword, trackInvalidPassword] = useState(false);
 	const [invalidName, trackInvalidName] = useState(false);
 	const [invalidContact, trackInvalidContact] = useState(false);
 	//  const [blockButton,trackInvalidButton]=useState(false);
 
 	//On any change in data fields
+	const checkEmailAlreadyExist=async (email) => {
+	
+		const values = {
+			email: email,
+		}
+
+		
+		return await fetch(`${API_URL}/checkDriverlogin`, {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(values),
+		}
+		)
+		
+	}
 	useEffect(() => {
 		//Set timeout of 500ms to let the user know if the entered details do not match the format.
-		let timer = setTimeout(() => {
+		let timer = setTimeout(async() => {
 
 			//Regular expression for email
 			let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
@@ -45,7 +63,17 @@ export default function Driver(props) {
 				trackInvalidEmail(true);
 			}
 			else
-				trackInvalidEmail(false);
+				{
+					const response=await checkEmailAlreadyExist(email);
+					
+					if(await response.json())
+					trackEmailAlreadyExist(true);
+					else
+					{
+						trackEmailAlreadyExist(false);
+					}
+					trackInvalidEmail(false);
+				}
 
 			//Minimum password length is 6
 			if (password.trim().length < 6) {
@@ -79,7 +107,7 @@ export default function Driver(props) {
 	);
 
 	//State which helps to disable button if any format still mismatches
-	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
+	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword|emailAlreadyExist);
 
 	//Make a request to the server to add this driver
 	const submitResponse = async (event) => {
@@ -146,7 +174,7 @@ export default function Driver(props) {
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
 								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
-
+								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (emailAlreadyExist == true ? 'block' : 'none') }}>Sorry!This email already exist.</span>
 								<hr className="mx-n3" />
 
 								<div className="row align-items-center py-3">

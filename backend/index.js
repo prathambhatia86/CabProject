@@ -20,5 +20,6 @@ app.post('/driverlogin', loginController.driverLogin);
 app.post('/driverRegistration',driverRegistrationController.driverRegistration);
 app.get('/driverNames',driverUpdationController.getNames);
 app.post('/driverUpdate',driverUpdationController.driverUpdate);
+app.post('/checkDriverLogin',driverRegistrationController.checkLogin);
 const port = 5000;
 app.listen(port, () => console.log(`App backend listening on port : ${port}!`));
