@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { Form, Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux'
-import { login, logout } from '../store/user';
+import { useDispatch } from 'react-redux'
+import { login } from '../store/user';
 
 export default function Login(props) {
+    //Using the useNavigate hook to redirect to another url
     const navigate = useNavigate();
-    const user = useSelector(state => state.user);
+
+    //dipatcher for login to store current user in the redux store.
     const dispatch = useDispatch()
+
+    //Authenticate and log-in the user, alert in case of error.
     const handleSubmit = event => {
         event.preventDefault();
         axios.post(props.action, formdata).then(({ data }) => {
@@ -17,7 +21,11 @@ export default function Login(props) {
             alert(err.response.data.message);
         });
     };
+
+    //React state to hold formdata
     const [formdata, setFormData] = useState({ email: "", password: "" });
+
+    //When either the email or password field changes through user input
     const handleChange = (event) => {
         let newData = ({
             ...formdata, [event.target.name]: event.target.value

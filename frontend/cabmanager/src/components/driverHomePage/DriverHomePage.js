@@ -71,6 +71,7 @@ export default function DriverHomePage() {
                                         <h5 className="card-title mt-2">Cab Number:</h5>
                                         <p className="card-text mt-4">Cab Model:</p>
                                         <p className="card-text ">Cab Color:</p>
+                                        {/*Modals are needed to give details regarding insurance/pollution certificate after being prompted. */}
                                         <div class="btn-group mt-5 flex-wrap">
                                             <button type="button" className="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#Insurance">
                                                 View Insurance Details
