@@ -5,8 +5,18 @@ import Driver from "./driver/Driver";
 import UpdateDriver from "./driver/UpdateDriver";
 import CabAssignments from "./updateCab/UpdateCab";
 import DriverAssignments from "./updateDriver/UpdateDriver";
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logout } from './store/user';
 
 export default function AdminHomepage(props) {
+
+	//Using the useNavigate hook to redirect to another url
+	const navigate = useNavigate();
+
+	//dipatcher for login to store current user in the redux store.
+	const dispatch = useDispatch();
+
 	//React State for determining the currently navigation status
 	const [navState, changeNavState] = useState(false);
 
@@ -55,6 +65,12 @@ export default function AdminHomepage(props) {
 		changeNavState(false);
 	}
 
+	//logout the user.
+	const logoutUser = () => {
+		dispatch(logout());
+		navigate('../');
+	}
+
 	//Responsiveness Shenanigans
 	let width = window.innerWidth;
 	if (width >= 1250)
@@ -101,7 +117,7 @@ export default function AdminHomepage(props) {
 				<div onClick={driverChange}>Driver Assignments</div>
 				<br />
 				<div onClick={cabChange} >Cab Assignments</div>
-				<div className="position-relative bottom-0 text-danger" style={{ width: 'inherit' }}>Logout</div>
+				<div className="position-relative bottom-0 text-danger" style={{ width: 'inherit' }} onClick={logoutUser}>Logout</div>
 			</div>
 
 

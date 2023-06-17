@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { login, logout } from '../store/user';
+import { logout } from '../store/user';
 import styles from "../../css/adminHomepage.module.css"
+import { useNavigate } from 'react-router-dom';
 
 export default function DriverHomePage() {
+
+    //Using the useNavigate hook to redirect to another url
+    const navigate = useNavigate();
+
+    //dipatcher for login to store current user in the redux store.
+    const dispatch = useDispatch();
+
     //React State for determining the currently navigation status
     const [navState, changeNavState] = useState(false);
 
@@ -24,6 +32,11 @@ export default function DriverHomePage() {
 
     //Get the current user from the redux store
     const user = useSelector(state => state.user.user);
+
+    const logoutUser = () => {
+        dispatch(logout());
+        navigate('../');
+    }
 
     //Responsiveness Shenanigans
     if (!user || !user.isAuth) return ('');
@@ -48,7 +61,7 @@ export default function DriverHomePage() {
                     </span>
                 </div>
                 <br />
-                <div className="position-relative bottom-0 text-danger" style={{ width: 'inherit' }}>Logout</div>
+                <div className="position-relative bottom-0 text-danger" style={{ width: 'inherit' }} onClick={logoutUser}>Logout</div>
             </div>
 
 

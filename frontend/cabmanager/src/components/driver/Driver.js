@@ -35,14 +35,12 @@ export default function Driver(props) {
 	const [invalidContact, trackInvalidContact] = useState(false);
 	//  const [blockButton,trackInvalidButton]=useState(false);
 
-	//On any change in data fields
-	const checkEmailAlreadyExist=async (email) => {
-	
+
+	//Check for duplicacy in driver email.
+	const checkEmailAlreadyExist = async (email) => {
 		const values = {
 			email: email,
 		}
-
-		
 		return await fetch(`${API_URL}/checkDriverlogin`, {
 			method: "post",
 			headers: {
@@ -51,29 +49,28 @@ export default function Driver(props) {
 			body: JSON.stringify(values),
 		}
 		)
-		
 	}
+
+	//On any change in data fields
 	useEffect(() => {
 		//Set timeout of 500ms to let the user know if the entered details do not match the format.
-		let timer = setTimeout(async() => {
+		let timer = setTimeout(async () => {
 
 			//Regular expression for email
 			let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 			if (!email.match(pattern)) {
 				trackInvalidEmail(true);
 			}
-			else
-				{
-					const response=await checkEmailAlreadyExist(email);
-					
-					if(await response.json())
+			else {
+				const response = await checkEmailAlreadyExist(email);
+
+				if (await response.json())
 					trackEmailAlreadyExist(true);
-					else
-					{
-						trackEmailAlreadyExist(false);
-					}
-					trackInvalidEmail(false);
+				else {
+					trackEmailAlreadyExist(false);
 				}
+				trackInvalidEmail(false);
+			}
 
 			//Minimum password length is 6
 			if (password.trim().length < 6) {
@@ -107,7 +104,7 @@ export default function Driver(props) {
 	);
 
 	//State which helps to disable button if any format still mismatches
-	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword|emailAlreadyExist);
+	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword | emailAlreadyExist);
 
 	//Make a request to the server to add this driver
 	const submitResponse = async (event) => {
