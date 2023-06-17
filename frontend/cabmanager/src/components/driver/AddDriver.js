@@ -125,10 +125,6 @@ export default function Driver(props) {
 		}
 		)
 	}
-
-	//If the current view is not add driver.
-	if (props.select !== '1')
-		return ('');
 	return (
 
 		<section className="vh-100">

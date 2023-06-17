@@ -1,6 +1,4 @@
 export default function Cab(props) {
-	if (props.select !== '2')
-		return ('');
 	return (
 
 		<section className="vh-100" >

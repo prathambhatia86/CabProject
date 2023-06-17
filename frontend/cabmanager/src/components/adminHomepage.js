@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../css/adminHomepage.module.css"
 import Cab from "./cab/Cab";
-import Driver from "./driver/Driver";
+import AddDriver from "./driver/AddDriver";
 import UpdateDriver from "./driver/UpdateDriver";
 import CabAssignments from "./updateCab/UpdateCab";
 import DriverAssignments from "./updateDriver/UpdateDriver";
@@ -123,11 +123,11 @@ export default function AdminHomepage(props) {
 
 			<button id="togglesidebar" className={`${styles.openbtn}`} style={{ display: (navState === true ? 'none' : 'block'), position: 'absolute' }} onClick={toggleNav} >☰</button>
 			<div className="container-fluid" style={{ paddingTop: "4rem" }}>
-				<Cab select={selectedState} />
-				<Driver select={selectedState} />
-				<CabAssignments select={selectedState} />
-				<DriverAssignments select={selectedState} />
-				<UpdateDriver select={selectedState} />
+				{selectedState == 1 ? <AddDriver /> : ''}
+				{selectedState == 2 ? <Cab /> : ''}
+				{selectedState == 3 ? <DriverAssignments /> : ''}
+				{selectedState == 4 ? <CabAssignments /> : ''}
+				{selectedState == 5 ? <UpdateDriver /> : ''}
 			</div>
 		</div >
 	)

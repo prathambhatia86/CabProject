@@ -92,9 +92,6 @@ export default function UpdateDriver(props) {
 		[email, password, name, contact]
 	);
 	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
-	if (props.select != 5) {
-		return ('');
-	}
 	while (userData == null) {
 
 	}

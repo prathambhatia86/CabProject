@@ -16,14 +16,11 @@ const deleteDriver = async (req, res) => {
     try {
         //Select document with specific id, delete it from the database
         const filter = { _id: req.body.id };
-        console.log(await driverCollection.findOne(filter));
-        console.log(filter);
         const data = await driverCollection.deleteOne(filter);
 
         //If the document was deleted send back status OK else if no deletion occured send no resource found
         res.status(data ? 200 : 404).json({
-            result: data,
-            message: 'User deleted',
+            message: data.result.deletedCount ? "User deleted" : "User Not found",
         });
     } catch (e) {
         //Send internal server error code  and message in case of any error.
