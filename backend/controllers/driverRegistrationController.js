@@ -4,12 +4,11 @@ const driverRegistration = async (req, res) => {
     res.send(true);
 }
 const checkLogin = async (req, res) => {
-   let check=await driverCollection.findOne({ email: req.body.email })
- 
-    if(check==null)
-   res.send(false);
+    let check = await driverCollection.findOne({ email: req.body.email })
+    if (check == null)
+        res.send(false);
     else
-    res.send(true);
+        res.send(true);
 }
 module.exports = {
     driverRegistration,

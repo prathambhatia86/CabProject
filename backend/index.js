@@ -5,8 +5,10 @@ const path = require('path');
 const loginController = require('./controllers/loginController');
 const driverRegistrationController = require('./controllers/driverRegistrationController')
 const driverUpdationController = require('./controllers/driverUpdationController');
+const cabAddController = require('./controllers/cabAddController');
 const db = require('./config/db');
 const cors = require('cors');
+
 db();
 require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
 
@@ -22,11 +24,12 @@ app.post('/adminlogin', loginController.adminLogin);
 app.post('/driverlogin', loginController.driverLogin);
 
 app.post('/driverRegistration', driverRegistrationController.driverRegistration);
+app.post('/checkDriverLogin', driverRegistrationController.checkLogin);
 app.get('/driverNames', driverUpdationController.getNames);
 app.post('/driverUpdate', driverUpdationController.driverUpdate);
-app.post('/checkDriverLogin', driverRegistrationController.checkLogin);
+app.delete('/deleteDriver', driverUpdationController.deleteDriver);
 
-
+app.post('/addCab', cabAddController.addCab);
 
 
 const port = 5000;
