@@ -18,7 +18,7 @@ export default function DriverHomePage() {
     const [navState, changeNavState] = useState(false);
 
     //React State for determining the current view 
-    const [selectedState, changeSelectedState] = useState('1');
+    const [selectedState, changeSelectedState] = useState(1);
 
     //Change the Navigation state to close/open sidebar
     const toggleNav = () => {
@@ -75,8 +75,8 @@ export default function DriverHomePage() {
 
             <div className="container-fluid" style={{ paddingTop: "5rem", height: "100%" }}>
                 <section className={`${(window.innerWidth > 1250) ? "mx-3" : " "}`} style={{ height: "100%" }}>
-                    {selectedState == 1 ? <AssignedCab /> : ''}
-                    {selectedState == 2 ? <Profile /> : ''}
+                    {selectedState === 1 ? <AssignedCab /> : ''}
+                    {selectedState === 2 ? <Profile /> : ''}
                 </section>
             </div >
         </div >
