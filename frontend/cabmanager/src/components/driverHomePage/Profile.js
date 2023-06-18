@@ -16,6 +16,7 @@ export default function Profile() {
         });
         setFormData(newData);
         //If there is no change in user data, user will not be allowed to update
+        // eslint-disable-next-line
         if (!(user.email == newData.email && user.name == newData.name && user.contact == newData.contact)) setChange(false);
         else setChange(true);
     }

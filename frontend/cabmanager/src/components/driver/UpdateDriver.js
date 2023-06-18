@@ -4,6 +4,8 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 const API_URL = 'http://localhost:5000';
 
 export default function UpdateDriver(props) {
+
+	console.log(1);
 	//React state for data of current driver selected for updation
 	const [userData, changeUserData] = useState(null);
 
@@ -49,7 +51,6 @@ export default function UpdateDriver(props) {
 				return val;
 			})
 			changeUserData(await newData);
-
 		}
 		catch {
 			console.log("not found");
@@ -92,9 +93,6 @@ export default function UpdateDriver(props) {
 		[email, password, name, contact]
 	);
 	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
-	while (userData == null) {
-
-	}
 	let userDataSelectedFunction = (selectedValue) => {
 		if (selectedValue.length == 0)
 			return;

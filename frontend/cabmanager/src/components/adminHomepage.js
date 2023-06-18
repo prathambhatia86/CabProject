@@ -21,7 +21,7 @@ export default function AdminHomepage(props) {
 	const [navState, changeNavState] = useState(false);
 
 	//React State for determining the current view 
-	const [selectedState, changeSelectedState] = useState('1');
+	const [selectedState, changeSelectedState] = useState(1);
 
 	//Change the Navigation state to close/open sidebar
 	const toggleNav = () => {
@@ -38,32 +38,44 @@ export default function AdminHomepage(props) {
 	}
 
 	//onClick functions to change current view to another view.
-	const driverDetails = () => {
-		changeSelectedState('1');
-	}
-	const cabDetails = () => {
-		changeSelectedState('2');
-	}
-	const driverChange = () => {
-		changeSelectedState('3');
-		changeNavState(false);
-	}
-	const cabChange = () => {
-		changeSelectedState('4');
-		changeNavState(false);
-	}
 	const driverAdd = () => {
-		changeSelectedState('1');
+		changeSelectedState(1);
 		changeNavState(false);
+		sidebarReset();
 	}
 	const driverUpdate = () => {
-		changeSelectedState('5');
+		changeSelectedState(2);
 		changeNavState(false);
+		sidebarReset();
 	}
 	const driverDelete = () => {
-		changeSelectedState('6');
+		changeSelectedState(3);
+		changeNavState(false);
+		sidebarReset();
+	}
+	const cabAdd = () => {
+		changeSelectedState(4);
+		changeNavState(false);
+		sidebarReset();
+	}
+	const cabUpdate = () => {
+		changeSelectedState(5);
+		changeNavState(false);
+		sidebarReset();
+	}
+	const cabDelete = () => {
+		changeSelectedState(6);
 		changeNavState(false);
 	}
+	const driverAssignments = () => {
+		changeSelectedState(7);
+		changeNavState(false);
+	}
+	const cabAssignments = () => {
+		changeSelectedState(8);
+		changeNavState(false);
+	}
+
 
 	//logout the user.
 	const logoutUser = () => {
@@ -81,7 +93,7 @@ export default function AdminHomepage(props) {
 				<i className={`${styles.closebtn}`} onClick={toggleNav}>×</i>
 				<br />
 				<div>
-					<span onClick={driverDetails} data-bs-toggle="collapse" data-bs-target="#driverSidebar">
+					<span data-bs-toggle="collapse" data-bs-target="#driverSidebar">
 						Driver ↧
 					</span>
 					<div className="container-fluid collapse row " id="driverSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
@@ -98,25 +110,25 @@ export default function AdminHomepage(props) {
 				</div>
 				<br />
 				<div className="container">
-					<span onClick={cabDetails} data-bs-toggle="collapse" data-bs-target="#cabSidebar">
+					<span data-bs-toggle="collapse" data-bs-target="#cabSidebar">
 						Cab ↧
 					</span>
 					<div className="container-fluid collapse row" id="cabSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
-						<div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
-							Click me!
+						<div className={`col ${styles.subMenuOptions}`} onClick={cabAdd}>
+							Add Cab
 						</div>
-						<div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
-							Click me!
+						<div className={`col ${styles.subMenuOptions}`} onClick={cabUpdate}>
+							Update Cab
 						</div>
-						<div className={`col ${styles.subMenuOptions}`} onClick={() => sidebarReset()}>
-							Click me!
+						<div className={`col ${styles.subMenuOptions}`} onClick={cabDelete}>
+							Delete Cab
 						</div>
 					</div>
 				</div>
 				<br />
-				<div onClick={driverChange}>Driver Assignments</div>
+				<div onClick={driverAssignments}>Driver Assignments</div>
 				<br />
-				<div onClick={cabChange} >Cab Assignments</div>
+				<div onClick={cabAssignments} >Cab Assignments</div>
 				<div className="position-relative bottom-0 text-danger" style={{ width: 'inherit' }} onClick={logoutUser}>Logout</div>
 			</div>
 
@@ -124,10 +136,13 @@ export default function AdminHomepage(props) {
 			<button id="togglesidebar" className={`${styles.openbtn}`} style={{ display: (navState === true ? 'none' : 'block'), position: 'absolute' }} onClick={toggleNav} >☰</button>
 			<div className="container-fluid" style={{ paddingTop: "4rem" }}>
 				{selectedState == 1 ? <AddDriver /> : ''}
-				{selectedState == 2 ? <Cab /> : ''}
-				{selectedState == 3 ? <DriverAssignments /> : ''}
-				{selectedState == 4 ? <CabAssignments /> : ''}
-				{selectedState == 5 ? <UpdateDriver /> : ''}
+				{selectedState == 2 ? <UpdateDriver /> : ''}
+				{/*[TODO] Add a component for remove driver*/}
+				{selectedState == 4 ? <Cab /> : ''}
+				{/*[TODO] Add a component for update cab, delete cab*/}
+				{selectedState == 7 ? <DriverAssignments /> : ''}
+				{selectedState == 8 ? <CabAssignments /> : ''}
+
 			</div>
 		</div >
 	)
