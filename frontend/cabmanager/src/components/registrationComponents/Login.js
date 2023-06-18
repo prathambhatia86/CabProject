@@ -25,7 +25,7 @@ export default function Login(props) {
     //React state to hold formdata
     const [formdata, setFormData] = useState({ email: "", password: "" });
 
-    //When either the email or password field changes through user input
+    //When either the email or password field changes through user input, the data corresponding to that name field is updated
     const handleChange = (event) => {
         let newData = ({
             ...formdata, [event.target.name]: event.target.value
