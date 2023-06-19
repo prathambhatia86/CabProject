@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "../../css/driverPageAdmin.module.css"
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 //Url to make API request from our server
 const API_URL = 'http://localhost:5000';
 
@@ -115,8 +116,8 @@ export default function Driver(props) {
 			contact: contact,
 		}
 
-		//[TODO]Alert if success or failure
-		return await fetch(`${API_URL}/driverRegistration`, {
+	
+		const response= await fetch(`${API_URL}/driverRegistration`, {
 			method: "post",
 			headers: {
 				"Content-Type": "application/json"
@@ -124,10 +125,21 @@ export default function Driver(props) {
 			body: JSON.stringify(values),
 		}
 		)
+		if(response)
+		{toast("form submitted");
+		changeEmail("");
+		changeContact("");
+		changePassword("");
+		changeName("");
+	}
+		else
+		toast("something wrong has happened");
+		
 	}
 	return (
 
 		<section className="vh-100">
+			     <ToastContainer />
 			<div className="container h-100">
 				<div className="row d-flex justify-content-center  h-100">
 					<div className="col-xl-9">
@@ -144,7 +156,7 @@ export default function Driver(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text" className="form-control form-control-lg" onChange={nameAltered} />
+										<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name}/>
 
 									</div>
 								</div>
@@ -161,7 +173,7 @@ export default function Driver(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="email" className="form-control form-control-lg" onChange={emailAltered} />
+										<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email}/>
 
 									</div>
 								</div>
@@ -178,7 +190,7 @@ export default function Driver(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="password" className="form-control form-control-lg" onChange={passwordAltered} />
+										<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password}/>
 
 									</div>
 								</div>
@@ -195,7 +207,7 @@ export default function Driver(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} />
+										<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} value={contact} />
 
 									</div>
 								</div>

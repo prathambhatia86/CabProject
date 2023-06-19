@@ -9,7 +9,8 @@ const driverUpdate = async (req, res) => {
     //Select document with specific id, update it to details recieved in the request.
     const filter = { _id: req.body.id };
     const update = { $set: req.body };
-    await driverCollection.updateOne(filter, update);
+    const response=await driverCollection.updateOne(filter, update);
+    res.send(response);
 }
 
 const deleteDriver = async (req, res) => {

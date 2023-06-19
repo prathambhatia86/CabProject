@@ -1,7 +1,7 @@
 const driverCollection = require('../models/drivers.model');
 const driverRegistration = async (req, res) => {
-    await driverCollection.insertMany(req.body);
-    res.send(true);
+   const response= await driverCollection.insertMany(req.body);
+    res.send(response);
 }
 const checkLogin = async (req, res) => {
     let check = await driverCollection.findOne({ email: req.body.email })

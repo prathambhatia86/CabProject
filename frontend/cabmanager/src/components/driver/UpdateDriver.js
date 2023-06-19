@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Typeahead } from 'react-bootstrap-typeahead';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const API_URL = 'http://localhost:5000';
 
 export default function UpdateDriver(props) {
@@ -60,7 +61,7 @@ export default function UpdateDriver(props) {
 	useEffect(() => {
 		getResponse();
 
-	}, [])
+	}, [formState])
 	useEffect(() => {
 
 		let timer = setTimeout(() => {
@@ -114,7 +115,9 @@ export default function UpdateDriver(props) {
 			password: password,
 			contact: contact,
 		}
-		return await fetch(`${API_URL}/driverUpdate`, {
+		
+		console.log("yoyoyoyoyoyo");
+		const response=await fetch(`${API_URL}/driverUpdate`, {
 			method: "post",
 			headers: {
 				"Content-Type": "application/json"
@@ -122,9 +125,15 @@ export default function UpdateDriver(props) {
 			body: JSON.stringify(values),
 		}
 		)
+		if(response)
+		toast("form updated");
+		else
+		toast("something wrong has occured");
+		changeFormState(false);
 	}
 	return (
 		<>
+		  <ToastContainer />
 			<Typeahead
 				id="DriverIds"
 				onChange={userDataSelectedFunction}

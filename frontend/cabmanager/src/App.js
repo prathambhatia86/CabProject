@@ -21,6 +21,7 @@ export default function App() {
 
   return (
     <div>
+    
       <React.StrictMode>
         <RouterProvider router={router} />
       </React.StrictMode>
