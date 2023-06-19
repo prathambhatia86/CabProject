@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css' 
 const API_URL = 'http://localhost:5000';
 
-export default function UpdateDriver(props) {
+export default function DeleteDriver(props) {
 
-	
+
 	//React state for data of current driver selected for updation
 	const [userData, changeUserData] = useState(null);
 
@@ -110,27 +112,40 @@ export default function UpdateDriver(props) {
 	const submitResponse = async (event) => {
 		const values = {
 			id: id,
-			name: name,
-			email: email,
-			password: password,
-			contact: contact,
+			
 		}
 		
 		
-		const response=await fetch(`${API_URL}/driverUpdate`, {
-			method: "post",
+		const response=await fetch(`${API_URL}/deleteDriver`, {
+			method: "delete",
 			headers: {
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify(values),
 		}
 		)
-		if(response)
-		toast("form updated");   //alert
+		if(response.status==200)
+		toast("form deleted");   //alert
 		else
 		toast("something wrong has occured");
 		changeFormState(false);
 	}
+   const ConfirmResponse= () => {    //confirmation
+        confirmAlert({
+          title: 'Confirm to Delete',
+          message: 'Are you sure to remove a driver.',
+          buttons: [
+            {
+              label: 'Yes',
+              onClick: submitResponse
+            },
+            {
+              label: 'No',
+              
+            }
+          ]
+        })
+      };
 	return (
 		<>
 		  <ToastContainer />
@@ -138,7 +153,7 @@ export default function UpdateDriver(props) {
 				id="DriverIds"
 				onChange={userDataSelectedFunction}
 				options={userData}
-				placeholder="Update the driver"
+				placeholder="Delete the driver"
 				selected={selectedUser}
 			/>
 			<section className="vh-100" style={{ display: (formState ? 'block' : 'none') }}>
@@ -147,7 +162,7 @@ export default function UpdateDriver(props) {
 						<div className="col-xl-9">
 
 							<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
-								<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Update Driver Details</h1>
+								<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Delete Driver Details</h1>
 								<div className="card-body">
 
 									<div className="row align-items-center pt-2 pb-3">
@@ -158,7 +173,7 @@ export default function UpdateDriver(props) {
 										</div>
 										<div className="col-md-9 pe-5">
 
-											<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name} />
+											<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name} disabled />
 
 										</div>
 									</div>
@@ -172,7 +187,7 @@ export default function UpdateDriver(props) {
 										</div>
 										<div className="col-md-9 pe-5">
 
-											<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email} />
+											<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email} disabled />
 
 										</div>
 									</div>
@@ -186,7 +201,7 @@ export default function UpdateDriver(props) {
 										</div>
 										<div className="col-md-9 pe-5">
 
-											<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} />
+											<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} disabled />
 
 										</div>
 									</div>
@@ -201,7 +216,7 @@ export default function UpdateDriver(props) {
 										</div>
 										<div className="col-md-9 pe-5">
 
-											<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} value={contact} />
+											<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} value={contact} disabled />
 
 										</div>
 									</div>
@@ -209,7 +224,7 @@ export default function UpdateDriver(props) {
 									<hr className="mx-n3" />
 
 									<div className="px-5 py-4 text-center">
-										<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={submitResponse}>Update</button>
+										<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={ConfirmResponse}>Delete</button>
 									</div>
 
 								</div>

@@ -3,6 +3,9 @@ import styles from "../css/adminHomepage.module.css"
 import Cab from "./cab/Cab";
 import AddDriver from "./driver/AddDriver";
 import UpdateDriver from "./driver/UpdateDriver";
+
+import RemoveDriver from "./driver/DeleteDriver";
+
 import CabAssignments from "./updateCab/UpdateCab";
 import DriverAssignments from "./updateDriver/UpdateDriver";
 import { useNavigate } from 'react-router-dom'
@@ -137,7 +140,7 @@ export default function AdminHomepage(props) {
 			<div className="container-fluid" style={{ paddingTop: "4rem" }}>
 				{selectedState == 1 ? <AddDriver /> : ''}
 				{selectedState == 2 ? <UpdateDriver /> : ''}
-				{/*[TODO] Add a component for remove driver*/}
+				{selectedState == 3 ? <RemoveDriver /> : ''}
 				{selectedState == 4 ? <Cab /> : ''}
 				{/*[TODO] Add a component for update cab, delete cab*/}
 				{selectedState == 7 ? <DriverAssignments /> : ''}

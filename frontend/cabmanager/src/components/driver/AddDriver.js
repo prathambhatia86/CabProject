@@ -126,7 +126,7 @@ export default function Driver(props) {
 		}
 		)
 		if(response)
-		{toast("form submitted");
+		{toast("form submitted"); //alert
 		changeEmail("");
 		changeContact("");
 		changePassword("");
