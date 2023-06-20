@@ -22,6 +22,13 @@ export default function Cab(props) {
 	const [regNumber, changeNum] = useState("");
 	const [model, changeModel] = useState("");
 	const [color, changeColor] = useState("");
+	const [insuranceNo, changeInsuranceNo] = useState(null);
+	const [insuranceCompany, changeInsuranceCompany] = useState(null);
+	const [insuranceAmount, changeInsuranceAmount] = useState(null);
+	const [insuranceExpirationDate, changeInsuranceExpiration] = useState(null);
+	const [insuranceNextPayment, changeNextPayment] = useState(null);
+	const [pollutionId, changePollutionID] = useState(null);
+	const [pollutionExpirationDate, changePollutionExpiration] = useState(null);
 
 	//OnClick functions to change value of states on User input.
 	const Numberaltered = (event) => {
@@ -32,6 +39,15 @@ export default function Cab(props) {
 	}
 	const ColorAltered = (event) => {
 		changeColor(event.target.value);
+	}
+	const insuranceNumberAltered = (event) => {
+		changeInsuranceNo(event.target.value);
+	}
+	const insuranceCompanyAltered = (event) => {
+		changeInsuranceCompany(event.target.value);
+	}
+	const insuranceAmountAltered = (event) => {
+		changeInsuranceAmount(parseInt(event.target.value));
 	}
 
 	//States which track if any of the data field still does not match the required format
@@ -65,6 +81,7 @@ export default function Cab(props) {
 				trackInvalidRegNumber(true);
 			}
 			else {
+				//Validate that the same cab hasnt been added to the database already.
 				const response = await checkCabAlreadyExist(regNumber);
 				if (await response.json())
 					trackCabAlreadyExist(true);
@@ -225,19 +242,50 @@ export default function Cab(props) {
 									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct reading</span>
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">
-
-											<h6 className="mb-0 fw-bolder">Current Odometer Reading</h6>
-
+											<h6 className="mb-0 fw-bolder">Amount</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-
 											<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
-
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
 									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct reading</span>
-
+									<div className="row align-items-center py-3">
+										<div className="col-md-3 ps-5">
+											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
+										</div>
+										<div className="col-md-9 pe-5">
+											<input type="date" className="form-control form-control-lg" onChange={ColorAltered} />
+										</div>
+									</div>
+									<div className="row align-items-center py-3">
+										<div className="col-md-3 ps-5">
+											<h6 className="mb-0 fw-bolder">Next Payment On</h6>
+										</div>
+										<div className="col-md-9 pe-5">
+											<input type="date" className="form-control form-control-lg" onChange={ColorAltered} />
+										</div>
+									</div>
+								</div>
+								<div className='container border border-warning-subtle rounded my-2' id='Pollutiondiv' style={{ display: (isPollution ? 'block' : 'none') }}>
+									<div className="row align-items-center py-3">
+										<div className="col-md-3 ps-5">
+											<h6 className="mb-0 fw-bolder">Pollution Certificate ID</h6>
+										</div>
+										<div className="col-md-9 pe-5">
+											<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
+										</div>
+									</div>
+									{/* Text which will only be visible when format is not adhered to */}
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct ID</span>
+									<div className="row align-items-center py-3">
+										<div className="col-md-3 ps-5">
+											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
+										</div>
+										<div className="col-md-9 pe-5">
+											<input type="date" className="form-control form-control-lg" onChange={ColorAltered} />
+										</div>
+									</div>
 								</div>
 
 								<div className="px-5 py-4 text-center row">
