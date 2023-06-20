@@ -5,7 +5,14 @@ const addCab = async (req, res) => {
     await Cab_collection.insertMany(req.body);
     res.send(true);
 }
+const checkCabExists = async (req, res) => {
+    let check = await Cab_collection.findOne({ registration_no: req.body.registration_no })
+    if (check == null)
+        res.send(false);
+    else
+        res.send(true);
+}
 
 module.exports = {
-    addCab
+    addCab, checkCabExists
 }

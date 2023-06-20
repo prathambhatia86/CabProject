@@ -30,6 +30,7 @@ app.post('/driverUpdate', driverUpdationController.driverUpdate);
 app.delete('/deleteDriver', driverUpdationController.deleteDriver);
 
 app.post('/addCab', cabAddController.addCab);
+app.post('/checkCabExists', cabAddController.checkCabExists);
 
 
 const port = 5000;
