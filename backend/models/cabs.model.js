@@ -13,15 +13,20 @@ const Cab_collection = require('mongoose').model("Cabs", new Schema({
         required: true
     },
     insurance: {
-        policy_number: String,
-        company: String,
-        expires: Date,
-        next_payment: Date,
-        amount: Number
+        type: {
+            policy_number: { type: String, required: true },
+            company: { type: String, required: true },
+            expires: { type: Date, required: true },
+            next_payment: { type: Date, required: true },
+            amount: { type: Number, required: true },
+        },
+        required: false
     },
     pollution: {
-        id: String,
-        expires: Date
+        type: {
+            id: { type: String, required: true },
+            expires: { type: Date, required: true },
+        }, required: false
     },
     odometer: {
         type: Number,

@@ -22,6 +22,7 @@ export default function Cab(props) {
 	const [regNumber, changeNum] = useState("");
 	const [model, changeModel] = useState("");
 	const [color, changeColor] = useState("");
+	const [reading, changeReading] = useState("");
 	const [insuranceNo, changeInsuranceNo] = useState(null);
 	const [insuranceCompany, changeInsuranceCompany] = useState(null);
 	const [insuranceAmount, changeInsuranceAmount] = useState(null);
@@ -40,6 +41,9 @@ export default function Cab(props) {
 	const ColorAltered = (event) => {
 		changeColor(event.target.value);
 	}
+	const ReadingAltered = (event) => {
+		changeReading(event.target.value);
+	}
 	const insuranceNumberAltered = (event) => {
 		changeInsuranceNo(event.target.value);
 	}
@@ -49,12 +53,32 @@ export default function Cab(props) {
 	const insuranceAmountAltered = (event) => {
 		changeInsuranceAmount(parseInt(event.target.value));
 	}
+	const insurancePaymentAltered = (event) => {
+		changeNextPayment(new Date(event.target.value));
+	}
+	const insuranceExpirationAltered = (event) => {
+		changeInsuranceExpiration(new Date(event.target.value));
+	}
+	const pollutionIDAltered = (event) => {
+		changePollutionID(event.target.value);
+	}
+	const pollutionExpirationAltered = (event) => {
+		changePollutionExpiration(new Date(event.target.value));
+	}
 
 	//States which track if any of the data field still does not match the required format
 	const [invalidRegNumber, trackInvalidRegNumber] = useState(false);
 	const [cabAlreadyExist, trackCabAlreadyExist] = useState(false);
 	const [invalidModel, trackInvalidModel] = useState(false);
 	const [invalidColor, trackInvalidColor] = useState(false);
+	const [invalidReading, trackInvalidReading] = useState(false);
+	const [invalidInsuranceNo, trackInvalidInsuranceNo] = useState(true);
+	const [invalidInsuranceCompany, trackInvalidInsuranceCompany] = useState(true);
+	const [invalidInsuranceAmount, trackInvalidInsuranceAmount] = useState(true);
+	const [invalidInsuranceExpiry, trackInvalidInsuranceExpiry] = useState(true);
+	const [invalidInsuranceNext, trackInvalidInsuranceNext] = useState(true);
+	const [invalidPollutionID, trackInvalidPollutionID] = useState(true);
+	const [invalidPollutionExpiry, trackInvalidPollutionExpiry] = useState(true);
 
 	//Check for duplicacy in Cab registration Number.
 	const checkCabAlreadyExist = async (reg) => {
@@ -104,6 +128,9 @@ export default function Cab(props) {
 			}
 			else
 				trackInvalidColor(false);
+
+			if (reading.length == 0 || Number.isNaN(parseInt(reading))) trackInvalidReading(true);
+			else trackInvalidReading(false);
 		}, 500);
 
 		//Clear the timeout to prevent rerendering continously, if the next change is within 500ms.
@@ -111,21 +138,78 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 	},
-		[color, regNumber, model]
+		[color, reading, regNumber, model]
 	);
+	useEffect(() => {
+		if (!isInsured) return;
+		//Set timeout of 500ms to let the user know if the entered details do not match the format.
+		let timer = setTimeout(async () => {
+			if (!insuranceAmount || Number.isNaN(insuranceAmount)) trackInvalidInsuranceAmount(true);
+			else trackInvalidInsuranceAmount(false);
+			if (!insuranceExpirationDate) trackInvalidInsuranceExpiry(true);
+			else trackInvalidInsuranceExpiry(false);
+			if (!insuranceCompany || insuranceCompany.length == 0) trackInvalidInsuranceCompany(true);
+			else trackInvalidInsuranceCompany(false);
+			if (!insuranceNo || insuranceNo.length == 0) trackInvalidInsuranceNo(true);
+			else trackInvalidInsuranceNo(false);
+			if (!insuranceNextPayment) trackInvalidInsuranceNext(true);
+			else trackInvalidInsuranceNext(false);
+		}, 500);
+		//Clear the timeout to prevent rerendering continously, if the next change is within 500ms.
+		return () => {
+			clearTimeout(timer);
+		};
+
+	}, [insuranceNo, insuranceAmount, insuranceCompany, insuranceExpirationDate, insuranceNextPayment])
+	useEffect(() => {
+		if (!isPollution) return;
+		//Set timeout of 500ms to let the user know if the entered details do not match the format.
+		let timer = setTimeout(async () => {
+			if (!pollutionId || pollutionId == 0) trackInvalidPollutionID(true);
+			else trackInvalidPollutionID(false);
+			if (!pollutionExpirationDate) trackInvalidPollutionExpiry(true);
+			else trackInvalidPollutionExpiry(false);
+		}, 500);
+		//Clear the timeout to prevent rerendering continously, if the next change is within 500ms.
+		return () => {
+			clearTimeout(timer);
+		};
+
+	}, [pollutionId, pollutionExpirationDate])
 
 	//State which helps to disable button if any format still mismatches
-	let blockButton = (invalidRegNumber | invalidModel | invalidColor | cabAlreadyExist);
+	let blockButton = (invalidRegNumber | invalidModel | invalidColor | cabAlreadyExist | invalidReading);
+	blockButton |= (isInsured ? (invalidInsuranceNo | invalidInsuranceAmount | invalidInsuranceExpiry | invalidInsuranceNext | invalidInsuranceCompany) : false);
+	blockButton |= (isPollution ? (invalidPollutionID | invalidPollutionExpiry) : false);
+
 
 	//Make a request to the server to add this driver
 	const submitResponse = async (event) => {
-		const values = {
+		document.getElementById('addCabSubmit').disabled = true;
+		let values = {
 			registration_no: regNumber,
 			model: model,
 			color: color,
+			odometer: reading
 		}
-
-
+		//Add insurance
+		if (isInsured) {
+			values.insurance = {
+				policy_number: insuranceNo,
+				company: insuranceCompany,
+				expires: insuranceExpirationDate,
+				next_payment: insuranceNextPayment,
+				amount: insuranceAmount,
+			}
+		}
+		//Add Pollution Certificate
+		if (isPollution) {
+			values.pollution = {
+				id: pollutionId,
+				expires: pollutionExpirationDate,
+			}
+		}
+		console.log(values);
 		const response = await fetch(`${API_URL}/addCab`, {
 			method: "post",
 			headers: {
@@ -140,8 +224,10 @@ export default function Cab(props) {
 			changeColor("");
 			changeModel("");
 		}
-		else
+		else {
 			toast("something wrong has happened");
+			document.getElementById('addCabSubmit').disabled = false;
+		}
 	}
 
 	return (
@@ -166,7 +252,7 @@ export default function Cab(props) {
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
 								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidRegNumber == true ? 'block' : 'none') }}>Please enter the correct number</span>
-
+								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (cabAlreadyExist == true ? 'block' : 'none') }}>Sorry!This Cab already exists.</span>
 								<hr className="mx-n3" />
 
 								<div className="row align-items-center py-3">
@@ -210,13 +296,11 @@ export default function Cab(props) {
 
 									</div>
 									<div className="col-md-9 pe-5">
-
-										<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
-
+										<input type="text" className="form-control form-control-lg" onChange={ReadingAltered} />
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
-								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct reading</span>
+								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidReading == true ? 'block' : 'none') }}>Please enter the correct reading</span>
 
 								<hr className="mx-n3" />
 								<div className='container border border-warning-subtle rounded' id='Insurancediv' style={{ display: (isInsured ? 'block' : 'none') }}>
@@ -225,47 +309,51 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Policy Number</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={insuranceNumberAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct reading</span>
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceNo == true ? 'block' : 'none') }}>Please enter the correct number</span>
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">
 											<h6 className="mb-0 fw-bolder">Company</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={insuranceCompanyAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct reading</span>
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceCompany == true ? 'block' : 'none') }}>Please enter the correct company</span>
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">
 											<h6 className="mb-0 fw-bolder">Amount</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={insuranceAmountAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct reading</span>
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceAmount == true ? 'block' : 'none') }}>Please enter the correct amount</span>
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" onChange={ColorAltered} />
+											<input type="date" className="form-control form-control-lg" onChange={insuranceExpirationAltered} />
 										</div>
 									</div>
+									{/* Text which will only be visible when format is not adhered to */}
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceExpiry == true ? 'block' : 'none') }}>Please Choose a valid date</span>
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">
 											<h6 className="mb-0 fw-bolder">Next Payment On</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" onChange={ColorAltered} />
+											<input type="date" className="form-control form-control-lg" onChange={insurancePaymentAltered} />
 										</div>
 									</div>
+									{/* Text which will only be visible when format is not adhered to */}
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceNext == true ? 'block' : 'none') }}>Please Choose a valid date</span>
 								</div>
 								<div className='container border border-warning-subtle rounded my-2' id='Pollutiondiv' style={{ display: (isPollution ? 'block' : 'none') }}>
 									<div className="row align-items-center py-3">
@@ -273,19 +361,21 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Pollution Certificate ID</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={pollutionIDAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct ID</span>
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidPollutionID == true ? 'block' : 'none') }}>Please enter the correct ID</span>
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" onChange={ColorAltered} />
+											<input type="date" id="expire" className="form-control form-control-lg" onChange={pollutionExpirationAltered} />
 										</div>
 									</div>
+									{/* Text which will only be visible when format is not adhered to */}
+									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidPollutionExpiry == true ? 'block' : 'none') }}>Please Choose a Valid date</span>
 								</div>
 
 								<div className="px-5 py-4 text-center row">
@@ -302,7 +392,7 @@ export default function Cab(props) {
 										</label>
 									</div>
 									<div className="col-sm-8">
-										<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={submitResponse}>Submit</button>
+										<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={submitResponse} id='addCabSubmit'>Submit</button>
 									</div>
 								</div>
 

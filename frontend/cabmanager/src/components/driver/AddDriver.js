@@ -109,6 +109,7 @@ export default function Driver(props) {
 
 	//Make a request to the server to add this driver
 	const submitResponse = async (event) => {
+		document.getElementById('addDriverSubmit').disabled = true;
 		const values = {
 			name: name,
 			email: email,
@@ -116,8 +117,8 @@ export default function Driver(props) {
 			contact: contact,
 		}
 
-	
-		const response= await fetch(`${API_URL}/driverRegistration`, {
+
+		const response = await fetch(`${API_URL}/driverRegistration`, {
 			method: "post",
 			headers: {
 				"Content-Type": "application/json"
@@ -125,21 +126,20 @@ export default function Driver(props) {
 			body: JSON.stringify(values),
 		}
 		)
-		if(response)
-		{toast("form submitted"); //alert
-		changeEmail("");
-		changeContact("");
-		changePassword("");
-		changeName("");
-	}
+		if (response) {
+			toast("form submitted"); //alert
+			changeEmail("");
+			changeContact("");
+			changePassword("");
+			changeName("");
+		}
 		else
-		toast("something wrong has happened");
-		
+			toast("something wrong has happened");
 	}
 	return (
 
 		<section className="vh-100">
-			     <ToastContainer />
+			<ToastContainer />
 			<div className="container h-100">
 				<div className="row d-flex justify-content-center  h-100">
 					<div className="col-xl-9">
@@ -156,7 +156,7 @@ export default function Driver(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name}/>
+										<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name} />
 
 									</div>
 								</div>
@@ -173,13 +173,13 @@ export default function Driver(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email}/>
+										<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email} />
 
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
 								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
-								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (emailAlreadyExist == true ? 'block' : 'none') }}>Sorry!This email already exist.</span>
+								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (emailAlreadyExist == true ? 'block' : 'none') }}>Sorry!This email already exists.</span>
 								<hr className="mx-n3" />
 
 								<div className="row align-items-center py-3">
@@ -190,7 +190,7 @@ export default function Driver(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password}/>
+										<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} />
 
 									</div>
 								</div>
@@ -217,7 +217,7 @@ export default function Driver(props) {
 								<hr className="mx-n3" />
 
 								<div className="px-5 py-4 text-center">
-									<button type="submit" className="btn btn-primary btn-lg" onClick={submitResponse} disabled={blockButton}>Submit</button>
+									<button type="submit" className="btn btn-primary btn-lg" onClick={submitResponse} disabled={blockButton} id="addDriverSubmit">Submit</button>
 								</div>
 
 							</div>
