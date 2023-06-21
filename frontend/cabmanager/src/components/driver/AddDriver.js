@@ -133,8 +133,11 @@ export default function Driver(props) {
 			changePassword("");
 			changeName("");
 		}
-		else
+		else {
 			toast("something wrong has happened");
+			document.getElementById('addDriverSubmit').disabled = false;
+		}
+		document.getElementById('addDriverSubmit').disabled = false;
 	}
 	return (
 

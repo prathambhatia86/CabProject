@@ -1,3 +1,5 @@
 /frontend/cabmanager/node_modules
 /backend/node_modules
 /backend/config/config.env
+
+/backend/combined.log

@@ -8,6 +8,7 @@ const driverUpdationController = require('./controllers/driverUpdationController
 const cabAddController = require('./controllers/cabAddController');
 const db = require('./config/db');
 const cors = require('cors');
+const logger = require('./logger')
 
 db();
 require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
@@ -34,4 +35,4 @@ app.post('/checkCabExists', cabAddController.checkCabExists);
 
 
 const port = 5000;
-app.listen(port, () => console.log(`App backend listening on port : ${port}!`));
+app.listen(port, () => logger.info(`App backend listening on port : ${port}!`));
