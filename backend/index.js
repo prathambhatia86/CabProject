@@ -14,9 +14,9 @@ db();
 require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
 
 //MiddleWares used
-app.use(express.json())
+app.use(express.json({ limit: "50mb" }))
 app.use(cors());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false, limit: "50mb" }))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')))
 

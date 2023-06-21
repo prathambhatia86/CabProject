@@ -31,6 +31,9 @@ const Cab_collection = require('mongoose').model("Cabs", new Schema({
     odometer: {
         type: Number,
         required: true
+    }, image: {
+        type: String,
+        required: true
     }
 }));
 

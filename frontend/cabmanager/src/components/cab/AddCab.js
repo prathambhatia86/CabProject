@@ -30,6 +30,7 @@ export default function Cab(props) {
 	const [insuranceNextPayment, changeNextPayment] = useState(null);
 	const [pollutionId, changePollutionID] = useState(null);
 	const [pollutionExpirationDate, changePollutionExpiration] = useState(null);
+	const [image, changeImage] = useState(null);
 
 	//OnClick functions to change value of states on User input.
 	const Numberaltered = (event) => {
@@ -65,6 +66,15 @@ export default function Cab(props) {
 	const pollutionExpirationAltered = (event) => {
 		changePollutionExpiration(new Date(event.target.value));
 	}
+	const ImageAltered = (event) => {
+		let file = event.target.files[0];
+		let reader = new FileReader();
+		reader.onloadend = function () {
+			changeImage(reader.result);
+		}
+		reader.readAsDataURL(file);
+	}
+
 
 	//States which track if any of the data field still does not match the required format
 	const [invalidRegNumber, trackInvalidRegNumber] = useState(false);
@@ -209,6 +219,19 @@ export default function Cab(props) {
 				expires: pollutionExpirationDate,
 			}
 		}
+		if (image) {
+			values.image = image;
+		} else {
+			let file = await (async () => {
+				const response = await fetch('https://th.bing.com/th/id/OIP.1ZB6rZ5hTMhm6o3wJ9x5RQHaFU?w=267&h=191&c=7&r=0&o=5&dpr=1.4&pid=1.7');
+				return response.blob();
+			})();
+			let reader = new FileReader();
+			reader.onloadend = async () => {
+				values.image = reader.result;
+			}
+			reader.readAsDataURL(file);
+		}
 		console.log(values);
 		const response = await fetch(`${API_URL}/addCab`, {
 			method: "post",
@@ -301,6 +324,17 @@ export default function Cab(props) {
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
 								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidReading == true ? 'block' : 'none') }}>Please enter the correct reading</span>
+								<div className="row align-items-center py-3">
+									<div className="col-md-3 ps-5">
+
+										<h6 className="mb-0 fw-bolder">Cab Image</h6>
+
+									</div>
+									<div className="col-md-9 pe-5">
+										<input type="file" className="form-control form-control-lg" onChange={ImageAltered} />
+									</div>
+								</div>
+								{/* Text which will only be visible when format is not adhered to */}
 
 								<hr className="mx-n3" />
 								<div className='container border border-warning-subtle rounded' id='Insurancediv' style={{ display: (isInsured ? 'block' : 'none') }}>
