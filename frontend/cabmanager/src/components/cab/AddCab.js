@@ -233,15 +233,13 @@ export default function Cab(props) {
 			}
 			reader.readAsDataURL(file);
 		}
-		const response = await axios.post(`${API_URL}/addCab`, {
-			method: "post",
+		const response = await axios.post(`${API_URL}/addCab`, JSON.stringify(values), {
 			headers: {
 				"Content-Type": "application/json",
 				"x-auth-token": user.token
-			},
-			body: JSON.stringify(values),
+			}
 		}
-		)
+		);
 		if (response) {
 			toast("form submitted"); //alert
 			changeNum("");
