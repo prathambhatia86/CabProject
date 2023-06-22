@@ -7,9 +7,10 @@ const driverRegistrationController = require('./controllers/driverRegistrationCo
 const driverUpdationController = require('./controllers/driverUpdationController');
 const cabAddController = require('./controllers/cabAddController');
 const db = require('./config/db');
+const fs=require("fs")
 const cors = require('cors');
 const logger = require('./logger')
-
+const https=require('https');
 db();
 require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
 
@@ -32,7 +33,12 @@ app.delete('/deleteDriver', driverUpdationController.deleteDriver);
 
 app.post('/addCab', cabAddController.addCab);
 app.post('/checkCabExists', cabAddController.checkCabExists);
-
-
+const key_path=path.join(__dirname,'config','key.pem');
+const cert_path=path.join(__dirname,'config','cert.pem');
 const port = 5000;
-app.listen(port, () => logger.info(`App backend listening on port : ${port}!`));
+https.createServer({
+    key:fs.readFileSync(key_path),
+    cert:fs.readFileSync(cert_path),
+  },app).listen(port,()=>{
+    logger.info(`App backend listening on port : ${port}!`);
+  })

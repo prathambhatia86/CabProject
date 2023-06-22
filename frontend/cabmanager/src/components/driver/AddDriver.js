@@ -3,7 +3,7 @@ import styles from "../../css/driverPageAdmin.module.css"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 //Url to make API request from our server
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://localhost:5000';
 
 export default function Driver(props) {
 	//React states to hold driver data.

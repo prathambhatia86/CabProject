@@ -1,5 +1,6 @@
 /frontend/cabmanager/node_modules
 /backend/node_modules
 /backend/config/config.env
-
+/backend/config/cert.pem
+/backend/config/key.pem
 /backend/combined.log

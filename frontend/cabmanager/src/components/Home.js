@@ -8,14 +8,14 @@ export default function Home() {
     const [current, setCurrent] = useState(0);
 
     //Change this url to the api call in backend.
-    const [logURL, setURL] = useState("http://localhost:5000/adminlogin")
+    const [logURL, setURL] = useState("https://localhost:5000/adminlogin")
 
     //Change url to the correct login api
     useEffect(() => {
         if (current) {
-            setURL("http://localhost:5000/driverlogin");
+            setURL("https://localhost:5000/driverlogin");
         } else {
-            setURL("http://localhost:5000/adminlogin");
+            setURL("https://localhost:5000/adminlogin");
         }
     }, [current])
     return (

@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { confirmAlert } from 'react-confirm-alert'; 
 import 'react-confirm-alert/src/react-confirm-alert.css' 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://localhost:5000';
 
 export default function DeleteDriver(props) {
 
