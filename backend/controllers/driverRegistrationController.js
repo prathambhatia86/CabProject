@@ -1,10 +1,25 @@
-const logger = require('../logger')
+const logger = require('../logger');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const driverCollection = require('../models/drivers.model');
 
 const driverRegistration = async (req, res) => {
     //Insert the new Driver into the database
     logger.info('Recieved Driver Add request for driver ', { driverID: req.body.email, driverName: req.body.name });
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
+        res.send(401).json({ message: "User Not authorised" });
+    }
     try {
+        {
+            //Revalidating data recieved is in correct format
+            let user = await driverCollection.findOne({ email: req.body.email });
+            if (user) {
+                return res.status(400).json({ error: 'Email already exists' });
+            }
+            //[TODO]Add all the other validations also.
+        }
+        const hashedPasswd = await bcrypt.hash(req.body.password, 10);
+        req.body.password = hashedPasswd;
         const response = await driverCollection.insertMany(req.body);
         res.send(response);
     } catch (err) {
@@ -12,6 +27,9 @@ const driverRegistration = async (req, res) => {
     }
 }
 const checkLogin = async (req, res) => {
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
+        res.send(401).json({ message: "User Not authorised" });
+    }
     try {
         //Find if the document with same email id exists.
         let check = await driverCollection.findOne({ email: req.body.email })

@@ -14,8 +14,8 @@ export default function Login(props) {
     //Authenticate and log-in the user, alert in case of error.
     const handleSubmit = event => {
         event.preventDefault();
-        axios.post(props.action, formdata).then(({ data }) => {
-            dispatch(login(data));
+        axios.post(props.action, formdata).then((data) => {
+            dispatch(login(data.data));
             props.curr ? navigate('/driver') : navigate('/homepage');
         }).catch((err) => {
             alert(err.response.data.message);

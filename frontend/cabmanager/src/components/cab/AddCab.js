@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import styles from "../../css/driverPageAdmin.module.css"
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios';
 
 //Url to make API request from our server
 const API_URL = 'https://localhost:5000';
 
 export default function Cab(props) {
-
+	const user = useSelector(state => state.user.user);
 	//React states to show/hide insurance or pollution divs
 	const [isInsured, changeInsured] = useState(false);
 	const [isPollution, changePollution] = useState(false);
@@ -95,12 +97,11 @@ export default function Cab(props) {
 		const values = {
 			registration_no: reg,
 		}
-		return await fetch(`${API_URL}/checkCabExists`, {
-			method: "post",
+		return await axios.post(`${API_URL}/checkCabExists`, JSON.stringify(values), {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"x-auth-token": user.token
 			},
-			body: JSON.stringify(values),
 		}
 		)
 	}
@@ -117,7 +118,7 @@ export default function Cab(props) {
 			else {
 				//Validate that the same cab hasnt been added to the database already.
 				const response = await checkCabAlreadyExist(regNumber);
-				if (await response.json())
+				if (response.data)
 					trackCabAlreadyExist(true);
 				else {
 					trackCabAlreadyExist(false);
@@ -232,11 +233,11 @@ export default function Cab(props) {
 			}
 			reader.readAsDataURL(file);
 		}
-		console.log(values);
-		const response = await fetch(`${API_URL}/addCab`, {
+		const response = await axios.post(`${API_URL}/addCab`, {
 			method: "post",
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"x-auth-token": user.token
 			},
 			body: JSON.stringify(values),
 		}
