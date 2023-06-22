@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { confirmAlert } from 'react-confirm-alert'; 
-import 'react-confirm-alert/src/react-confirm-alert.css' 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'
+import axios from "axios";
+import { useSelector } from 'react-redux'
+
 const API_URL = 'https://localhost:5000';
 
 export default function DeleteDriver(props) {
-
+	const user = useSelector(state => state.user.user);
 
 	//React state for data of current driver selected for updation
 	const [userData, changeUserData] = useState(null);
@@ -43,12 +46,13 @@ export default function DeleteDriver(props) {
 	const [invalidContact, trackInvalidContact] = useState(false);
 	const getResponse = async (event) => {
 		try {
-			let response = await fetch(`${API_URL}/driverNames`, {
-				method: 'GET'
-			}
-			)
-			//   console.log(await response.json());
-			let data = await response.json();
+			let response = await axios.get(`${API_URL}/driverNames`, {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user.token
+				},
+			});
+			let data = response.data;
 			let newData = await data.map((val) => {
 				val.label = val.name + '~' + val.email;
 				return val;
@@ -56,7 +60,7 @@ export default function DeleteDriver(props) {
 			changeUserData(await newData);
 		}
 		catch {
-			console.log("not found");
+			toast("Failed to fetch drivers from our servers");
 		}
 	}
 
@@ -101,7 +105,6 @@ export default function DeleteDriver(props) {
 			return;
 		if (!formState)
 			changeFormState(true);
-		console.log(selectedValue);
 		changeEmail(selectedValue[0].email);
 		changePassword(selectedValue[0].password);
 		changeName(selectedValue[0].name);
@@ -112,128 +115,130 @@ export default function DeleteDriver(props) {
 	const submitResponse = async (event) => {
 		const values = {
 			id: id,
-			
 		}
-		
-		
-		const response=await fetch(`${API_URL}/deleteDriver`, {
-			method: "delete",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(values),
+		try {
+			const response = await axios.delete(`${API_URL}/deleteDriver`, {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user.token
+				},
+				data: JSON.stringify(values)
+			}
+			)
+			if (response && response.status == 200)
+				toast("form deleted");   //alert
+			else
+				toast("something wrong has occured");
+		} catch (err) {
+			toast("Some error occured, Please try again later");
 		}
-		)
-		if(response.status==200)
-		toast("form deleted");   //alert
-		else
-		toast("something wrong has occured");
 		changeFormState(false);
+
 	}
-   const ConfirmResponse= () => {    //confirmation
-        confirmAlert({
-          title: 'Confirm to Delete',
-          message: 'Are you sure to remove a driver.',
-          buttons: [
-            {
-              label: 'Yes',
-              onClick: submitResponse
-            },
-            {
-              label: 'No',
-              
-            }
-          ]
-        })
-      };
+	const ConfirmResponse = () => {    //confirmation
+		confirmAlert({
+			title: 'Confirm to Delete',
+			message: 'Are you sure to remove a driver.',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: submitResponse
+				},
+				{
+					label: 'No',
+
+				}
+			]
+		})
+	};
 	return (
 		<>
-		  <ToastContainer />
-			<Typeahead
+			<ToastContainer />
+			{userData && (<><Typeahead
 				id="DriverIds"
 				onChange={userDataSelectedFunction}
 				options={userData}
 				placeholder="Delete the driver"
 				selected={selectedUser}
 			/>
-			<section className="vh-100" style={{ display: (formState ? 'block' : 'none') }}>
-				<div className="container h-100">
-					<div className="row d-flex justify-content-center  h-100">
-						<div className="col-xl-9">
+				<section className="vh-100" style={{ display: (formState ? 'block' : 'none') }}>
+					<div className="container h-100">
+						<div className="row d-flex justify-content-center  h-100">
+							<div className="col-xl-9">
 
-							<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
-								<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Delete Driver Details</h1>
-								<div className="card-body">
+								<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
+									<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Delete Driver Details</h1>
+									<div className="card-body">
 
-									<div className="row align-items-center pt-2 pb-3">
-										<div className="col-md-3 ps-5">
+										<div className="row align-items-center pt-2 pb-3">
+											<div className="col-md-3 ps-5">
 
-											<h6 className="mb-0 fw-bolder">Driver name</h6>
+												<h6 className="mb-0 fw-bolder">Driver name</h6>
 
+											</div>
+											<div className="col-md-9 pe-5">
+
+												<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name} disabled />
+
+											</div>
 										</div>
-										<div className="col-md-9 pe-5">
+										<span className="help-block" style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct name</span>
+										<hr className="mx-n3" />
+										<div className="row align-items-center py-3">
+											<div className="col-md-3 ps-5">
 
-											<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name} disabled />
+												<h6 className="mb-0 fw-bolder" value={email}>Driver E-mail</h6>
 
+											</div>
+											<div className="col-md-9 pe-5">
+
+												<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email} disabled />
+
+											</div>
 										</div>
+										<span className="help-block" style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
+										<hr className="mx-n3" />
+										<div className="row align-items-center py-3">
+											<div className="col-md-3 ps-5">
+
+												<h6 className="mb-0 fw-bolder">Driver password</h6>
+
+											</div>
+											<div className="col-md-9 pe-5">
+
+												<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} disabled />
+
+											</div>
+										</div>
+										<span className="help-block" style={{ display: (invalidPassword == true ? 'block' : 'none') }}>Please enter the correct password</span>
+										<hr className="mx-n3" />
+
+										<div className="row align-items-center py-3">
+											<div className="col-md-3 ps-5">
+
+												<h6 className="mb-0 fw-bolder">Driver mobile number</h6>
+
+											</div>
+											<div className="col-md-9 pe-5">
+
+												<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} value={contact} disabled />
+
+											</div>
+										</div>
+										<span className="help-block" style={{ display: (invalidContact == true ? 'block' : 'none') }}>Please enter the correct mobile number</span>
+										<hr className="mx-n3" />
+
+										<div className="px-5 py-4 text-center">
+											<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={ConfirmResponse}>Delete</button>
+										</div>
+
 									</div>
-									<span class="help-block" style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct name</span>
-									<hr className="mx-n3" />
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-
-											<h6 className="mb-0 fw-bolder" value={email}>Driver E-mail</h6>
-
-										</div>
-										<div className="col-md-9 pe-5">
-
-											<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email} disabled />
-
-										</div>
-									</div>
-									<span class="help-block" style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
-									<hr className="mx-n3" />
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-
-											<h6 className="mb-0 fw-bolder">Driver password</h6>
-
-										</div>
-										<div className="col-md-9 pe-5">
-
-											<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} disabled />
-
-										</div>
-									</div>
-									<span class="help-block" style={{ display: (invalidPassword == true ? 'block' : 'none') }}>Please enter the correct password</span>
-									<hr className="mx-n3" />
-
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-
-											<h6 className="mb-0 fw-bolder">Driver mobile number</h6>
-
-										</div>
-										<div className="col-md-9 pe-5">
-
-											<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} value={contact} disabled />
-
-										</div>
-									</div>
-									<span class="help-block" style={{ display: (invalidContact == true ? 'block' : 'none') }}>Please enter the correct mobile number</span>
-									<hr className="mx-n3" />
-
-									<div className="px-5 py-4 text-center">
-										<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={ConfirmResponse}>Delete</button>
-									</div>
-
 								</div>
-							</div>
 
+							</div>
 						</div>
 					</div>
-				</div>
-			</section>
+				</section> </>)}
 		</>
 	)
 }

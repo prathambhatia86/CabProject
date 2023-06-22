@@ -21,9 +21,11 @@ const driverRegistration = async (req, res) => {
         const hashedPasswd = await bcrypt.hash(req.body.password, 10);
         req.body.password = hashedPasswd;
         const response = await driverCollection.insertMany(req.body);
-        res.send(response);
+        if (response.length > 0) res.send(true);
+        else res.send(false);
     } catch (err) {
         logger.error("While adding the driver an error occured", { driverID: req.body.email, driverName: req.body.name, error: err });
+        res.status(500).json({ error: "internal server error" });
     }
 }
 const checkLogin = async (req, res) => {

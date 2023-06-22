@@ -1,11 +1,16 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "../../css/driverPageAdmin.module.css"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+import { useSelector } from 'react-redux'
+
 //Url to make API request from our server
 const API_URL = 'https://localhost:5000';
-
+/* eslint-disable eqeqeq */
 export default function Driver(props) {
+	const user = useSelector(state => state.user.user);
+
 	//React states to hold driver data.
 	const [email, changeEmail] = useState("");
 	const [password, changePassword] = useState("");
@@ -36,21 +41,23 @@ export default function Driver(props) {
 	const [invalidContact, trackInvalidContact] = useState(false);
 	//  const [blockButton,trackInvalidButton]=useState(false);
 
-
 	//Check for duplicacy in driver email.
-	const checkEmailAlreadyExist = async (email) => {
+	const checkEmailAlreadyExist = useCallback(async (email) => {
 		const values = {
 			email: email,
 		}
-		return await fetch(`${API_URL}/checkDriverlogin`, {
-			method: "post",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(values),
+		try {
+			return await axios.post(`${API_URL}/checkDriverlogin`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user.token
+				},
+			}
+			);
+		} catch (err) {
+			toast("something wrong has happened when connecting to our servers");
 		}
-		)
-	}
+	}, [user.token]);
 
 	//On any change in data fields
 	useEffect(() => {
@@ -64,8 +71,7 @@ export default function Driver(props) {
 			}
 			else {
 				const response = await checkEmailAlreadyExist(email);
-
-				if (await response.json())
+				if (response && response.data)
 					trackEmailAlreadyExist(true);
 				else {
 					trackEmailAlreadyExist(false);
@@ -101,7 +107,7 @@ export default function Driver(props) {
 			clearTimeout(timer);
 		};
 	},
-		[email, password, name, contact]
+		[email, password, name, contact, checkEmailAlreadyExist]
 	);
 
 	//State which helps to disable button if any format still mismatches
@@ -116,28 +122,30 @@ export default function Driver(props) {
 			password: password,
 			contact: contact,
 		}
-
-
-		const response = await fetch(`${API_URL}/driverRegistration`, {
-			method: "post",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(values),
-		}
-		)
-		if (response) {
-			toast("form submitted"); //alert
-			changeEmail("");
-			changeContact("");
-			changePassword("");
-			changeName("");
-		}
-		else {
+		try {
+			//Axios post request with token added as header for authentication.
+			const response = await axios.post(`${API_URL}/driverRegistration`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user.token
+				}
+			}
+			);
+			if (response && response.data) {
+				toast("form submitted"); //alert
+				changeEmail("");
+				changeContact("");
+				changePassword("");
+				changeName("");
+			}
+			else {
+				toast("something wrong has happened");
+				document.getElementById('addDriverSubmit').disabled = false;
+			}
+		} catch (err) {
 			toast("something wrong has happened");
 			document.getElementById('addDriverSubmit').disabled = false;
 		}
-		document.getElementById('addDriverSubmit').disabled = false;
 	}
 	return (
 

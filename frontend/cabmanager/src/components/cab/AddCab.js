@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import styles from "../../css/driverPageAdmin.module.css"
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import axios from 'axios';
 
 //Url to make API request from our server
 const API_URL = 'https://localhost:5000';
-
+/* eslint-disable eqeqeq */
 export default function Cab(props) {
 	const user = useSelector(state => state.user.user);
 	//React states to show/hide insurance or pollution divs
@@ -93,18 +93,22 @@ export default function Cab(props) {
 	const [invalidPollutionExpiry, trackInvalidPollutionExpiry] = useState(true);
 
 	//Check for duplicacy in Cab registration Number.
-	const checkCabAlreadyExist = async (reg) => {
+	const checkCabAlreadyExist = useCallback(async (reg) => {
 		const values = {
 			registration_no: reg,
 		}
-		return await axios.post(`${API_URL}/checkCabExists`, JSON.stringify(values), {
-			headers: {
-				"Content-Type": "application/json",
-				"x-auth-token": user.token
-			},
+		try {
+			return await axios.post(`${API_URL}/checkCabExists`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user.token
+				},
+			}
+			)
+		} catch (err) {
+			toast("something wrong has happened when connecting to servers");
 		}
-		)
-	}
+	}, [user.token]);
 
 	//On any change in data fields
 	useEffect(() => {
@@ -118,7 +122,7 @@ export default function Cab(props) {
 			else {
 				//Validate that the same cab hasnt been added to the database already.
 				const response = await checkCabAlreadyExist(regNumber);
-				if (response.data)
+				if (response && response.data)
 					trackCabAlreadyExist(true);
 				else {
 					trackCabAlreadyExist(false);
@@ -149,7 +153,7 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 	},
-		[color, reading, regNumber, model]
+		[color, reading, regNumber, model, checkCabAlreadyExist]
 	);
 	useEffect(() => {
 		if (!isInsured) return;
@@ -171,7 +175,7 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 
-	}, [insuranceNo, insuranceAmount, insuranceCompany, insuranceExpirationDate, insuranceNextPayment])
+	}, [isInsured, insuranceNo, insuranceAmount, insuranceCompany, insuranceExpirationDate, insuranceNextPayment])
 	useEffect(() => {
 		if (!isPollution) return;
 		//Set timeout of 500ms to let the user know if the entered details do not match the format.
@@ -186,7 +190,7 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 
-	}, [pollutionId, pollutionExpirationDate])
+	}, [isPollution, pollutionId, pollutionExpirationDate])
 
 	//State which helps to disable button if any format still mismatches
 	let blockButton = (invalidRegNumber | invalidModel | invalidColor | cabAlreadyExist | invalidReading);
@@ -224,8 +228,12 @@ export default function Cab(props) {
 			values.image = image;
 		} else {
 			let file = await (async () => {
-				const response = await fetch('https://th.bing.com/th/id/OIP.1ZB6rZ5hTMhm6o3wJ9x5RQHaFU?w=267&h=191&c=7&r=0&o=5&dpr=1.4&pid=1.7');
-				return response.blob();
+				try {
+					const response = await fetch('https://th.bing.com/th/id/OIP.1ZB6rZ5hTMhm6o3wJ9x5RQHaFU?w=267&h=191&c=7&r=0&o=5&dpr=1.4&pid=1.7');
+					return response.blob();
+				} catch (err) {
+					return null;
+				}
 			})();
 			let reader = new FileReader();
 			reader.onloadend = async () => {
@@ -233,22 +241,26 @@ export default function Cab(props) {
 			}
 			reader.readAsDataURL(file);
 		}
-		const response = await axios.post(`${API_URL}/addCab`, JSON.stringify(values), {
-			headers: {
-				"Content-Type": "application/json",
-				"x-auth-token": user.token
+		try {
+			const response = await axios.post(`${API_URL}/addCab`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user.token
+				}
 			}
-		}
-		);
-		if (response) {
-			toast("form submitted"); //alert
-			changeNum("");
-			changeColor("");
-			changeModel("");
-		}
-		else {
+			);
+			if (response && response.data) {
+				toast("form submitted"); //alert
+				changeNum("");
+				changeColor("");
+				changeModel("");
+			}
+			else {
+				toast("something wrong has happened");
+				document.getElementById('addCabSubmit').disabled = false;
+			}
+		} catch (err) {
 			toast("something wrong has happened");
-			document.getElementById('addCabSubmit').disabled = false;
 		}
 	}
 
