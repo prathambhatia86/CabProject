@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,7 +8,7 @@ import axios from "axios";
 import { useSelector } from 'react-redux'
 
 const API_URL = 'https://localhost:5000';
-
+/* eslint-disable eqeqeq */
 export default function DeleteDriver(props) {
 	const user = useSelector(state => state.user.user);
 
@@ -44,12 +44,12 @@ export default function DeleteDriver(props) {
 	const [invalidPassword, trackInvalidPassword] = useState(false);
 	const [invalidName, trackInvalidName] = useState(false);
 	const [invalidContact, trackInvalidContact] = useState(false);
-	const getResponse = async (event) => {
+	const getResponse = useCallback(async (event) => {
 		try {
 			let response = await axios.get(`${API_URL}/driverNames`, {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				},
 			});
 			let data = response.data;
@@ -62,12 +62,12 @@ export default function DeleteDriver(props) {
 		catch {
 			toast("Failed to fetch drivers from our servers");
 		}
-	}
+	}, [user]);
 
 	useEffect(() => {
 		getResponse();
 
-	}, [formState])
+	}, [formState, getResponse])
 	useEffect(() => {
 
 		let timer = setTimeout(() => {
@@ -99,6 +99,10 @@ export default function DeleteDriver(props) {
 	},
 		[email, password, name, contact]
 	);
+	//Return if not authorised
+	if (!user || !user.isAuth) return;
+
+
 	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
 	let userDataSelectedFunction = (selectedValue) => {
 		if (selectedValue.length == 0)
@@ -120,7 +124,7 @@ export default function DeleteDriver(props) {
 			const response = await axios.delete(`${API_URL}/deleteDriver`, {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				},
 				data: JSON.stringify(values)
 			}

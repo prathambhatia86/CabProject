@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,7 +6,7 @@ import axios from "axios";
 import { useSelector } from 'react-redux'
 
 const API_URL = 'https://localhost:5000';
-
+/* eslint-disable eqeqeq */
 export default function UpdateDriver(props) {
 	const user = useSelector(state => state.user.user);
 
@@ -30,9 +30,7 @@ export default function UpdateDriver(props) {
 		changeEmail(event.target.value);
 	}
 	const passwordAltered = (event) => {
-
 		changePassword(event.target.value);
-
 	}
 	const contactAltered = (event) => {
 		event.target.value = event.target.value.replace(/[^0-9]/g, '');
@@ -42,12 +40,12 @@ export default function UpdateDriver(props) {
 	const [invalidPassword, trackInvalidPassword] = useState(false);
 	const [invalidName, trackInvalidName] = useState(false);
 	const [invalidContact, trackInvalidContact] = useState(false);
-	const getResponse = async (event) => {
+	const getResponse = useCallback(async (event) => {
 		try {
 			let response = await axios.get(`${API_URL}/driverNames`, {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				},
 			});
 			let data = response.data;
@@ -60,12 +58,12 @@ export default function UpdateDriver(props) {
 		catch {
 			toast("Failed to fetch drivers from our servers");
 		}
-	}
+	}, [user]);
 
 	useEffect(() => {
 		getResponse();
 
-	}, [formState])
+	}, [formState, getResponse])
 	useEffect(() => {
 
 		let timer = setTimeout(() => {
@@ -97,6 +95,8 @@ export default function UpdateDriver(props) {
 	},
 		[email, password, name, contact]
 	);
+	//Return if not authorised
+	if (!user || !user.isAuth) return;
 	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
 	let userDataSelectedFunction = (selectedValue) => {
 		if (selectedValue.length == 0)
@@ -122,7 +122,7 @@ export default function UpdateDriver(props) {
 			const response = await axios.post(`${API_URL}/driverUpdate`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				}
 			}
 			)
@@ -140,21 +140,21 @@ export default function UpdateDriver(props) {
 			<ToastContainer />
 			{userData && (
 				<>
-					<Typeahead
-						id="DriverIds"
-						onChange={userDataSelectedFunction}
-						options={userData}
-						placeholder="Update the driver"
-						selected={selectedUser}
-					/>
-					<section className="vh-100" style={{ display: (formState ? 'block' : 'none') }}>
+
+					<section className="vh-100" >
 						<div className="container h-100">
 							<div className="row d-flex justify-content-center  h-100">
-								<div className="col-xl-9">
-
-									<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
+								<div className="col-xl-11">
+									<Typeahead
+										id="DriverIds"
+										onChange={userDataSelectedFunction}
+										options={userData}
+										placeholder="Update the driver"
+										selected={selectedUser}
+									/>
+									<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }}>
 										<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Update Driver Details</h1>
-										<div className="card-body">
+										<div className="card-body ">
 
 											<div className="row align-items-center pt-2 pb-3">
 												<div className="col-md-3 ps-5">

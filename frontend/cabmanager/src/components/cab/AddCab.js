@@ -101,14 +101,14 @@ export default function Cab(props) {
 			return await axios.post(`${API_URL}/checkCabExists`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				},
 			}
 			)
 		} catch (err) {
 			toast("something wrong has happened when connecting to servers");
 		}
-	}, [user.token]);
+	}, [user]);
 
 	//On any change in data fields
 	useEffect(() => {
@@ -190,7 +190,9 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 
-	}, [isPollution, pollutionId, pollutionExpirationDate])
+	}, [isPollution, pollutionId, pollutionExpirationDate]);
+	//Return if not authorised
+	if (!user || !user.isAuth) return;
 
 	//State which helps to disable button if any format still mismatches
 	let blockButton = (invalidRegNumber | invalidModel | invalidColor | cabAlreadyExist | invalidReading);
@@ -245,7 +247,7 @@ export default function Cab(props) {
 			const response = await axios.post(`${API_URL}/addCab`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				}
 			}
 			);

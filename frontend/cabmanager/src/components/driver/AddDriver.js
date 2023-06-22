@@ -10,7 +10,6 @@ const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
 export default function Driver(props) {
 	const user = useSelector(state => state.user.user);
-
 	//React states to hold driver data.
 	const [email, changeEmail] = useState("");
 	const [password, changePassword] = useState("");
@@ -50,14 +49,14 @@ export default function Driver(props) {
 			return await axios.post(`${API_URL}/checkDriverlogin`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				},
 			}
 			);
 		} catch (err) {
 			toast("something wrong has happened when connecting to our servers");
 		}
-	}, [user.token]);
+	}, [user]);
 
 	//On any change in data fields
 	useEffect(() => {
@@ -109,6 +108,8 @@ export default function Driver(props) {
 	},
 		[email, password, name, contact, checkEmailAlreadyExist]
 	);
+	//Return if not authorised
+	if (!user || !user.isAuth) return;
 
 	//State which helps to disable button if any format still mismatches
 	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword | emailAlreadyExist);
@@ -127,7 +128,7 @@ export default function Driver(props) {
 			const response = await axios.post(`${API_URL}/driverRegistration`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
-					"x-auth-token": user.token
+					"x-auth-token": user ? user.token : null
 				}
 			}
 			);

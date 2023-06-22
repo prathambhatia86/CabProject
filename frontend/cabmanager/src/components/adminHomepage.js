@@ -11,7 +11,7 @@ import DriverAssignments from "./updateDriver/UpdateDriver";
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logout } from './store/user';
-
+/* eslint-disable eqeqeq */
 export default function AdminHomepage(props) {
 
 	//Using the useNavigate hook to redirect to another url
@@ -69,14 +69,17 @@ export default function AdminHomepage(props) {
 	const cabDelete = () => {
 		changeSelectedState(6);
 		changeNavState(false);
+		sidebarReset();
 	}
 	const driverAssignments = () => {
 		changeSelectedState(7);
 		changeNavState(false);
+		sidebarReset();
 	}
 	const cabAssignments = () => {
 		changeSelectedState(8);
 		changeNavState(false);
+		sidebarReset();
 	}
 
 
