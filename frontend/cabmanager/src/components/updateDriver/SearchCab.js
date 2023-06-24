@@ -8,21 +8,20 @@ import CabCard from './CabCard';
 import AssignCab from "./AssignCab";
 const API_URL = 'https://localhost:5000';
 
-export default function DriverAssignedCab({ driver, goback }) {
+export default function SearchCab({ driver, goback, onAssignment }) {
     const user = useSelector(state => state.user.user);
-    //React state for data of current driver selected for updation
+    //React state for data of current cab selected for updation
     const [userData, changeUserData] = useState(null);
     const [currUserData, changeCurrUserData] = useState(null);
 
     const [formState, changeFormState] = useState(false);
 
-    //React state for current driver selected for updation
+    //React state for current cab selected for updation
     const [selectedUser, changeSelectedUser] = useState(null);
-    //React state to determine whether a 
-    const [cabSelected, changeCabSelected] = useState(false);
+
     const getResponse = useCallback(async (event) => {
         try {
-            let response = await axios.get(`${API_URL}/driverNames`, {
+            let response = await axios.get(`${API_URL}/cabNames`, {
                 headers: {
                     "Content-Type": "application/json",
                     "x-auth-token": user ? user.token : null
@@ -30,13 +29,13 @@ export default function DriverAssignedCab({ driver, goback }) {
             });
             let data = response.data;
             let newData = await data.map((val) => {
-                val.label = val.name + '~' + val.email;
+                val.label = val.registration_no;
                 return val;
             })
             changeUserData(await newData);
         }
         catch {
-            toast("Failed to fetch drivers from our servers");
+            toast("Failed to fetch cabs from our servers");
         }
     }, [user]);
     useEffect(() => {
@@ -53,7 +52,7 @@ export default function DriverAssignedCab({ driver, goback }) {
             changeFormState(true);
         changeCurrUserData(selectedValue[0]);
     }
-    if (!cabSelected) {
+    if (!currUserData) {
         return (
             <div className="col-xl-11">
                 <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
@@ -80,7 +79,7 @@ export default function DriverAssignedCab({ driver, goback }) {
                         }
                         <div className="card mb-3" >
                             <div className="row g-0">
-                                {[{ registration_no: 1 }, { registration_no: 2 }, { registration_no: 3 }].map(elem => { return <CabCard key={elem.registration_no} clicked={() => changeCabSelected(elem.registration_no)} /> })}
+                                {userData && userData.map(elem => { return <CabCard cab={elem} key={elem.registration_no} clicked={() => changeCurrUserData(elem)} /> })}
                             </div>
                         </div>
                     </div>
@@ -89,7 +88,7 @@ export default function DriverAssignedCab({ driver, goback }) {
         )
     } else {
         return (
-            <AssignCab driver={driver} cab={cabSelected} goback={() => changeCabSelected(null)} />
+            <AssignCab driver={driver} cab={currUserData} onAssignment={onAssignment} goback={() => changeCurrUserData(null)} />
         )
     }
 }

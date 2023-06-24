@@ -15,6 +15,25 @@ export default function DriverAssignedCab({ driver }) {
     useEffect(() => {
         changewantSearch(false);
     }, [driver]);
+    const [cab, changeCab] = useState(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const values = { email: driver.email };
+                let response = await axios.post(`${API_URL}/getAssignedCab`, JSON.stringify(values), {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-auth-token": user ? user.token : null
+                    },
+                });
+                changeCab(response.data);
+            }
+            catch {
+                toast("Failed to fetch assigned cab");
+            }
+        }
+        fetchData();
+    }, []);
     //Return if not authorised
     if (!user || !user.isAuth) return;
     if (!wantSearch) {
@@ -23,7 +42,7 @@ export default function DriverAssignedCab({ driver }) {
                 <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
 
                     <h2 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Assigned Cab</h2>
-                    <CabDetail />
+                    {cab && <CabDetail assign={true} cab={cab} driver={driver} />}
                     <div className="row g-0 justify-content-center my-2">
                         <div className="col-4 btn-group">
                             <button type="button" className="btn btn-primary" onClick={() => changewantSearch(true)}>Change Assigned</button>
@@ -36,7 +55,7 @@ export default function DriverAssignedCab({ driver }) {
     }
     else {
         return (
-            <SearchCab driver={driver} goback={() => changewantSearch(false)} />
+            <SearchCab driver={driver} goback={() => changewantSearch(false)} onAssignment={elem => { changeCab(elem); changewantSearch(false); }} />
         )
     }
 }

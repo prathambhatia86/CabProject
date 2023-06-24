@@ -16,12 +16,14 @@ export default function UpdateDriverAssignments(props) {
     //React state for data of current driver selected for updation
     const [userData, changeUserData] = useState(null);
     const [currUserData, changeCurrUserData] = useState(null);
+    const [cabAssigned, changeCabAssigned] = useState(false);
 
     const [formState, changeFormState] = useState(false);
 
     //React state for current driver selected for updation
     const [selectedUser, changeSelectedUser] = useState(null);
 
+    //Get the names of all drivers
     const getResponse = useCallback(async (event) => {
         try {
             let response = await axios.get(`${API_URL}/driverNames`, {
@@ -44,11 +46,31 @@ export default function UpdateDriverAssignments(props) {
 
     useEffect(() => {
         getResponse();
-
     }, [formState, getResponse]);
 
-    //Return if not authorised
-    if (!user || !user.isAuth) return;
+    //A function which responds with whether the user does have a cab already assigned or not.
+    const checkAssignedCab = useCallback(async () => {
+        if (!currUserData) changeCabAssigned(false);
+        try {
+            const values = { email: currUserData.email };
+            let response = await axios.post(`${API_URL}/checkCabAssigned`, JSON.stringify(values), {
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth-token": user ? user.token : null
+                },
+            });
+            if (response.data) changeCabAssigned(true);
+        }
+        catch {
+            toast("Failed to check if driver had any assigned cab due to server error.");
+        }
+    }, [user, currUserData]);
+
+    //Non dependency UseEffect to initialise
+    useEffect(() => {
+        if (currUserData) checkAssignedCab();
+    }, [checkAssignedCab, currUserData])
+
     let userDataSelectedFunction = (selectedValue) => {
         if (selectedValue.length == 0)
             return;
@@ -56,17 +78,13 @@ export default function UpdateDriverAssignments(props) {
             changeFormState(true);
         changeCurrUserData(selectedValue[0]);
     }
-    //[TODO]Add a function which responds with whether the user does have a cab already assigned or not.
-    const checkAssignedCab = () => {
-        //Temporary logic for frontend development.
-        return true;
-    }
+    //Return if not authorised
+    if (!user || !user.isAuth) return;
     return (
         <>
             <ToastContainer />
             {userData && (
                 <>
-
                     <section className="vh-100" style={{ display: 'block' }}>
                         <div className="row">
                             <div className="container">
@@ -118,7 +136,7 @@ export default function UpdateDriverAssignments(props) {
                         <div className="row">
                             <div className="container">
                                 <div className="row d-flex justify-content-center  h-100">
-                                    {currUserData && (checkAssignedCab() ? <DriverAssignedCab driver={currUserData} /> : <SearchCab driver={currUserData} />)}
+                                    {currUserData && (cabAssigned ? <DriverAssignedCab driver={currUserData} /> : <SearchCab driver={currUserData} onAssignment={(elem) => changeCabAssigned(true)} />)}
                                 </div>
                             </div>
                         </div>

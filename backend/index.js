@@ -5,6 +5,8 @@ const path = require('path');
 const loginController = require('./controllers/loginController');
 const driverRegistrationController = require('./controllers/driverRegistrationController')
 const driverUpdationController = require('./controllers/driverUpdationController');
+const cabUpdationController = require('./controllers/cabUpdationController');
+const AssignmentController = require('./controllers/AssignmentController');
 const cabAddController = require('./controllers/cabAddController');
 const db = require('./config/db');
 const fs = require("fs")
@@ -36,6 +38,13 @@ app.delete('/deleteDriver', auth, driverUpdationController.deleteDriver);
 
 app.post('/addCab', auth, cabAddController.addCab);
 app.post('/checkCabExists', auth, cabAddController.checkCabExists);
+app.get('/cabNames', auth, cabUpdationController.getNames);
+
+app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
+app.post('/assignCab', auth, AssignmentController.assignCab);
+app.post('/getAssignedCab', auth, AssignmentController.getAssignedCab);
+
+
 const key_path = path.join(__dirname, 'config', 'key.pem');
 const cert_path = path.join(__dirname, 'config', 'cert.pem');
 const port = 5000;
