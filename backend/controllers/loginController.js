@@ -1,5 +1,7 @@
 const Driver_collection = require('../models/drivers.model');
 const jwt = require('jsonwebtoken');
+const logger = require('../logger');
+const bcrypt = require('bcrypt');
 
 const adminLogin = async (req, res) => {
     if (req.body.email === process.env.ADMIN_EMAIL && req.body.password === process.env.ADMIN_PASSWORD) {

@@ -11,10 +11,13 @@ const API_URL = 'https://localhost:5000';
 
 export default function DriverAssignedCab({ driver }) {
     const user = useSelector(state => state.user.user);
+    //React state for whether the user wants to search for any other cab to assign to this driver.
     const [wantSearch, changewantSearch] = useState(false);
+    //reset this when driver changes
     useEffect(() => {
         changewantSearch(false);
     }, [driver]);
+    //Create a cab state for holding currently assigned cab.
     const [cab, changeCab] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
@@ -33,16 +36,15 @@ export default function DriverAssignedCab({ driver }) {
             }
         }
         fetchData();
-    }, []);
+    }, [driver]);
     //Return if not authorised
     if (!user || !user.isAuth) return;
     if (!wantSearch) {
         return (
             <div className="col-xl-11">
                 <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
-
                     <h2 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Assigned Cab</h2>
-                    {cab && <CabDetail assign={true} cab={cab} driver={driver} />}
+                    {cab && <CabDetail cab={cab} driver={driver} />}
                     <div className="row g-0 justify-content-center my-2">
                         <div className="col-4 btn-group">
                             <button type="button" className="btn btn-primary" onClick={() => changewantSearch(true)}>Change Assigned</button>

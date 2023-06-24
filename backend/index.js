@@ -39,6 +39,7 @@ app.delete('/deleteDriver', auth, driverUpdationController.deleteDriver);
 app.post('/addCab', auth, cabAddController.addCab);
 app.post('/checkCabExists', auth, cabAddController.checkCabExists);
 app.get('/cabNames', auth, cabUpdationController.getNames);
+app.get('/cabNonAssignedNames', auth, cabUpdationController.getNonAssignedNames);
 
 app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
 app.post('/assignCab', auth, AssignmentController.assignCab);

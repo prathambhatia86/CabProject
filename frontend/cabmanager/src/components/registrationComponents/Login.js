@@ -18,7 +18,8 @@ export default function Login(props) {
             dispatch(login(data.data));
             props.curr ? navigate('/driver') : navigate('/homepage');
         }).catch((err) => {
-            alert(err.response.data.message);
+            console.log(err);
+            alert(err.message);
         });
     };
 

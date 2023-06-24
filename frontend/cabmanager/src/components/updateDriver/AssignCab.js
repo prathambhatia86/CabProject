@@ -10,6 +10,7 @@ const API_URL = 'https://localhost:5000';
 
 export default function AssignCab({ goback, driver, cab, onAssignment }) {
     const user = useSelector(state => state.user.user);
+    //Handle assignment of a cab to a driver
     const assignCab = async () => {
         try {
             const values = { email: driver.email, registration_no: cab.registration_no };
@@ -19,6 +20,7 @@ export default function AssignCab({ goback, driver, cab, onAssignment }) {
                     "x-auth-token": user ? user.token : null
                 },
             });
+            //onAssignment prop contains logic for changing the assigned cab state on the frontend.
             if (response.data) onAssignment(cab);
         }
         catch {
@@ -33,7 +35,7 @@ export default function AssignCab({ goback, driver, cab, onAssignment }) {
                     {goback && <button className='btn btn-danger' onClick={goback}>&lt;</button>}
                     Assign a Cab
                 </h2>
-                <CabDetail cab={cab} driver={driver} assigned={false} />
+                <CabDetail cab={cab} driver={driver} />
                 <div className="row g-0 justify-content-center my-2">
                     <div className="col-4 btn-group">
                         <button type="button" className="btn btn-primary" onClick={assignCab}>Assign This Cab</button>

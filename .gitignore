@@ -4,3 +4,4 @@
 /backend/config/cert.pem
 /backend/config/key.pem
 /backend/combined.log
+/backend/onlyError.log

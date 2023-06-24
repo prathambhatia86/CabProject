@@ -228,20 +228,6 @@ export default function Cab(props) {
 		}
 		if (image) {
 			values.image = image;
-		} else {
-			let file = await (async () => {
-				try {
-					const response = await fetch('https://th.bing.com/th/id/OIP.1ZB6rZ5hTMhm6o3wJ9x5RQHaFU?w=267&h=191&c=7&r=0&o=5&dpr=1.4&pid=1.7');
-					return response.blob();
-				} catch (err) {
-					return null;
-				}
-			})();
-			let reader = new FileReader();
-			reader.onloadend = async () => {
-				values.image = reader.result;
-			}
-			reader.readAsDataURL(file);
 		}
 		try {
 			const response = await axios.post(`${API_URL}/addCab`, JSON.stringify(values), {

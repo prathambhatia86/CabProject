@@ -40,11 +40,10 @@ export default function DriverHomePage() {
         navigate('../');
     }
 
-    //Responsiveness Shenanigans
     if (!user || !user.isAuth) {
         return;
     }
-
+    //Responsiveness Shenanigans
     let width = window.innerWidth;
     if (width >= 1250)
         width = 250

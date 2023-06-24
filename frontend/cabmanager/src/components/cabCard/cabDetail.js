@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function CabDetail({ cab, driver, assigned }) {
+export default function CabDetail({ cab, driver }) {
     return (
         <div className="row g-0 justify-content-center">
             <div className="col-md-4 col-lg-3 col-sm-8 mx-2 ">
@@ -30,7 +30,11 @@ export default function CabDetail({ cab, driver, assigned }) {
                                 </div>
                                 {cab.insurance &&
                                     <div className="modal-body">
-                                        /*Data Here*/
+                                        <span className='font-monospace'>Policy Number : {cab.insurance.policy_number}</span><br />
+                                        <span className='font-monospace'>Company : {cab.insurance.company}</span><br />
+                                        <span className='font-monospace'>Expires : {cab.insurance.expires}</span><br />
+                                        <span className='font-monospace'>Next Payment on : {cab.insurance.next_payment}</span><br />
+                                        <span className='font-monospace'>Amount Payable : {cab.insurance.amount}</span><br />
                                     </div>
                                 }
                                 {!cab.insurance &&
@@ -48,12 +52,13 @@ export default function CabDetail({ cab, driver, assigned }) {
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title" id="staticBackdropLabel">Pollution details for /*Cab Number*/</h5>
+                                    <h5 className="modal-title" id="staticBackdropLabel">Pollution details for {cab.registration_no}/</h5>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 {cab.pollution &&
                                     <div className="modal-body">
-                                        /*Data Here*/
+                                        <span className='font-monospace'>ID : {cab.pollution.id}</span><br />
+                                        <span className='font-monospace'>Company : {cab.pollution.expires}</span><br />
                                     </div>
                                 }
                                 {!cab.pollution &&
@@ -67,7 +72,6 @@ export default function CabDetail({ cab, driver, assigned }) {
                             </div>
                         </div>
                     </div>
-                    {assigned && <p className="card-text"><small className="text-muted">Assigned to You on : /*Date here*/</small></p>}
                 </div>
             </div>
         </div>

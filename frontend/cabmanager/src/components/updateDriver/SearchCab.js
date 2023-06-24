@@ -10,8 +10,9 @@ const API_URL = 'https://localhost:5000';
 
 export default function SearchCab({ driver, goback, onAssignment }) {
     const user = useSelector(state => state.user.user);
-    //React state for data of current cab selected for updation
+    //React state for containing data of all cabs
     const [userData, changeUserData] = useState(null);
+    //React state to hold current selected cab
     const [currUserData, changeCurrUserData] = useState(null);
 
     const [formState, changeFormState] = useState(false);
@@ -21,7 +22,7 @@ export default function SearchCab({ driver, goback, onAssignment }) {
 
     const getResponse = useCallback(async (event) => {
         try {
-            let response = await axios.get(`${API_URL}/cabNames`, {
+            let response = await axios.get(`${API_URL}/cabNonAssignedNames`, {
                 headers: {
                     "Content-Type": "application/json",
                     "x-auth-token": user ? user.token : null
@@ -56,15 +57,11 @@ export default function SearchCab({ driver, goback, onAssignment }) {
         return (
             <div className="col-xl-11">
                 <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
-
                     <h2 className="text-yellow mb-4 py-4 text-center me-5" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>
                         {goback && <button className='btn btn-danger' onClick={goback}>&lt;</button>}
                         Assign a Cab
                     </h2>
-
-
                     <div className="card-body text-center">
-
                         {userData &&
                             <>
                                 <Typeahead

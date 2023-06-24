@@ -13,9 +13,11 @@ const API_URL = 'https://localhost:5000';
 export default function UpdateDriverAssignments(props) {
     const user = useSelector(state => state.user.user);
 
-    //React state for data of current driver selected for updation
+    //React state for data of all drivers
     const [userData, changeUserData] = useState(null);
+    //React state for current selected driver.
     const [currUserData, changeCurrUserData] = useState(null);
+    //Check if any cab is assigned or not.
     const [cabAssigned, changeCabAssigned] = useState(false);
 
     const [formState, changeFormState] = useState(false);
@@ -23,7 +25,7 @@ export default function UpdateDriverAssignments(props) {
     //React state for current driver selected for updation
     const [selectedUser, changeSelectedUser] = useState(null);
 
-    //Get the names of all drivers
+    //Get the names of all drivers from the database using API call through axios.
     const getResponse = useCallback(async (event) => {
         try {
             let response = await axios.get(`${API_URL}/driverNames`, {
@@ -33,6 +35,7 @@ export default function UpdateDriverAssignments(props) {
                 },
             });
             let data = response.data;
+            //Converting object to string for selection
             let newData = await data.map((val) => {
                 val.label = val.name + '~' + val.email;
                 return val;
@@ -60,16 +63,19 @@ export default function UpdateDriverAssignments(props) {
                 },
             });
             if (response.data) changeCabAssigned(true);
+            else {
+                changeCabAssigned(false);
+            }
         }
         catch {
             toast("Failed to check if driver had any assigned cab due to server error.");
         }
     }, [user, currUserData]);
 
-    //Non dependency UseEffect to initialise
+    //When a user is selected, recheck if any cab is assigned to him.
     useEffect(() => {
         if (currUserData) checkAssignedCab();
-    }, [checkAssignedCab, currUserData])
+    }, [checkAssignedCab, currUserData]);
 
     let userDataSelectedFunction = (selectedValue) => {
         if (selectedValue.length == 0)
@@ -78,6 +84,7 @@ export default function UpdateDriverAssignments(props) {
             changeFormState(true);
         changeCurrUserData(selectedValue[0]);
     }
+
     //Return if not authorised
     if (!user || !user.isAuth) return;
     return (
@@ -136,6 +143,7 @@ export default function UpdateDriverAssignments(props) {
                         <div className="row">
                             <div className="container">
                                 <div className="row d-flex justify-content-center  h-100">
+                                    {/* Depending upon any cab is assigned or not we will either show that cab or show a search component */}
                                     {currUserData && (cabAssigned ? <DriverAssignedCab driver={currUserData} /> : <SearchCab driver={currUserData} onAssignment={(elem) => changeCabAssigned(true)} />)}
                                 </div>
                             </div>
