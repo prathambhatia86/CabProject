@@ -24,6 +24,7 @@ export default function Cab(props) {
 	const [regNumber, changeNum] = useState("");
 	const [model, changeModel] = useState("");
 	const [color, changeColor] = useState("");
+	const [capacity, changeCapacity] = useState("");
 	const [reading, changeReading] = useState("");
 	const [insuranceNo, changeInsuranceNo] = useState(null);
 	const [insuranceCompany, changeInsuranceCompany] = useState(null);
@@ -43,6 +44,9 @@ export default function Cab(props) {
 	}
 	const ColorAltered = (event) => {
 		changeColor(event.target.value);
+	}
+	const CapacityAltered = (event) => {
+		changeCapacity(event.target.value);
 	}
 	const ReadingAltered = (event) => {
 		changeReading(event.target.value);
@@ -82,6 +86,7 @@ export default function Cab(props) {
 	const [invalidRegNumber, trackInvalidRegNumber] = useState(false);
 	const [cabAlreadyExist, trackCabAlreadyExist] = useState(false);
 	const [invalidModel, trackInvalidModel] = useState(false);
+	const [invalidCapacity, trackInvalidCapacity] = useState(false);
 	const [invalidColor, trackInvalidColor] = useState(false);
 	const [invalidReading, trackInvalidReading] = useState(false);
 	const [invalidInsuranceNo, trackInvalidInsuranceNo] = useState(true);
@@ -136,7 +141,11 @@ export default function Cab(props) {
 			}
 			else
 				trackInvalidModel(false);
-
+			//capacity should be between 1 and 2(inclusive)
+			if(capacity.trim().length<1||capacity.trim().length>2)
+			trackInvalidCapacity(true);
+			else
+			trackInvalidCapacity(false);
 			//Color must have non-zero length
 			if (color.trim().length == 0) {
 				trackInvalidColor(true);
@@ -153,7 +162,7 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 	},
-		[color, reading, regNumber, model, checkCabAlreadyExist]
+		[color, reading, regNumber, model,capacity, checkCabAlreadyExist]
 	);
 	useEffect(() => {
 		if (!isInsured) return;
@@ -195,7 +204,7 @@ export default function Cab(props) {
 	if (!user || !user.isAuth) return;
 
 	//State which helps to disable button if any format still mismatches
-	let blockButton = (invalidRegNumber | invalidModel | invalidColor | cabAlreadyExist | invalidReading);
+	let blockButton = (invalidRegNumber | invalidModel |invalidCapacity| invalidColor | cabAlreadyExist | invalidReading);
 	blockButton |= (isInsured ? (invalidInsuranceNo | invalidInsuranceAmount | invalidInsuranceExpiry | invalidInsuranceNext | invalidInsuranceCompany) : false);
 	blockButton |= (isPollution ? (invalidPollutionID | invalidPollutionExpiry) : false);
 
@@ -206,6 +215,7 @@ export default function Cab(props) {
 		let values = {
 			registration_no: regNumber,
 			model: model,
+			capacity:capacity,
 			color: color,
 			odometer: reading
 		}
@@ -316,7 +326,21 @@ export default function Cab(props) {
 								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct color</span>
 
 								<hr className="mx-n3" />
+								<div className="row align-items-center py-3">
+									<div className="col-md-3 ps-5">
 
+										<h6 className="mb-0 fw-bolder">Cab capacity</h6>
+
+									</div>
+									<div className="col-md-9 pe-5">
+
+										<input type="text"  pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered} required />
+
+									</div>
+								</div>
+								{/* Text which will only be visible when format is not adhered to */}
+								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidCapacity == true ? 'block' : 'none') }}>Please enter the correct capacity(1-99)</span>
+								<hr className="mx-n3" />
 								<div className="row align-items-center py-3">
 									<div className="col-md-3 ps-5">
 

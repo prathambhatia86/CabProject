@@ -8,6 +8,10 @@ const Cab_collection = require('mongoose').model("Cabs", new Schema({
         type: String,
         required: true
     },
+    capacity: {
+        type: Number,
+        required: true
+    },
     color: {
         type: String,
         required: true
