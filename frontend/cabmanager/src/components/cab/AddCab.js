@@ -34,7 +34,7 @@ export default function Cab(props) {
 	const [pollutionId, changePollutionID] = useState(null);
 	const [pollutionExpirationDate, changePollutionExpiration] = useState(null);
 	const [image, changeImage] = useState(null);
-
+	const [invalidImage, trackInvalidImage] = useState(true);
 	//OnClick functions to change value of states on User input.
 	const Numberaltered = (event) => {
 		changeNum(event.target.value);
@@ -77,6 +77,7 @@ export default function Cab(props) {
 		let reader = new FileReader();
 		reader.onloadend = function () {
 			changeImage(reader.result);
+			trackInvalidImage(false);//image is selected
 		}
 		reader.readAsDataURL(file);
 	}
@@ -134,7 +135,6 @@ export default function Cab(props) {
 				}
 				trackInvalidRegNumber(false);
 			}
-
 			//The model field must have an entry
 			if (model.trim().length == 0) {
 				trackInvalidModel(true);
@@ -162,7 +162,7 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 	},
-		[color, reading, regNumber, model,capacity, checkCabAlreadyExist]
+		[color, reading, regNumber, model,capacity,image, checkCabAlreadyExist]
 	);
 	useEffect(() => {
 		if (!isInsured) return;
@@ -204,7 +204,7 @@ export default function Cab(props) {
 	if (!user || !user.isAuth) return;
 
 	//State which helps to disable button if any format still mismatches
-	let blockButton = (invalidRegNumber | invalidModel |invalidCapacity| invalidColor | cabAlreadyExist | invalidReading);
+	let blockButton = (invalidRegNumber | invalidModel |invalidCapacity| invalidColor | cabAlreadyExist | invalidReading|invalidImage);
 	blockButton |= (isInsured ? (invalidInsuranceNo | invalidInsuranceAmount | invalidInsuranceExpiry | invalidInsuranceNext | invalidInsuranceCompany) : false);
 	blockButton |= (isPollution ? (invalidPollutionID | invalidPollutionExpiry) : false);
 
@@ -353,6 +353,7 @@ export default function Cab(props) {
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
 								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidReading == true ? 'block' : 'none') }}>Please enter the correct reading</span>
+								<hr className="mx-n3" />
 								<div className="row align-items-center py-3">
 									<div className="col-md-3 ps-5">
 
@@ -360,11 +361,11 @@ export default function Cab(props) {
 
 									</div>
 									<div className="col-md-9 pe-5">
-										<input type="file" className="form-control form-control-lg" onChange={ImageAltered} />
+										<input type="file" className="form-control form-control-lg" accept="image/*" onChange={ImageAltered}  />
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
-
+								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidImage== true ? 'block' : 'none') }}>Please select the image!</span>
 								<hr className="mx-n3" />
 								<div className='container border border-warning-subtle rounded' id='Insurancediv' style={{ display: (isInsured ? 'block' : 'none') }}>
 									<div className="row align-items-center py-3">
