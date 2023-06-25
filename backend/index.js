@@ -44,6 +44,7 @@ app.get('/cabNonAssignedNames', auth, cabUpdationController.getNonAssignedNames)
 app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
 app.post('/assignCab', auth, AssignmentController.assignCab);
 app.post('/getAssignedCab', auth, AssignmentController.getAssignedCab);
+app.post('/deassignCab', auth, AssignmentController.deassignCab);
 
 
 const key_path = path.join(__dirname, 'config', 'key.pem');

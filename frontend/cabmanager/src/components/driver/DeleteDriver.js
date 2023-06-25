@@ -158,19 +158,19 @@ export default function DeleteDriver(props) {
 	return (
 		<>
 			<ToastContainer />
-			{userData && (<><Typeahead
-				id="DriverIds"
-				onChange={userDataSelectedFunction}
-				options={userData}
-				placeholder="Delete the driver"
-				selected={selectedUser}
-			/>
-				<section className="vh-100" style={{ display: (formState ? 'block' : 'none') }}>
+			{userData && (<>
+				<section className="vh-100">
 					<div className="container h-100">
 						<div className="row d-flex justify-content-center  h-100">
-							<div className="col-xl-9">
-
-								<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
+							<div className="col-xl-11">
+								<Typeahead
+									id="DriverIds"
+									onChange={userDataSelectedFunction}
+									options={userData}
+									placeholder="Delete the driver"
+									selected={selectedUser}
+								/>
+								<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }}>
 									<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Delete Driver Details</h1>
 									<div className="card-body">
 
