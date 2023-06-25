@@ -4,7 +4,7 @@ import styles from "../../css/driverPageAdmin.module.css"
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux'
 import axios from 'axios';
-
+import { motion } from "framer-motion";
 //Url to make API request from our server
 const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
@@ -254,7 +254,13 @@ export default function Cab(props) {
 
 	return (
 
-		<section className="vh-100" >
+		<motion.section className="vh-100"    initial={{ scale: 0 }}
+		animate={{ rotate: 360, scale: 1 }}
+		transition={{
+		  type: "spring",
+		  stiffness: 260,
+		  damping: 100
+		}}>
 			<ToastContainer />
 			<div className="container h-100" >
 				<div className="row d-flex justify-content-center  h-100">
@@ -435,7 +441,7 @@ export default function Cab(props) {
 					</div>
 				</div>
 			</div>
-		</section>
+		</motion.section>
 
 	)
 }

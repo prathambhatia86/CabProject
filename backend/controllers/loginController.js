@@ -9,7 +9,7 @@ const adminLogin = async (req, res) => {
         const payload = {
             TokenContent: {
                 email: "ADMIN",
-                isAuth: true,
+                isAuth: true
             },
         };
         const token = jwt.sign(

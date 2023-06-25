@@ -6,7 +6,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import axios from "axios";
 import { useSelector } from 'react-redux'
-
+import { motion } from "framer-motion";
 const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
 export default function DeleteDriver(props) {
@@ -170,7 +170,13 @@ export default function DeleteDriver(props) {
 									placeholder="Delete the driver"
 									selected={selectedUser}
 								/>
-								<div className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }}>
+								<motion.div  initial={{ scale: 0 }}
+		animate={{ rotate: 360, scale: 1 }}
+		transition={{
+		  type: "spring",
+		  stiffness: 260,
+		  damping: 100
+		}} key={formState} className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }}>
 									<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Delete Driver Details</h1>
 									<div className="card-body">
 
@@ -237,7 +243,7 @@ export default function DeleteDriver(props) {
 										</div>
 
 									</div>
-								</div>
+								</motion.div>
 
 							</div>
 						</div>
