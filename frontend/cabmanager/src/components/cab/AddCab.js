@@ -47,21 +47,26 @@ export default function Cab(props) {
 		changeColor(event.target.value);
 	}
 	const CapacityAltered = (event) => {
+		event.target.value = event.target.value.replace(/[^0-9]/g, '');
 		changeCapacity(event.target.value);
 	}
 	const ReadingAltered = (event) => {
+		event.target.value = event.target.value.replace(/[^0-9]/g, '');
 		changeReading(event.target.value);
 	}
 	const insuranceNumberAltered = (event) => {
+		event.target.value = event.target.value.replace(/[^0-9]/g, '');
 		changeInsuranceNo(event.target.value);
 	}
 	const insuranceCompanyAltered = (event) => {
 		changeInsuranceCompany(event.target.value);
 	}
 	const insuranceAmountAltered = (event) => {
+		event.target.value = event.target.value.replace(/[^0-9]/g, '');
 		changeInsuranceAmount(parseInt(event.target.value));
 	}
 	const insurancePaymentAltered = (event) => {
+		event.target.value = event.target.value.replace(/[^0-9]/g, '');
 		changeNextPayment(new Date(event.target.value));
 	}
 	const insuranceExpirationAltered = (event) => {
@@ -350,7 +355,7 @@ export default function Cab(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text"  pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered} onkeypress='return event.charCode >= 48 && event.charCode <= 57' required value={capacity} />
+										<input type="text"  pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered}  required value={capacity} />
 
 									</div>
 								</div>
