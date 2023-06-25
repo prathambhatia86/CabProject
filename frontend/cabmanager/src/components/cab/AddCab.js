@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState,useRef} from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import styles from "../../css/driverPageAdmin.module.css"
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,6 +10,7 @@ const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
 export default function Cab(props) {
 	const user = useSelector(state => state.user.user);
+	const ref = useRef();
 	//React states to show/hide insurance or pollution divs
 	const [isInsured, changeInsured] = useState(false);
 	const [isPollution, changePollution] = useState(false);
@@ -249,9 +250,24 @@ export default function Cab(props) {
 			);
 			if (response && response.data) {
 				toast("form submitted"); //alert
+				ref.current.value = ""
 				changeNum("");
 				changeColor("");
 				changeModel("");
+				changeCapacity("");
+				changeImage("");
+				trackInvalidImage(true);
+				changeInsuranceAmount(null);
+				changeInsuranceCompany(null);
+				changeInsuranceExpiration(null);
+				changeInsuranceNo(null);
+				changeNextPayment(null);
+				changePollutionExpiration(null);
+				changePollutionID(null);
+				changeReading("");
+				changeInsured(false);
+				changePollution(false);
+				
 			}
 			else {
 				toast("something wrong has happened");
@@ -285,7 +301,7 @@ export default function Cab(props) {
 										<em className=" mb-0 fw-light"><small>(<a href="https://tinyurl.com/ysuphhm5" target="blank">Format</a> : XX XX XX XXXX)</small></em>
 									</div>
 									<div className="col-md-9 pe-5">
-										<input type="text" className="form-control form-control-lg" onChange={Numberaltered} />
+										<input type="text" className="form-control form-control-lg" onChange={Numberaltered} value={regNumber}/>
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
@@ -301,7 +317,7 @@ export default function Cab(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text" className="form-control form-control-lg" onChange={ModelAltered} />
+										<input type="text" className="form-control form-control-lg" onChange={ModelAltered} value={model} />
 
 									</div>
 								</div>
@@ -318,7 +334,7 @@ export default function Cab(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text" className="form-control form-control-lg" onChange={ColorAltered} />
+										<input type="text" className="form-control form-control-lg" onChange={ColorAltered} value={color} />
 
 									</div>
 								</div>
@@ -334,7 +350,7 @@ export default function Cab(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text"  pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered} required />
+										<input type="text"  pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered} onkeypress='return event.charCode >= 48 && event.charCode <= 57' required value={capacity} />
 
 									</div>
 								</div>
@@ -348,7 +364,7 @@ export default function Cab(props) {
 
 									</div>
 									<div className="col-md-9 pe-5">
-										<input type="text" className="form-control form-control-lg" onChange={ReadingAltered} />
+										<input type="text" className="form-control form-control-lg" onChange={ReadingAltered} value={reading} />
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
@@ -361,7 +377,7 @@ export default function Cab(props) {
 
 									</div>
 									<div className="col-md-9 pe-5">
-										<input type="file" className="form-control form-control-lg" accept="image/*" onChange={ImageAltered}  />
+										<input type="file" className="form-control form-control-lg"  ref={ref} accept="image/*" onChange={ImageAltered}  />
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
@@ -373,7 +389,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Policy Number</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={insuranceNumberAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={insuranceNumberAltered} value={insuranceNo}/>
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -383,7 +399,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Company</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={insuranceCompanyAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={insuranceCompanyAltered} value={insuranceCompany} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -393,7 +409,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Amount</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={insuranceAmountAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={insuranceAmountAltered} value={insuranceAmount} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -403,7 +419,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" onChange={insuranceExpirationAltered} />
+											<input type="date" className="form-control form-control-lg" onChange={insuranceExpirationAltered} value={insuranceExpirationDate} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -413,7 +429,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Next Payment On</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" onChange={insurancePaymentAltered} />
+											<input type="date" className="form-control form-control-lg" onChange={insurancePaymentAltered} value={insuranceNextPayment}/>
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -425,7 +441,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Pollution Certificate ID</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={pollutionIDAltered} />
+											<input type="text" className="form-control form-control-lg" onChange={pollutionIDAltered} value={pollutionId} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -435,7 +451,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" id="expire" className="form-control form-control-lg" onChange={pollutionExpirationAltered} />
+											<input type="date" id="expire" className="form-control form-control-lg" onChange={pollutionExpirationAltered} value={pollutionExpirationDate} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -444,13 +460,13 @@ export default function Cab(props) {
 
 								<div className="px-5 py-4 text-center row">
 									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" value="" id="insuranceCheckbox" onClick={handleInsuranceCheckbox} />
+										<input className="form-check-input" type="checkbox" value={isInsured} id="insuranceCheckbox" onClick={handleInsuranceCheckbox} />
 										<label className="form-check-label" htmlFor="insuranceCheckbox">
 											Cab Insured?
 										</label>
 									</div>
 									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" value="" id="PollutionCheckbox" onClick={handlePollutionCheckbox} />
+										<input className="form-check-input" type="checkbox" value={isPollution} id="PollutionCheckbox" onClick={handlePollutionCheckbox} />
 										<label className="form-check-label" htmlFor="PollutionCheckbox">
 											Pollution
 										</label>
