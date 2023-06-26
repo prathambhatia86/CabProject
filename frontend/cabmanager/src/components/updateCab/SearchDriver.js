@@ -9,7 +9,7 @@ import AssignCab from "../updateDriver/AssignCab";
 import SelectedCab from "./SelectedCab";
 const API_URL = 'https://localhost:5000';
 
-export default function SelectDriver() {
+export default function SearchDriver({ cab }) {
     const user = useSelector(state => state.user.user);
 
     //React state for data of all drivers
@@ -90,40 +90,42 @@ export default function SelectDriver() {
     if (!user || !user.isAuth) return;
     return (
         <>
-            <Typeahead
-                id="DriverIds"
-                onChange={userDataSelectedFunction}
-                options={userData}
-                placeholder="Update the driver"
-                selected={selectedUser}
-            />
-            <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
-                <h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Selected Driver</h1>
-                <div className="card-body text-center">
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <h6 className="mb-0">Name</h6>
+            <div className="col-xl-11">
+                <Typeahead
+                    id="DriverIds"
+                    onChange={userDataSelectedFunction}
+                    options={userData}
+                    placeholder="Update the driver"
+                    selected={selectedUser}
+                />
+                <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
+                    <h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Selected Driver</h1>
+                    <div className="card-body text-center">
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Name</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {formState ? currUserData.name : 'Please select a driver'}
+                            </div>
                         </div>
-                        <div className="col-sm-9 text-secondary">
-                            {formState ? currUserData.name : 'Please select a driver'}
+                        <hr />
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Email</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {formState ? currUserData.email : 'Please select a driver'}
+                            </div>
                         </div>
-                    </div>
-                    <hr />
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <h6 className="mb-0">Email</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                            {formState ? currUserData.email : 'Please select a driver'}
-                        </div>
-                    </div>
-                    <hr />
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <h6 className="mb-0">Contact</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                            {formState ? '(+91) ' + currUserData.contact : 'Please select a driver'}
+                        <hr />
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Contact</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {formState ? '(+91) ' + currUserData.contact : 'Please select a driver'}
+                            </div>
                         </div>
                     </div>
                 </div>

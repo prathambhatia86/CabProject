@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState,useRef} from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import styles from "../../css/driverPageAdmin.module.css"
 import 'react-toastify/dist/ReactToastify.css';
@@ -135,10 +135,10 @@ export default function Cab(props) {
 			else {
 				//Validate that the same cab hasnt been added to the database already.
 				const response = await checkCabAlreadyExist(regNumber);
-				if (response && response.data)
-					{trackCabAlreadyExist(true);
-						trackInvalidRegNumber(false);
-					}
+				if (response && response.data) {
+					trackCabAlreadyExist(true);
+					trackInvalidRegNumber(false);
+				}
 				else {
 					trackCabAlreadyExist(false);
 				}
@@ -151,10 +151,10 @@ export default function Cab(props) {
 			else
 				trackInvalidModel(false);
 			//capacity should be between 1 and 2(inclusive)
-			if(capacity.trim().length<1||capacity.trim().length>2)
-			trackInvalidCapacity(true);
+			if (capacity.trim().length < 1 || capacity.trim().length > 2)
+				trackInvalidCapacity(true);
 			else
-			trackInvalidCapacity(false);
+				trackInvalidCapacity(false);
 			//Color must have non-zero length
 			if (color.trim().length == 0) {
 				trackInvalidColor(true);
@@ -171,7 +171,7 @@ export default function Cab(props) {
 			clearTimeout(timer);
 		};
 	},
-		[color, reading, regNumber, model,capacity,image, checkCabAlreadyExist]
+		[color, reading, regNumber, model, capacity, image, checkCabAlreadyExist]
 	);
 	useEffect(() => {
 		if (!isInsured) return;
@@ -213,7 +213,7 @@ export default function Cab(props) {
 	if (!user || !user.isAuth) return;
 
 	//State which helps to disable button if any format still mismatches
-	let blockButton = (invalidRegNumber | invalidModel |invalidCapacity| invalidColor | cabAlreadyExist | invalidReading|invalidImage);
+	let blockButton = (invalidRegNumber | invalidModel | invalidCapacity | invalidColor | cabAlreadyExist | invalidReading | invalidImage);
 	blockButton |= (isInsured ? (invalidInsuranceNo | invalidInsuranceAmount | invalidInsuranceExpiry | invalidInsuranceNext | invalidInsuranceCompany) : false);
 	blockButton |= (isPollution ? (invalidPollutionID | invalidPollutionExpiry) : false);
 
@@ -224,7 +224,7 @@ export default function Cab(props) {
 		let values = {
 			registration_no: regNumber,
 			model: model,
-			capacity:capacity,
+			capacity: capacity,
 			color: color,
 			odometer: reading
 		}
@@ -275,7 +275,7 @@ export default function Cab(props) {
 				changeReading("");
 				changeInsured(false);
 				changePollution(false);
-				
+
 			}
 			else {
 				toast("something wrong has happened");
@@ -288,17 +288,17 @@ export default function Cab(props) {
 
 	return (
 
-		<motion.section className="vh-100"    initial={{ scale: 0 }}
-		animate={{ rotate: 0, scale: 1 }}
-		transition={{
-			ease: "linear",
-			duration: 1,
-			x: { duration: 1 }
-		  }}>
+		<motion.section className="vh-100" initial={{ scale: 0 }}
+			animate={{ rotate: 0, scale: 1 }}
+			transition={{
+				ease: "linear",
+				duration: 1,
+				x: { duration: 1 }
+			}}>
 			<ToastContainer />
-			<div className="container h-100" >
+			<div className="container h-100 my-2" >
 				<div className="row d-flex justify-content-center  h-100">
-					<div className="col-xl-9">
+					<div className="col-xl-11">
 
 						<div className="card my-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }} >
 							<h1 className="text-yellow mb-4 text-center py-4" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Enter Cab Details</h1>
@@ -309,7 +309,7 @@ export default function Cab(props) {
 										<em className=" mb-0 fw-light"><small>(<a href="https://tinyurl.com/ysuphhm5" target="blank">Format</a> : XX XX XX XXXX)</small></em>
 									</div>
 									<div className="col-md-9 pe-5">
-										<input type="text" className="form-control form-control-lg" onChange={Numberaltered} value={regNumber}/>
+										<input type="text" className="form-control form-control-lg" onChange={Numberaltered} value={regNumber} />
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
@@ -358,7 +358,7 @@ export default function Cab(props) {
 									</div>
 									<div className="col-md-9 pe-5">
 
-										<input type="text"  pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered}  required value={capacity} />
+										<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered} required value={capacity} />
 
 									</div>
 								</div>
@@ -385,11 +385,11 @@ export default function Cab(props) {
 
 									</div>
 									<div className="col-md-9 pe-5">
-										<input type="file" className="form-control form-control-lg"  ref={ref} accept="image/*" onChange={ImageAltered}  />
+										<input type="file" className="form-control form-control-lg" ref={ref} accept="image/*" onChange={ImageAltered} />
 									</div>
 								</div>
 								{/* Text which will only be visible when format is not adhered to */}
-								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidImage== true ? 'block' : 'none') }}>Please select the image!</span>
+								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidImage == true ? 'block' : 'none') }}>Please select the image!</span>
 								<hr className="mx-n3" />
 								<div className='container border border-warning-subtle rounded' id='Insurancediv' style={{ display: (isInsured ? 'block' : 'none') }}>
 									<div className="row align-items-center py-3">
@@ -397,7 +397,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Policy Number</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={insuranceNumberAltered} value={insuranceNo}/>
+											<input type="text" className="form-control form-control-lg" onChange={insuranceNumberAltered} value={insuranceNo} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -427,7 +427,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date"  className="form-control form-control-lg" value={insuranceExpirationDate} onChange={insuranceExpirationAltered}  />
+											<input type="date" className="form-control form-control-lg" value={insuranceExpirationDate} onChange={insuranceExpirationAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -437,7 +437,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Next Payment On</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date"  className="form-control form-control-lg" value={insuranceNextPayment} onChange={insurancePaymentAltered} />
+											<input type="date" className="form-control form-control-lg" value={insuranceNextPayment} onChange={insurancePaymentAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -459,7 +459,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" id="expire"  className="form-control form-control-lg" value={pollutionExpirationDate} onChange={pollutionExpirationAltered}  />
+											<input type="date" id="expire" className="form-control form-control-lg" value={pollutionExpirationDate} onChange={pollutionExpirationAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}

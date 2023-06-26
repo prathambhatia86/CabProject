@@ -10,6 +10,7 @@ import DriverAssignments from "./updateDriver/UpdateDriver";
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logout } from './store/user';
+
 /* eslint-disable eqeqeq */
 export default function AdminHomepage(props) {
 
@@ -147,7 +148,6 @@ export default function AdminHomepage(props) {
 				{/*[TODO] Add a component for update cab, delete cab*/}
 				{selectedState == 7 ? <DriverAssignments /> : ''}
 				{selectedState == 8 ? <CabAssignments /> : ''}
-
 			</div>
 		</div >
 	)

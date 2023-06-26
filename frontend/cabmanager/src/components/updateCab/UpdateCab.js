@@ -6,7 +6,8 @@ import axios from "axios";
 import { useSelector } from 'react-redux'
 import CabCard from '../updateDriver/CabCard';
 import SelectedCab from "./SelectedCab";
-import SelectDriver from "./SelectDriver";
+import SearchDriver from "./SearchDriver";
+import CabAssignedDriver from "./CabAssignedDriver";
 const API_URL = 'https://localhost:5000';
 
 export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
@@ -15,6 +16,8 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
     const [userData, changeUserData] = useState(null);
     //React state to hold current selected cab
     const [currUserData, changeCurrUserData] = useState(null);
+    //Check if any driver is assigned or not.
+    const [driverAssigned, changeDriverAssigned] = useState(false);
 
     const [formState, changeFormState] = useState(false);
 
@@ -42,8 +45,32 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
     }, [user]);
     useEffect(() => {
         getResponse();
-
     }, [formState, getResponse]);
+    //A function which responds with whether the user does have a cab already assigned or not.
+    const checkAssignedDriver = useCallback(async () => {
+        if (!currUserData) changeDriverAssigned(false);
+        try {
+            const values = { registration_no: currUserData.registration_no };
+            let response = await axios.post(`${API_URL}/checkDriverAssigned`, JSON.stringify(values), {
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth-token": user ? user.token : null
+                },
+            });
+            if (response.data) changeDriverAssigned(true);
+            else {
+                changeDriverAssigned(false);
+            }
+        }
+        catch {
+            toast("Failed to check if driver had any assigned cab due to server error.");
+        }
+    }, [user, currUserData]);
+
+    //When a user is selected, recheck if any cab is assigned to him.
+    useEffect(() => {
+        if (currUserData) checkAssignedDriver();
+    }, [checkAssignedDriver, currUserData]);
 
     //Return if not authorised
     if (!user || !user.isAuth) return;
@@ -99,11 +126,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                             <div className="container">
                                 <div className="row d-flex justify-content-center  h-100">
                                     {/* Depending upon any cab is assigned or not we will either show that cab or show a search component */}
-                                    <div className="col-xl-11">
-                                        {currUserData && <SelectDriver />
-                                        }
-                                    </div>
-
+                                    {currUserData && (driverAssigned ? <CabAssignedDriver cab={currUserData} onDeassign={() => changeDriverAssigned(null)} /> : <SearchDriver cab={currUserData} />)}
                                 </div>
                             </div>
                         </div>

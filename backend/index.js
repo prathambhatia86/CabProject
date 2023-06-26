@@ -42,8 +42,10 @@ app.get('/cabNames', auth, cabUpdationController.getNames);
 app.get('/cabNonAssignedNames', auth, cabUpdationController.getNonAssignedNames);
 
 app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
+app.post('/checkDriverAssigned', auth, AssignmentController.checkDriverAssigned);
 app.post('/assignCab', auth, AssignmentController.assignCab);
 app.post('/getAssignedCab', auth, AssignmentController.getAssignedCab);
+app.post('/getAssignedDriver', auth, AssignmentController.getAssignedDriver);
 app.post('/deassignCab', auth, AssignmentController.deassignCab);
 
 
