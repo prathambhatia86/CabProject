@@ -66,17 +66,17 @@ export default function Cab(props) {
 		changeInsuranceAmount(parseInt(event.target.value));
 	}
 	const insurancePaymentAltered = (event) => {
-		event.target.value = event.target.value.replace(/[^0-9]/g, '');
-		changeNextPayment(new Date(event.target.value));
+
+		changeNextPayment((event.target.value));
 	}
 	const insuranceExpirationAltered = (event) => {
-		changeInsuranceExpiration(new Date(event.target.value));
+		changeInsuranceExpiration((event.target.value));
 	}
 	const pollutionIDAltered = (event) => {
 		changePollutionID(event.target.value);
 	}
 	const pollutionExpirationAltered = (event) => {
-		changePollutionExpiration(new Date(event.target.value));
+		changePollutionExpiration((event.target.value));
 	}
 	const ImageAltered = (event) => {
 		let file = event.target.files[0];
@@ -233,8 +233,8 @@ export default function Cab(props) {
 			values.insurance = {
 				policy_number: insuranceNo,
 				company: insuranceCompany,
-				expires: insuranceExpirationDate,
-				next_payment: insuranceNextPayment,
+				expires: new Date(insuranceExpirationDate),
+				next_payment: new Date(insuranceNextPayment),
 				amount: insuranceAmount,
 			}
 		}
@@ -242,7 +242,7 @@ export default function Cab(props) {
 		if (isPollution) {
 			values.pollution = {
 				id: pollutionId,
-				expires: pollutionExpirationDate,
+				expires: new Date(pollutionExpirationDate),
 			}
 		}
 		if (image) {
@@ -265,13 +265,13 @@ export default function Cab(props) {
 				changeCapacity("");
 				changeImage("");
 				trackInvalidImage(true);
-				changeInsuranceAmount(null);
-				changeInsuranceCompany(null);
-				changeInsuranceExpiration(null);
-				changeInsuranceNo(null);
-				changeNextPayment(null);
-				changePollutionExpiration(null);
-				changePollutionID(null);
+				changeInsuranceAmount("");
+				changeInsuranceCompany("");
+				changeInsuranceExpiration("");
+				changeInsuranceNo("");
+				changeNextPayment("");
+				changePollutionExpiration("");
+				changePollutionID("");
 				changeReading("");
 				changeInsured(false);
 				changePollution(false);
@@ -427,7 +427,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" onChange={insuranceExpirationAltered} value={insuranceExpirationDate} />
+											<input type="date"  className="form-control form-control-lg" value={insuranceExpirationDate} onChange={insuranceExpirationAltered}  />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -437,7 +437,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Next Payment On</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" onChange={insurancePaymentAltered} value={insuranceNextPayment}/>
+											<input type="date"  className="form-control form-control-lg" value={insuranceNextPayment} onChange={insurancePaymentAltered} />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -459,7 +459,7 @@ export default function Cab(props) {
 											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
 										</div>
 										<div className="col-md-9 pe-5">
-											<input type="date" id="expire" className="form-control form-control-lg" onChange={pollutionExpirationAltered} value={pollutionExpirationDate} />
+											<input type="date" id="expire"  className="form-control form-control-lg" value={pollutionExpirationDate} onChange={pollutionExpirationAltered}  />
 										</div>
 									</div>
 									{/* Text which will only be visible when format is not adhered to */}
@@ -468,13 +468,13 @@ export default function Cab(props) {
 
 								<div className="px-5 py-4 text-center row">
 									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" value={isInsured} id="insuranceCheckbox" onClick={handleInsuranceCheckbox} />
+										<input className="form-check-input" type="checkbox" checked={isInsured} id="insuranceCheckbox" onClick={handleInsuranceCheckbox} />
 										<label className="form-check-label" htmlFor="insuranceCheckbox">
 											Cab Insured?
 										</label>
 									</div>
 									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" value={isPollution} id="PollutionCheckbox" onClick={handlePollutionCheckbox} />
+										<input className="form-check-input" type="checkbox" checked={isPollution} id="PollutionCheckbox" onClick={handlePollutionCheckbox} />
 										<label className="form-check-label" htmlFor="PollutionCheckbox">
 											Pollution
 										</label>
