@@ -151,12 +151,12 @@ export default function Driver(props) {
 	return (
 
 		<motion.section className="vh-100"    initial={{ scale: 0 }}
-		animate={{ rotate: 360, scale: 1 }}
+		animate={{ rotate: 0, scale: 1 }}
 		transition={{
-		  type: "spring",
-		  stiffness: 260,
-		  damping: 100
-		}}>
+			ease: "linear",
+			duration: 1,
+			x: { duration: 1 }
+		  }}>
 			
 			<ToastContainer />
 			<div className="container h-100">
