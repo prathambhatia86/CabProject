@@ -130,12 +130,15 @@ export default function Cab(props) {
 			let pattern = /^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/;
 			if (!regNumber.match(pattern)) {
 				trackInvalidRegNumber(true);
+				trackCabAlreadyExist(false);
 			}
 			else {
 				//Validate that the same cab hasnt been added to the database already.
 				const response = await checkCabAlreadyExist(regNumber);
 				if (response && response.data)
-					trackCabAlreadyExist(true);
+					{trackCabAlreadyExist(true);
+						trackInvalidRegNumber(false);
+					}
 				else {
 					trackCabAlreadyExist(false);
 				}
