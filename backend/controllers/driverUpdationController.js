@@ -3,7 +3,7 @@ const Assignment_collection = require('../models/assignment.model');
 const driverCollection = require('../models/drivers.model');
 const getNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         //Fetch all documents from the database
@@ -17,7 +17,7 @@ const getNames = async (req, res) => {
 const driverUpdate = async (req, res) => {
     //Here both admin and the driver with that Email will be allowed to make a change to the data.
     if (!req.userFromToken || !req.userFromToken.isAuth || (req.userFromToken.email != 'ADMIN' && req.userFromToken.email != req.body.email)) {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         if (req.userFromToken.email == 'ADMIN') {
@@ -44,12 +44,16 @@ const driverUpdate = async (req, res) => {
 
 const deleteDriver = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || (req.userFromToken.email != 'ADMIN')) {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         //Select document with specific id, delete it from the database
         const filter = { _id: req.body.id };
-        const data = await driverCollection.deleteOne(filter);
+        let data = await Assignment_collection.deleteOne({ email: req.body.email });
+        if (!data) res.status(404).json({
+            message: "Unable to delete now",
+        });
+        data = await driverCollection.deleteOne(filter);
         //If the document was deleted send back status OK else if no deletion occured send no resource found
         res.status(data ? 200 : 404).json({
             message: data.deletedCount ? "User deleted" : "User Not found",
@@ -66,7 +70,7 @@ const deleteDriver = async (req, res) => {
 
 const getNonAssignedNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         //Fetch all documents from the database

@@ -5,10 +5,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import { useSelector } from 'react-redux'
 import { motion } from "framer-motion";
+import { RotatingLines } from 'react-loader-spinner'
+
 const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
 export default function UpdateDriver(props) {
 	const user = useSelector(state => state.user.user);
+
+	const [loading, changeLoading] = useState(true);
 
 	//React state for data of current driver selected for updation
 	const [userData, changeUserData] = useState(null);
@@ -54,6 +58,7 @@ export default function UpdateDriver(props) {
 				return val;
 			})
 			changeUserData(await newData);
+			changeLoading(false);
 		}
 		catch {
 			toast("Failed to fetch drivers from our servers");
@@ -138,101 +143,109 @@ export default function UpdateDriver(props) {
 	return (
 		<>
 			<ToastContainer />
-			{userData && (
-				<>
 
-					<section className="vh-100" >
-						<div className="container h-100">
-							<div className="row d-flex justify-content-center  h-100">
-								<div className="col-xl-11">
-									<Typeahead
-										id="DriverIds"
-										onChange={userDataSelectedFunction}
-										options={userData}
-										placeholder="Update the driver"
-										selected={selectedUser}
+			<section className="vh-100" >
+				<div className="container h-100">
+					<div className="row d-flex justify-content-center  h-100">
+						<div className="col-xl-11">
+							{loading &&
+								<div className="text-center">
+									<RotatingLines
+										strokeColor="grey"
+										strokeWidth="5"
+										animationDuration="0.75"
+										width="96"
+										visible={true}
 									/>
-									<motion.div initial={{ scale: 0 }}
-			animate={{ rotate: 0, scale: 1 }}
-			transition={{
-				ease: "linear",
-				duration: 1,
-				x: { duration: 1 }
-			  }} key={formState} className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }}>
-										<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Update Driver Details</h1>
-										<div className="card-body ">
+								</div>}
+							{!loading &&
+								<Typeahead
+									id="DriverIds"
+									onChange={userDataSelectedFunction}
+									options={userData}
+									placeholder="Update the driver"
+									selected={selectedUser}
+								/>
+							}
+							<motion.div initial={{ scale: 0 }}
+								animate={{ rotate: 0, scale: 1 }}
+								transition={{
+									ease: "linear",
+									duration: 1,
+									x: { duration: 1 }
+								}} key={formState} className="card" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }}>
+								<h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Update Driver Details</h1>
+								<div className="card-body ">
 
-											<div className="row align-items-center pt-2 pb-3">
-												<div className="col-md-3 ps-5">
+									<div className="row align-items-center pt-2 pb-3">
+										<div className="col-md-3 ps-5">
 
-													<h6 className="mb-0 fw-bolder">Driver name</h6>
-
-												</div>
-												<div className="col-md-9 pe-5">
-
-													<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name} />
-
-												</div>
-											</div>
-											<span className="help-block" style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct name</span>
-											<hr className="mx-n3" />
-											<div className="row align-items-center py-3">
-												<div className="col-md-3 ps-5">
-
-													<h6 className="mb-0 fw-bolder" value={email}>Driver E-mail</h6>
-
-												</div>
-												<div className="col-md-9 pe-5">
-
-													<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email} />
-
-												</div>
-											</div>
-											<span className="help-block" style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
-											<hr className="mx-n3" />
-											<div className="row align-items-center py-3">
-												<div className="col-md-3 ps-5">
-
-													<h6 className="mb-0 fw-bolder">Driver password</h6>
-
-												</div>
-												<div className="col-md-9 pe-5">
-
-													<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} />
-
-												</div>
-											</div>
-											<span className="help-block" style={{ display: (invalidPassword == true ? 'block' : 'none') }}>Please enter the correct password</span>
-											<hr className="mx-n3" />
-
-											<div className="row align-items-center py-3">
-												<div className="col-md-3 ps-5">
-
-													<h6 className="mb-0 fw-bolder">Driver mobile number</h6>
-
-												</div>
-												<div className="col-md-9 pe-5">
-
-													<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} value={contact} />
-
-												</div>
-											</div>
-											<span className="help-block" style={{ display: (invalidContact == true ? 'block' : 'none') }}>Please enter the correct mobile number</span>
-											<hr className="mx-n3" />
-
-											<div className="px-5 py-4 text-center">
-												<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={submitResponse}>Update</button>
-											</div>
+											<h6 className="mb-0 fw-bolder">Driver name</h6>
 
 										</div>
-									</motion.div>
+										<div className="col-md-9 pe-5">
+
+											<input type="text" className="form-control form-control-lg" onChange={nameAltered} value={name} />
+
+										</div>
+									</div>
+									<span className="help-block" style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct name</span>
+									<hr className="mx-n3" />
+									<div className="row align-items-center py-3">
+										<div className="col-md-3 ps-5">
+
+											<h6 className="mb-0 fw-bolder" value={email}>Driver E-mail</h6>
+
+										</div>
+										<div className="col-md-9 pe-5">
+
+											<input type="email" className="form-control form-control-lg" onChange={emailAltered} value={email} />
+
+										</div>
+									</div>
+									<span className="help-block" style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
+									<hr className="mx-n3" />
+									<div className="row align-items-center py-3">
+										<div className="col-md-3 ps-5">
+
+											<h6 className="mb-0 fw-bolder">Driver password</h6>
+
+										</div>
+										<div className="col-md-9 pe-5">
+
+											<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} />
+
+										</div>
+									</div>
+									<span className="help-block" style={{ display: (invalidPassword == true ? 'block' : 'none') }}>Please enter the correct password</span>
+									<hr className="mx-n3" />
+
+									<div className="row align-items-center py-3">
+										<div className="col-md-3 ps-5">
+
+											<h6 className="mb-0 fw-bolder">Driver mobile number</h6>
+
+										</div>
+										<div className="col-md-9 pe-5">
+
+											<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={contactAltered} value={contact} />
+
+										</div>
+									</div>
+									<span className="help-block" style={{ display: (invalidContact == true ? 'block' : 'none') }}>Please enter the correct mobile number</span>
+									<hr className="mx-n3" />
+
+									<div className="px-5 py-4 text-center">
+										<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={submitResponse}>Update</button>
+									</div>
 
 								</div>
-							</div>
+							</motion.div>
+
 						</div>
-					</section>
-				</>)
-			}
+					</div>
+				</div>
+			</section>
 		</>
 	)
 }

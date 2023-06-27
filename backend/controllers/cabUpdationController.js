@@ -3,7 +3,7 @@ const Assignment_collection = require('../models/assignment.model');
 const cabCollection = require('../models/cabs.model');
 const getNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         //Fetch all documents from the database
@@ -16,7 +16,7 @@ const getNames = async (req, res) => {
 
 const getNonAssignedNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         //Fetch all documents from the database

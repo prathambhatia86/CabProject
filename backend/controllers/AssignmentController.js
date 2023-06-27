@@ -4,8 +4,9 @@ const Cab_collection = require('../models/cabs.model');
 const Driver_collection = require('../models/drivers.model');
 
 const checkCabAssigned = async (req, res) => {
-    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+    if (!req.userFromToken || !req.userFromToken.isAuth || (req.userFromToken.email != 'ADMIN' && req.body.email != req.userFromToken.email)) {
+        res.status(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         let check = await Assignment_collection.findOne({ email: req.body.email });
@@ -20,7 +21,8 @@ const checkCabAssigned = async (req, res) => {
 
 const assignCab = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         let deletePrevious = await Assignment_collection.deleteOne({ email: req.body.email });
@@ -35,8 +37,9 @@ const assignCab = async (req, res) => {
 }
 
 const getAssignedCab = async (req, res) => {
-    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+    if (!req.userFromToken || !req.userFromToken.isAuth || (req.userFromToken.email != 'ADMIN' && req.body.email != req.userFromToken.email)) {
+        res.status(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         let check = await Assignment_collection.findOne({ email: req.body.email });
@@ -53,7 +56,8 @@ const getAssignedCab = async (req, res) => {
 }
 const deassignCab = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         let check = await Assignment_collection.deleteOne({ email: req.body.email, registration_no: req.body.registration_no });
@@ -68,7 +72,8 @@ const deassignCab = async (req, res) => {
 
 const checkDriverAssigned = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         let check = await Assignment_collection.findOne({ registration_no: req.body.registration_no });
@@ -84,6 +89,7 @@ const checkDriverAssigned = async (req, res) => {
 const getAssignedDriver = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
         res.send(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         let check = await Assignment_collection.findOne({ registration_no: req.body.registration_no });
@@ -102,6 +108,7 @@ const getAssignedDriver = async (req, res) => {
 const assignDriver = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
         res.send(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         let deletePrevious = await Assignment_collection.deleteOne({ registration_no: req.body.registration_no });

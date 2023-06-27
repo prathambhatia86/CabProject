@@ -7,7 +7,7 @@ const driverRegistration = async (req, res) => {
     //Insert the new Driver into the database
     logger.info('Recieved Driver Add request for driver ', { driverID: req.body.email, driverName: req.body.name });
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         {
@@ -30,7 +30,7 @@ const driverRegistration = async (req, res) => {
 }
 const checkLogin = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         //Find if the document with same email id exists.

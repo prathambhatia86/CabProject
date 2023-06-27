@@ -5,7 +5,7 @@ const addCab = async (req, res) => {
     //Insert the new Cab into the database.
     logger.info('Recieved Cab Add request for cab ' + req.body.registration_no);
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         await Cab_collection.insertMany(req.body);
@@ -17,7 +17,7 @@ const addCab = async (req, res) => {
 }
 const checkCabExists = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
-        res.send(401).json({ message: "User Not authorised" });
+        res.status(401).json({ message: "User Not authorised" });
     }
     try {
         let check = await Cab_collection.findOne({ registration_no: req.body.registration_no })
