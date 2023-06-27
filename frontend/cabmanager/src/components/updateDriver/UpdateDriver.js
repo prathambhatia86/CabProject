@@ -86,7 +86,6 @@ export default function UpdateDriverAssignments(props) {
         changeCabAssigned(false);
         changeCurrUserData(selectedValue[0]);
     }
-
     //Return if not authorised
     if (!user || !user.isAuth) return;
     return (
@@ -146,7 +145,7 @@ export default function UpdateDriverAssignments(props) {
                             <div className="container">
                                 <div className="row d-flex justify-content-center  h-100">
                                     {/* Depending upon any cab is assigned or not we will either show that cab or show a search component */}
-                                    {currUserData && (cabAssigned ? <DriverAssignedCab cab={currUserData} onDeassign={() => changeCabAssigned(null)} /> : <SearchCab driver={currUserData} onAssignment={(elem) => changeCabAssigned(true)} />)}
+                                    {currUserData && (cabAssigned ? <DriverAssignedCab driver={currUserData} onDeassign={() => changeCabAssigned(null)} /> : <SearchCab driver={currUserData} onAssignment={(elem) => changeCabAssigned(true)} />)}
                                 </div>
                             </div>
                         </div>

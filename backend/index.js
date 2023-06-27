@@ -33,6 +33,7 @@ app.post('/driverlogin', loginController.driverLogin);
 app.post('/driverRegistration', auth, driverRegistrationController.driverRegistration);
 app.post('/checkDriverLogin', auth, driverRegistrationController.checkLogin);
 app.get('/driverNames', auth, driverUpdationController.getNames);
+app.get('/driverNonAssignedNames', auth, driverUpdationController.getNonAssignedNames);
 app.post('/driverUpdate', auth, driverUpdationController.driverUpdate);
 app.delete('/deleteDriver', auth, driverUpdationController.deleteDriver);
 
@@ -44,6 +45,7 @@ app.get('/cabNonAssignedNames', auth, cabUpdationController.getNonAssignedNames)
 app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
 app.post('/checkDriverAssigned', auth, AssignmentController.checkDriverAssigned);
 app.post('/assignCab', auth, AssignmentController.assignCab);
+app.post('/assignDriver', auth, AssignmentController.assignDriver);
 app.post('/getAssignedCab', auth, AssignmentController.getAssignedCab);
 app.post('/getAssignedDriver', auth, AssignmentController.getAssignedDriver);
 app.post('/deassignCab', auth, AssignmentController.deassignCab);

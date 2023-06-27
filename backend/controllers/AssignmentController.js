@@ -32,7 +32,6 @@ const assignCab = async (req, res) => {
     } catch (err) {
         logger.error("When assigning a cab ", { error: err });
     }
-
 }
 
 const getAssignedCab = async (req, res) => {
@@ -100,7 +99,24 @@ const getAssignedDriver = async (req, res) => {
     }
 }
 
+const assignDriver = async (req, res) => {
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
+        res.send(401).json({ message: "User Not authorised" });
+    }
+    try {
+        let deletePrevious = await Assignment_collection.deleteOne({ registration_no: req.body.registration_no });
+        let check = await Assignment_collection.insertMany({ email: req.body.email, registration_no: req.body.registration_no });
+        if (check == null)
+            res.send(false);
+        else
+            res.send(true);
+    } catch (err) {
+        logger.error("When assigning a driver", { error: err });
+        res.send(false);
+    }
+}
+
 module.exports = {
     checkCabAssigned, assignCab, getAssignedCab, deassignCab,
-    checkDriverAssigned, getAssignedDriver
+    checkDriverAssigned, getAssignedDriver, assignDriver
 }

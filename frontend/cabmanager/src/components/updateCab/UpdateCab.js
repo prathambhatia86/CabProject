@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import axios from "axios";
 import { useSelector } from 'react-redux'
@@ -85,6 +85,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
         <>
             {userData && (
                 <>
+                    <ToastContainer />
                     <section className="vh-100" style={{ display: 'block' }}>
                         <div className="row">
                             <div className="container">
@@ -109,6 +110,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                                                             <hr />
                                                         </>
                                                     }
+                                                    {!userData && toast("Failed to fetch any cab")}
                                                     <div className="card mb-3" >
                                                         <div className="row g-0">
                                                             {userData && userData.map(elem => { return <CabCard cab={elem} key={elem.registration_no} clicked={() => changeCurrUserData(elem)} /> })}
@@ -118,7 +120,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                                             </div>
                                         </div>
                                     }
-                                    {currUserData && <SelectedCab cab={currUserData} goback={() => changeCurrUserData(null)} />}
+                                    {currUserData && <SelectedCab cab={currUserData} goback={() => { changeCurrUserData(null); changeDriverAssigned(false); }} />}
                                 </div>
                             </div>
                         </div>
@@ -126,7 +128,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                             <div className="container">
                                 <div className="row d-flex justify-content-center  h-100">
                                     {/* Depending upon any cab is assigned or not we will either show that cab or show a search component */}
-                                    {currUserData && (driverAssigned ? <CabAssignedDriver cab={currUserData} onDeassign={() => changeDriverAssigned(null)} /> : <SearchDriver cab={currUserData} />)}
+                                    {currUserData && (driverAssigned ? <CabAssignedDriver cab={currUserData} onDeassign={() => changeDriverAssigned(null)} /> : <SearchDriver cab={currUserData} onAssignment={() => changeDriverAssigned(true)} />)}
                                 </div>
                             </div>
                         </div>

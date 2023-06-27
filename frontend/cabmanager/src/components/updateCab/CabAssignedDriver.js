@@ -16,7 +16,7 @@ export default function CabAssignedDriver({ cab, onDeassign }) {
     useEffect(() => {
         changewantSearch(false);
     }, [cab]);
-    //Create a cab state for holding currently assigned cab.
+    //Create a cab state for holding currently assigned driver
     const [driver, changeDriver] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +28,6 @@ export default function CabAssignedDriver({ cab, onDeassign }) {
                         "x-auth-token": user ? user.token : null
                     },
                 });
-                console.log(response);
                 changeDriver(response.data);
             }
             catch {
@@ -76,7 +75,7 @@ export default function CabAssignedDriver({ cab, onDeassign }) {
     }
     else {
         return (
-            <SearchDriver cab={cab} goback={() => changewantSearch(false)} onAssignment={elem => { changeDriver(elem); changewantSearch(false); }} />
+            <SearchDriver cab={cab} goback={() => changewantSearch(false)} onAssignment={elem => { changewantSearch(false); changeDriver(elem); }} />
         )
     }
 }

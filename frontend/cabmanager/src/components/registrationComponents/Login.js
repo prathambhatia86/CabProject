@@ -18,7 +18,6 @@ export default function Login(props) {
             dispatch(login(data.data));
             props.curr ? navigate('/driver') : navigate('/homepage');
         }).catch((err) => {
-            console.log(err);
             alert(err.message);
         });
     };
@@ -50,12 +49,6 @@ export default function Login(props) {
                                 <div className="form-outline mb-4">
                                     <input type="password" id="typePasswordX-2" className="form-control form-control-lg" name="password" value={formdata.password} onChange={handleChange} required />
                                     <label className="form-label" htmlFor="typePasswordX-2">Password</label>
-                                </div>
-
-                                <div className="form-check d-flex justify-content-start mb-4">
-                                    <input className="form-check-input " type="checkbox" value="" id="form1Example3" />
-
-                                    <label className="form-check-label " htmlFor="form1Example3"> Remember password </label>
                                 </div>
 
                                 <button className="btn btn-primary btn-lg btn-block" type="submit">Login</button>

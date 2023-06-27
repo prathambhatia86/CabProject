@@ -1,4 +1,5 @@
 const logger = require('../logger');
+const Assignment_collection = require('../models/assignment.model');
 const driverCollection = require('../models/drivers.model');
 const getNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
@@ -62,8 +63,24 @@ const deleteDriver = async (req, res) => {
         });
     }
 }
+
+const getNonAssignedNames = async (req, res) => {
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
+        res.send(401).json({ message: "User Not authorised" });
+    }
+    try {
+        //Fetch all documents from the database
+        const assigned = (await Assignment_collection.find({})).map(a => { return a.email });
+        const data = await driverCollection.find({ email: { $nin: assigned } });
+        res.json(data);
+    } catch (err) {
+        logger.error('Error when getting Names for All non assigned drivers', { error: err });
+    }
+}
+
 module.exports = {
     getNames,
     driverUpdate,
-    deleteDriver
+    deleteDriver,
+    getNonAssignedNames
 }

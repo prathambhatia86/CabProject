@@ -1,9 +1,12 @@
 import React from 'react'
 
-export default function DriverDetail({ driver }) {
+export default function DriverDetail({ driver, goback }) {
     return (
         <>
-            <h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Selected Driver</h1>
+            <h1 className="text-yellow mb-4 py-4 text-center" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>
+                {goback && <button className='btn btn-danger' onClick={goback}>&lt;</button>}
+                Selected Driver
+            </h1>
             <div className="card-body text-center">
                 <div className="row">
                     <div className="col-sm-3">
