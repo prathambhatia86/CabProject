@@ -8,10 +8,15 @@ import CabCard from '../updateDriver/CabCard';
 import SelectedCab from "./SelectedCab";
 import SearchDriver from "./SearchDriver";
 import CabAssignedDriver from "./CabAssignedDriver";
+import { RotatingLines } from 'react-loader-spinner'
 const API_URL = 'https://localhost:5000';
 
 export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
     const user = useSelector(state => state.user.user);
+
+    const [cabsLoading, changeCabsLoading] = useState(true);
+
+
     //React state for containing data of all cabs
     const [userData, changeUserData] = useState(null);
     //React state to hold current selected cab
@@ -38,6 +43,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                 return val;
             })
             changeUserData(await newData);
+            changeCabsLoading(false);
         }
         catch {
             toast("Failed to fetch cabs from our servers");
@@ -83,7 +89,18 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
     }
     return (
         <>
-            {userData && (
+            {cabsLoading &&
+                <div className="text-center">
+                    <RotatingLines
+                        strokeColor="grey"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="96"
+                        visible={true}
+                    />
+                </div>
+            }
+            {!cabsLoading &&
                 <>
                     <ToastContainer />
                     <section className="vh-100" style={{ display: 'block' }}>
@@ -133,7 +150,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                             </div>
                         </div>
                     </section>
-                </>)
+                </>
             }
         </>
     )

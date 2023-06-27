@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import axios from "axios";
 import { useSelector } from 'react-redux'
-import CabCard from '../updateDriver/CabCard';
-import AssignCab from "../updateDriver/AssignCab";
-import SelectedCab from "./SelectedCab";
+import { RotatingLines } from 'react-loader-spinner'
 import DriverDetail from "./DriverDetail";
 const API_URL = 'https://localhost:5000';
 
 export default function SearchDriver({ cab, onAssignment, goback }) {
     const user = useSelector(state => state.user.user);
+
+    const [loading, changeLoading] = useState(true);
 
     //React state for data of all drivers
     const [userData, changeUserData] = useState(null);
@@ -39,6 +39,7 @@ export default function SearchDriver({ cab, onAssignment, goback }) {
                 return val;
             })
             changeUserData(await newData);
+            changeLoading(false);
         }
         catch {
             toast("Failed to fetch drivers from our servers");
@@ -82,23 +83,36 @@ export default function SearchDriver({ cab, onAssignment, goback }) {
     return (
         <>
             <div className="col-xl-11">
-                {userData &&
-                    <Typeahead
-                        id="DriverIds"
-                        onChange={userDataSelectedFunction}
-                        options={userData}
-                        placeholder="Update the driver"
-                        selected={selectedUser}
-                    />
-                }
-                <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
-                    <DriverDetail goback={goback} driver={currUserData} />
-                    <div className="row g-0 justify-content-center my-2">
-                        <div className="col-4 btn-group">
-                            {currUserData && <button type="button" className="btn btn-primary" onClick={assignCab}>Assign This Driver</button>}
-                        </div>
+                {loading &&
+                    <div className="text-center">
+                        <RotatingLines
+                            strokeColor="grey"
+                            strokeWidth="5"
+                            animationDuration="0.75"
+                            width="96"
+                            visible={true}
+                        />
                     </div>
-                </div>
+                }
+                {!loading &&
+                    <>
+                        <Typeahead
+                            id="DriverIds"
+                            onChange={userDataSelectedFunction}
+                            options={userData}
+                            placeholder="Update the driver"
+                            selected={selectedUser}
+                        />
+                        <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
+                            <DriverDetail goback={goback} driver={currUserData} />
+                            <div className="row g-0 justify-content-center my-2">
+                                <div className="col-4 btn-group">
+                                    {currUserData && <button type="button" className="btn btn-primary" onClick={assignCab}>Assign This Driver</button>}
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                }
             </div>
         </>
     )
