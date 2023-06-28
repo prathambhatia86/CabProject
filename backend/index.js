@@ -18,6 +18,8 @@ const helmet = require("helmet");
 const auth = require('./middlewares/auth');
 db();
 
+//cache for heavy requests.
+const cache = require('./middlewares/cache');
 
 //MiddleWares used
 app.use(helmet());
@@ -33,16 +35,16 @@ app.post('/driverlogin', loginController.driverLogin);
 
 app.post('/driverRegistration', auth, driverRegistrationController.driverRegistration);
 app.post('/checkDriverLogin', auth, driverRegistrationController.checkLogin);
-app.get('/driverNames', auth, driverUpdationController.getNames);
-app.get('/driverNonAssignedNames', auth, driverUpdationController.getNonAssignedNames);
+app.get('/driverNames', [auth, cache(10)], driverUpdationController.getNames);
+app.get('/driverNonAssignedNames', [auth, cache(10)], driverUpdationController.getNonAssignedNames);
 app.post('/driverUpdate', auth, driverUpdationController.driverUpdate);
 app.post('/changePassword', auth, driverUpdationController.changePassword);
 app.delete('/deleteDriver', auth, driverUpdationController.deleteDriver);
 
 app.post('/addCab', auth, cabAddController.addCab);
 app.post('/checkCabExists', auth, cabAddController.checkCabExists);
-app.get('/cabNames', auth, cabUpdationController.getNames);
-app.get('/cabNonAssignedNames', auth, cabUpdationController.getNonAssignedNames);
+app.get('/cabNames', [auth, cache(10)], cabUpdationController.getNames);
+app.get('/cabNonAssignedNames', [auth, cache(10)], cabUpdationController.getNonAssignedNames);
 app.post('/getCab', auth, cabUpdationController.getCab);
 
 app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
