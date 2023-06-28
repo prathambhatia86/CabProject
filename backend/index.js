@@ -11,12 +11,13 @@ const cabAddController = require('./controllers/cabAddController');
 const db = require('./config/db');
 const fs = require("fs")
 const cors = require('cors');
+require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
 const logger = require('./logger')
 const https = require('https');
 const helmet = require("helmet");
 const auth = require('./middlewares/auth');
 db();
-require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
+
 
 //MiddleWares used
 app.use(helmet());

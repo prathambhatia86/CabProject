@@ -2,6 +2,7 @@ const Driver_collection = require('../models/drivers.model');
 const jwt = require('jsonwebtoken');
 const logger = require('../logger');
 const bcrypt = require('bcrypt');
+const CURRENT_FILE = 'loginController.js';
 
 const adminLogin = async (req, res) => {
     if (req.body.email === process.env.ADMIN_EMAIL && req.body.password === process.env.ADMIN_PASSWORD) {
@@ -52,7 +53,10 @@ const driverLogin = async (req, res) => {
                 res.status(401).json({ message: "The entered credentials are Invalid!" });
             }
         })
-        .catch(err => logger.error(err));
+        .catch(err => {
+            res.status(500);
+            logger.error("Encountered an error when driver " + req.body.email + " tried to log in", { error: err, fileName: CURRENT_FILE });
+        });
 }
 
 module.exports = {

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const logger = require('../logger');
+const CURRENT_FILE = 'auth.js';
 
 module.exports = function (req, res, next) {
     // Get token from header
@@ -19,7 +20,7 @@ module.exports = function (req, res, next) {
             }
         });
     } catch (err) {
-        logger.error('something wrong with auth middleware');
+        logger.error('something wrong with auth middleware', { fileName: CURRENT_FILE });
         res.status(500).json({ msg: 'Server Error' });
     }
 };

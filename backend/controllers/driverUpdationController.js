@@ -1,6 +1,8 @@
 const logger = require('../logger');
 const Assignment_collection = require('../models/assignment.model');
 const driverCollection = require('../models/drivers.model');
+const CURRENT_FILE = 'driverUpdationController.js';
+
 const getNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
         res.status(401).json({ message: "User Not authorised" });
@@ -10,7 +12,8 @@ const getNames = async (req, res) => {
         const data = await driverCollection.find({});
         res.json(data);
     } catch (err) {
-        logger.error('Error when getting Names for Updating driver', { error: err });
+        res.status(500);
+        logger.error("Encountered an error when retrieving all driver names", { error: err, fileName: CURRENT_FILE });
     }
 }
 
@@ -24,6 +27,23 @@ const driverUpdate = async (req, res) => {
             //Select document with specific id, update it to details recieved in the request.
             const filter = { _id: req.body.id };
             const update = { $set: req.body };
+            let email = req.body.email;
+            let password = req.body.password;
+            let contact = req.body.contact;
+            let name = req.body.name;
+            let ok = true;
+            //Match the email regex.
+            let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+            if (!email.match(pattern)) ok = false;
+            //Minimum password length is 6
+            if (password.trim().length < 6) ok = false;
+            //Name must have non-zero length
+            if (name.trim().length == 0) ok = false;
+            //Contact length must be 10 digits
+            if (contact.trim().length != 10) ok = false;
+            if (!ok) {
+                return res.status(400).json({ error: 'Invalid Update' });
+            }
             const response = await driverCollection.updateOne(filter, update);
             res.send(response);
         } else {
@@ -34,11 +54,22 @@ const driverUpdate = async (req, res) => {
                 contact: req.body.contact
             }
             const update = { $set: whatToSet };
+            let contact = req.body.contact;
+            let name = req.body.name;
+            let ok = true;
+            //Name must have non-zero length
+            if (name.trim().length == 0) ok = false;
+            //Contact length must be 10 digits
+            if (contact.trim().length != 10) ok = false;
+            if (!ok) {
+                return res.status(400).json({ error: 'Invalid Update' });
+            }
             const response = await driverCollection.updateOne(filter, update);
             res.send(response);
         }
     } catch (err) {
-        logger.error('When updating driver with email: ' + req.body.email + ' by user: ' + req.userFromToken.email + ' Some error was encountered', { error: err });
+        res.status(500);
+        logger.error("Encountered an error when updating the driver " + req.body.email, { error: err, fileName: CURRENT_FILE });
     }
 }
 
@@ -60,7 +91,7 @@ const deleteDriver = async (req, res) => {
         });
     } catch (e) {
         //Log the error
-        logger.error('Deleting driver ' + req.body.email + ' failed due to error', { error: e });
+        logger.error('Deleting driver ' + req.body.email + ' failed due to error', { error: e, fileName: CURRENT_FILE });
         //Send internal server error code  and message in case of any error.
         res.status(500).json({
             result: e.toString(),
@@ -78,7 +109,8 @@ const getNonAssignedNames = async (req, res) => {
         const data = await driverCollection.find({ email: { $nin: assigned } });
         res.json(data);
     } catch (err) {
-        logger.error('Error when getting Names for All non assigned drivers', { error: err });
+        res.status(500);
+        logger.error("Encountered an error when retrieving all non assigned driver names", { error: err, fileName: CURRENT_FILE });
     }
 }
 

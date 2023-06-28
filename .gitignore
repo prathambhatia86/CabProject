@@ -3,5 +3,5 @@
 /backend/config/config.env
 /backend/config/cert.pem
 /backend/config/key.pem
-/backend/combined.log
-/backend/onlyError.log
+*.log
+*audit.json

@@ -1,6 +1,9 @@
 const logger = require('../logger');
 const Assignment_collection = require('../models/assignment.model');
 const cabCollection = require('../models/cabs.model');
+const CURRENT_FILE = 'cabUpdationController.js'
+
+
 const getNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
         res.status(401).json({ message: "User Not authorised" });
@@ -10,7 +13,8 @@ const getNames = async (req, res) => {
         const data = await cabCollection.find({}).select('registration_no').exec();
         res.json(data);
     } catch (err) {
-        logger.error('Error when getting Names for All cabs', { error: err });
+        res.status(500);
+        logger.error("Encountered an error when retrieving all cab names", { error: err, fileName: CURRENT_FILE });
     }
 }
 
@@ -24,7 +28,8 @@ const getNonAssignedNames = async (req, res) => {
         const data = await cabCollection.find({ registration_no: { $nin: assigned } }).select('registration_no').exec();
         res.json(data);
     } catch (err) {
-        logger.error('Error when getting Names for All cabs', { error: err });
+        res.status(500);
+        logger.error("Encountered an error when retrieving all non-assigned cab names", { error: err, fileName: CURRENT_FILE });
     }
 }
 
@@ -37,7 +42,8 @@ const getCab = async (req, res) => {
         const data = await cabCollection.findOne({ registration_no: req.body.registration_no });
         res.json(data);
     } catch (err) {
-        logger.error('Error when getting Names for All cabs', { error: err });
+        res.status(500);
+        logger.error("Encountered an error when retrieving the cab " + req.body.registration_no, { error: err, fileName: CURRENT_FILE });
     }
 }
 

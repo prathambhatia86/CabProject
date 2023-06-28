@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-
+const logger = require('../logger');
 const mongoURI = 'mongodb://127.0.0.1:27017/CabManager';
 const connectToMongo = () => {
     mongoose.connect(mongoURI).then(() => {
-        console.log('Connected to mongoose Success');
+        logger.info('Connected to mongoose Success');
     }).catch(err => {
-        console.log("Connection to mongodb failed with error code: " + err.code);
+        logger.error("Connection to mongodb failed with error code: " + err.code);
     })
 }
 module.exports = connectToMongo;
