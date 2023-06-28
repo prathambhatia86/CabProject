@@ -21,7 +21,7 @@ const getNonAssignedNames = async (req, res) => {
     try {
         //Fetch all documents from the database
         const assigned = (await Assignment_collection.find({})).map(a => { return a.registration_no });
-        const data = await cabCollection.find({ registration_no: { $nin: assigned } });
+        const data = await cabCollection.find({ registration_no: { $nin: assigned } }).select('registration_no').exec();
         res.json(data);
     } catch (err) {
         logger.error('Error when getting Names for All cabs', { error: err });

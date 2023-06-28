@@ -29,7 +29,7 @@ export default function CabCard({ data, index, clicked }) {
             }
         }
         fetchData();
-    }, [cab, user]);
+    }, [cab, user, reg]);
     return (
         <>
             {!cab &&

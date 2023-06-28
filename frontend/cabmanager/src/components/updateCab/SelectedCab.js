@@ -30,7 +30,7 @@ export default function SelectedCab({ goback, registration_no }) {
             }
         }
         fetchData();
-    }, [cab, user]);
+    }, [cab, user, registration_no]);
     if (!user || !user.isAuth) return;
     return (
         <>
