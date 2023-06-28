@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import styles from "../../css/driverPageAdmin.module.css"
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import { change } from '../store/user';
+
+const API_URL = 'https://localhost:5000';
 
 export default function Profile() {
     const user = useSelector(state => state.user.user);
+    const dispatch = useDispatch();
     const [editingMode, changeMode] = useState(false);
     //React state denoting if any change in driver details
     const [detailsChanged, setChange] = useState(true);
@@ -18,6 +24,21 @@ export default function Profile() {
         event.target.value = event.target.value.replace(/[^0-9]/g, '');
         changeContact(event.target.value);
     }
+    const oldAltered = (event) => {
+        changeOldPassword(event.target.value);
+    }
+    const newAltered = (event) => {
+        changeNewPassword(event.target.value);
+    }
+    const confirmAltered = (event) => {
+        changeConfirmNewPassword(event.target.value);
+    }
+
+    const [oldPassword, changeOldPassword] = useState('');
+    const [newPassword, changeNewPassword] = useState('');
+    const [confirmNewPassword, changeConfirmNewPassword] = useState('');
+    const allowPasswordChange = (newPassword == confirmNewPassword && (newPassword.trim().length >= 6));
+
     const [invalidEmail, trackInvalidEmail] = useState(false);
     const [invalidName, trackInvalidName] = useState(false);
     const [invalidContact, trackInvalidContact] = useState(false);
@@ -58,12 +79,64 @@ export default function Profile() {
         document.getElementById('DriverName').readOnly = false;
         document.getElementById('DriverContact').readOnly = false;
     }
+    const saveChanges = () => {
+        setTimeout(async () => {
+            try {
+                if (invalidDetails) {
+                    toast("You are trying to make a change which is not valid");
+                    return;
+                }
+                const values = { name: name, contact: contact, email: email };
+                let response = await axios.post(`${API_URL}/driverUpdate`, JSON.stringify(values), {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-auth-token": user ? user.token : null
+                    },
+                });
+                if (response.data.modifiedCount) {
+                    toast("Sucess");
+                    dispatch(change({ ...user, name: values.name, contact: values.contact }));
+                    changeName(values.name);
+                    changeContact(values.contact);
+                    changeMode(false);
+                } else {
+                    toast("Failure");
+                }
+            }
+            catch {
+                toast("Failed to Update Profile");
+            }
+        }, 500);
+    }
+    const ChangePassword = async () => {
+        if (!allowPasswordChange) return;
+        try {
+            if (newPassword != confirmNewPassword) return;
+            const values = { old: oldPassword, new: newPassword, email: user.email };
+            let response = await axios.post(`${API_URL}/changePassword`, JSON.stringify(values), {
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth-token": user ? user.token : null
+                },
+            });
+            if (response.data.modifiedCount) {
+                toast("Sucess");
+                document.getElementById('close').click();
+            } else {
+                toast("Failure");
+            }
+        }
+        catch {
+            toast("Failed to Update Profile");
+        }
+    }
 
     return (
         <div className="card mx-5 px-5 mb-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", height: "95%" }} >
             <div className='h3 text-black fw-bolder text-center py-5'>
                 Your Profile
             </div>
+            <ToastContainer />
             <div className="col-lg-12">
                 <div className="card mb-5 " >
                     <div className="card-body">
@@ -101,7 +174,7 @@ export default function Profile() {
                             <div className="btn-group align-content-center" role="group" aria-label="Basic example">
                                 <button type="button" className="btn btn-primary rounded mx-1" onClick={enableEditing} disabled={editingMode}>Edit Details</button>
                                 <button type="button" className="btn btn-primary rounded mx-1" data-bs-toggle="modal" data-bs-target="#Changepwd">Change Password</button>
-                                <input type="submit" value="Save Changes" className="btn btn-primary rounded mx-1" disabled={editingMode ? (detailsChanged || invalidDetails) : true} />
+                                <input type="submit" value="Save Changes" className="btn btn-primary rounded mx-1" onClick={saveChanges} disabled={editingMode ? (detailsChanged || invalidDetails) : true} />
                             </div>
                         </div>
                         <div className='modal' id="Changepwd">
@@ -112,10 +185,16 @@ export default function Profile() {
                                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div className="modal-body">
-                                        <h3 className='text-danger'>No Insurance Details Found</h3>
+                                        <label htmlFor="OldPassword" className="mb-0 fw-bolder text-center">Enter Old Password</label>
+                                        <input type="password" className="form-control" id="OldPassword" name="OldPassword" onChange={oldAltered} placeholder="Enter Password" />
+                                        <label htmlFor="NewPassword" className="mb-0 fw-bolder text-center">Enter New Password</label>
+                                        <input type="password" className="form-control" id="NewPassword" name="NewPassword" onChange={newAltered} placeholder="Enter Password" />
+                                        <label htmlFor="confirmPassword" className="mb-0 fw-bolder text-center">Confirm new Password</label>
+                                        <input type="password" className="form-control" id="confirmPassword" name="NewPassword" onChange={confirmAltered} placeholder="Enter Password" />
+                                        <button type="button" className="btn btn-primary" onClick={ChangePassword} disabled={!allowPasswordChange}>ChangePassword</button>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" id='close' className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>

@@ -71,7 +71,6 @@ export default function DriverHomePage() {
 
             <button id="togglesidebar" className={`${styles.openbtn}`} style={{ display: (navState === true ? 'none' : 'block'), position: 'absolute' }} onClick={toggleNav} >☰</button>
 
-
             <div className="container-fluid" style={{ paddingTop: "5rem", height: "100%" }}>
                 <section className={`${(window.innerWidth > 1250) ? "mx-3" : " "}`} style={{ height: "100%" }}>
                     {selectedState === 1 ? <AssignedCab /> : ''}

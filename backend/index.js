@@ -36,6 +36,7 @@ app.post('/checkDriverLogin', auth, driverRegistrationController.checkLogin);
 app.get('/driverNames', auth, driverUpdationController.getNames);
 app.get('/driverNonAssignedNames', auth, driverUpdationController.getNonAssignedNames);
 app.post('/driverUpdate', auth, driverUpdationController.driverUpdate);
+app.post('/changePassword', auth, driverUpdationController.changePassword);
 app.delete('/deleteDriver', auth, driverUpdationController.deleteDriver);
 
 app.post('/addCab', auth, cabAddController.addCab);

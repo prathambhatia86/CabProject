@@ -15,6 +15,7 @@ export default function Login(props) {
     const handleSubmit = event => {
         event.preventDefault();
         axios.post(props.action, formdata).then((data) => {
+            delete data.data.user.password;
             dispatch(login(data.data));
             props.curr ? navigate('/driver') : navigate('/homepage');
         }).catch((err) => {

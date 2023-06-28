@@ -1,6 +1,7 @@
 const logger = require('../logger');
 const Assignment_collection = require('../models/assignment.model');
 const driverCollection = require('../models/drivers.model');
+const bcrypt = require('bcrypt');
 const CURRENT_FILE = 'driverUpdationController.js';
 
 const getNames = async (req, res) => {
@@ -21,6 +22,7 @@ const driverUpdate = async (req, res) => {
     //Here both admin and the driver with that Email will be allowed to make a change to the data.
     if (!req.userFromToken || !req.userFromToken.isAuth || (req.userFromToken.email != 'ADMIN' && req.userFromToken.email != req.body.email)) {
         res.status(401).json({ message: "User Not authorised" });
+        return;
     }
     try {
         if (req.userFromToken.email == 'ADMIN') {
@@ -48,7 +50,7 @@ const driverUpdate = async (req, res) => {
             res.send(response);
         } else {
             //Here the driver is only allowed to make a limited number of changes so we will only allow those changes.
-            const filter = { _id: req.body.id };
+            const filter = { email: req.body.email };
             const whatToSet = {
                 name: req.body.name,
                 contact: req.body.contact
@@ -114,9 +116,46 @@ const getNonAssignedNames = async (req, res) => {
     }
 }
 
+const changePassword = async (req, res) => {
+    //Only allow driver to do this update
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != req.body.email) {
+        res.status(401).json({ message: "User Not authorised" });
+        return;
+    }
+    try {
+        //Here the driver is only allowed to make a limited number of changes so we will only allow those changes.
+        const filter = { email: req.body.email };
+        //Check password matches format
+        if (req.body.new.trim().length < 6) {
+            res.status(401).json({ message: "Password Too Small" });
+            return;
+        }
+        //Confirm old password is correct.
+        const data = await driverCollection.findOne({ email: req.body.email });
+        const isMatch = await bcrypt.compare(req.body.old, data.password);
+        if (!isMatch) {
+            res.status(401).json({ message: "User Not authorised" });
+            return;
+        }
+        //Create new hashed password
+        const hashedPasswd = await bcrypt.hash(req.body.new, 10);
+        const whatToSet = {
+            password: hashedPasswd
+        }
+        const update = { $set: whatToSet };
+        const response = await driverCollection.updateOne(filter, update);
+        res.send(response);
+
+    } catch (err) {
+        res.status(500);
+        logger.error("Encountered an error when updating the password of driver driver " + req.body.email, { error: err, fileName: CURRENT_FILE });
+    }
+}
+
 module.exports = {
     getNames,
     driverUpdate,
     deleteDriver,
-    getNonAssignedNames
+    getNonAssignedNames,
+    changePassword
 }
