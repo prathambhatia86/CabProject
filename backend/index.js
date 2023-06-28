@@ -9,7 +9,32 @@ const cabUpdationController = require('./controllers/cabUpdationController');
 const AssignmentController = require('./controllers/AssignmentController');
 const cabAddController = require('./controllers/cabAddController');
 const db = require('./config/db');
-const fs = require("fs")
+const fs = require("fs");
+const snapShot = require('mongodb-snapshot');
+const MongoTransferer = snapShot.MongoTransferer, MongoDBDuplexConnector = snapShot.MongoDBDuplexConnector, LocalFileSystemDuplexConnector = snapShot.LocalFileSystemDuplexConnector
+
+async function dumpMongo2Localfile() {
+    const mongo_connector = new MongoDBDuplexConnector({
+        connection: {
+            uri: `mongodb://127.0.0.1:27017/`,
+            dbname: 'CabManager',
+        },
+    });
+
+    const localfile_connector = new LocalFileSystemDuplexConnector({
+        connection: {
+            path: './backups/backup.tar',
+        },
+    });
+
+    const transferer = new MongoTransferer({
+        source: mongo_connector,
+        targets: [localfile_connector],
+    });
+
+    logger.info("Starting backup Now");
+}
+
 const cors = require('cors');
 require('dotenv').config({ path: path.resolve(__dirname, "./config/config.env") });
 const logger = require('./logger')
@@ -20,6 +45,12 @@ db();
 
 //cache for heavy requests.
 const cache = require('./middlewares/cache');
+
+//Create a backup every 2 days.
+setInterval(() => {
+    dumpMongo2Localfile();
+}, 2 * 24 * 60 * 1000);
+
 
 //MiddleWares used
 app.use(helmet());

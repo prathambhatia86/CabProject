@@ -27,13 +27,13 @@ export default function Cab(props) {
 	const [color, changeColor] = useState("");
 	const [capacity, changeCapacity] = useState("");
 	const [reading, changeReading] = useState("");
-	const [insuranceNo, changeInsuranceNo] = useState(null);
-	const [insuranceCompany, changeInsuranceCompany] = useState(null);
-	const [insuranceAmount, changeInsuranceAmount] = useState(null);
-	const [insuranceExpirationDate, changeInsuranceExpiration] = useState(null);
-	const [insuranceNextPayment, changeNextPayment] = useState(null);
-	const [pollutionId, changePollutionID] = useState(null);
-	const [pollutionExpirationDate, changePollutionExpiration] = useState(null);
+	const [insuranceNo, changeInsuranceNo] = useState('');
+	const [insuranceCompany, changeInsuranceCompany] = useState('');
+	const [insuranceAmount, changeInsuranceAmount] = useState('');
+	const [insuranceExpirationDate, changeInsuranceExpiration] = useState('');
+	const [insuranceNextPayment, changeNextPayment] = useState('');
+	const [pollutionId, changePollutionID] = useState('');
+	const [pollutionExpirationDate, changePollutionExpiration] = useState('');
 	const [image, changeImage] = useState(null);
 	const [invalidImage, trackInvalidImage] = useState(true);
 	//OnClick functions to change value of states on User input.
@@ -468,13 +468,13 @@ export default function Cab(props) {
 
 								<div className="px-5 py-4 text-center row">
 									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" checked={isInsured} id="insuranceCheckbox" onClick={handleInsuranceCheckbox} />
+										<input className="form-check-input" type="checkbox" checked={isInsured} id="insuranceCheckbox" onClick={handleInsuranceCheckbox} readOnly />
 										<label className="form-check-label" htmlFor="insuranceCheckbox">
 											Cab Insured?
 										</label>
 									</div>
 									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" checked={isPollution} id="PollutionCheckbox" onClick={handlePollutionCheckbox} />
+										<input className="form-check-input" type="checkbox" checked={isPollution} id="PollutionCheckbox" onClick={handlePollutionCheckbox} readOnly />
 										<label className="form-check-label" htmlFor="PollutionCheckbox">
 											Pollution
 										</label>
