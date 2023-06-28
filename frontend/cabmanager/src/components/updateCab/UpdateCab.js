@@ -8,7 +8,8 @@ import CabCard from '../updateDriver/CabCard';
 import SelectedCab from "./SelectedCab";
 import SearchDriver from "./SearchDriver";
 import CabAssignedDriver from "./CabAssignedDriver";
-import { RotatingLines } from 'react-loader-spinner'
+import { RotatingLines } from 'react-loader-spinner';
+import { FixedSizeList } from "react-window";
 const API_URL = 'https://localhost:5000';
 
 export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
@@ -130,14 +131,35 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                                                     {!userData && toast("Failed to fetch any cab")}
                                                     <div className="card mb-3" >
                                                         <div className="row g-0">
-                                                            {userData && userData.map(elem => { return <CabCard cab={elem} key={elem.registration_no} clicked={() => changeCurrUserData(elem)} /> })}
+                                                            {userData &&
+                                                                <div className="row">
+                                                                    <div className="text-center col-md-2 col-lg-3">
+                                                                    </div>
+                                                                    <div className="text-center col-md-8 col-lg-6">
+                                                                        <FixedSizeList
+                                                                            className="List d-flex"
+                                                                            height={500}
+                                                                            itemCount={userData.length}
+                                                                            itemSize={50}
+                                                                            itemData={userData}
+                                                                            width='100%'
+                                                                        >
+
+                                                                            {(props) => CabCard({ ...props, clicked: (elem) => changeCurrUserData(elem) })}
+
+                                                                        </FixedSizeList>
+                                                                    </div>
+                                                                    <div className="text-center col-md-2 col-lg-3">
+                                                                    </div>
+                                                                </div>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     }
-                                    {currUserData && <SelectedCab cab={currUserData} goback={() => { changeCurrUserData(null); changeDriverAssigned(false); }} />}
+                                    {currUserData && <SelectedCab registration_no={currUserData} goback={() => { changeCurrUserData(null); changeDriverAssigned(false); }} />}
                                 </div>
                             </div>
                         </div>
