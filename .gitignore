@@ -6,3 +6,4 @@
 *.log
 *audit.json
 /backend/backups
+/node_modules

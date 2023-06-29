@@ -90,9 +90,14 @@ app.post('/deassignCab', auth, AssignmentController.deassignCab);
 const key_path = path.join(__dirname, 'config', 'key.pem');
 const cert_path = path.join(__dirname, 'config', 'cert.pem');
 const port = 5000;
-https.createServer({
+const test_port=8000;
+const server=https.createServer({
     key: fs.readFileSync(key_path),
     cert: fs.readFileSync(cert_path),
 }, app).listen(port, () => {
     logger.info(`App backend listening on port : ${port}!`);
 })
+const server_test=app.listen(test_port);
+module.exports={
+   server_test
+}

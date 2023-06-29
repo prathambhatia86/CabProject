@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "jest": {
+    "testPathIgnorePatterns": ["frontend"],
+    "testEnvironment":"node"
+  },
   "scripts": {
     "server": "npm start --prefix backend",
     "client": "npm start --prefix frontend",
-    "test": "concurrently 'npm:server' 'npm:client' ",
-    "deploy": "npm run build --prefix frontend && npm start --prefix backend"
+    "watch": "concurrently 'npm:server' 'npm:client' ",
+    "deploy": "npm run build --prefix frontend && npm start --prefix backend",
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -20,6 +25,8 @@
   },
   "homepage": "https://github.com/prathambhatia86/CabProject#readme",
   "dependencies": {
-    "react-bootstrap-typeahead": "^6.2.3"
+    "jest": "^29.5.0",
+    "react-bootstrap-typeahead": "^6.2.3",
+    "supertest": "^6.3.3"
   }
 }
