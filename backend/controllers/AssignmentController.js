@@ -68,7 +68,7 @@ const deassignCab = async (req, res) => {
     try {
         //Delete the assignment key-value pair from the assignment collection
         let check = await Assignment_collection.deleteOne({ email: req.body.email, registration_no: req.body.registration_no });
-        if (check) res.send(true);
+        if (check.deletedCount) res.send(true);
         else res.send(false);
     } catch (err) {
         res.status(500);
