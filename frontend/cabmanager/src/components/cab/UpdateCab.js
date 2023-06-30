@@ -359,20 +359,13 @@ export default function UpdateCab(props) {
 	}
 
 	return (
-
-		<motion.section className="vh-100" initial={{ scale: 0 }}
-			animate={{ rotate: 0, scale: 1 }}
-			transition={{
-				ease: "linear",
-				duration: 1,
-				x: { duration: 1 }
-			}} key={formState}>
-			<ToastContainer />
-
-			<div className="container h-100 my-2" >
-				<div className="row d-flex justify-content-center  h-100">
-					<div className="col-xl-11">
-                    {loading &&
+		<>
+		<ToastContainer />
+		<section className="vh-100">
+				<div className="container h-100">
+					<div className="row d-flex justify-content-center  h-100">
+						<div className="col-xl-11">
+		{loading &&
 								<div className="text-center">
 									<RotatingLines
 										strokeColor="grey"
@@ -392,6 +385,18 @@ export default function UpdateCab(props) {
 									selected={selectedUser}
 								/>
 							}
+		<motion.section className="vh-100" initial={{ scale: 0 }}
+			animate={{ rotate: 0, scale: 1 }}
+			transition={{
+				ease: "linear",
+				duration: 1,
+				x: { duration: 1 }
+			}} key={formState}>
+		
+
+			<div className="container h-100 my-2" >
+				<div className="row d-flex justify-content-center  h-100">
+					<div className="col-xl-11">
                             
 						<div className="card my-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" ,display: (formState ? 'block' : 'none')}} >
 							<h1 className="text-yellow mb-4 text-center py-4" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Enter Cab Details</h1>
@@ -583,6 +588,10 @@ export default function UpdateCab(props) {
 				</div>
 			</div>
 		</motion.section>
-
+		</div>
+					</div>
+				</div>
+			</section>
+			</>
 	)
 }
