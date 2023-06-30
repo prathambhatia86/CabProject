@@ -11,6 +11,7 @@ const getNames = async (req, res) => {
     try {
         //Fetch all documents from the database
         const data = await driverCollection.find({});
+       
         res.json(data);
     } catch (err) {
         res.status(500);

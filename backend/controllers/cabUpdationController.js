@@ -18,6 +18,20 @@ const getNames = async (req, res) => {
     }
 }
 
+const getCabDataWithoutImages = async (req, res) => {
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
+        res.status(401).json({ message: "User Not authorised" });
+    }
+    try {
+        //Fetch all documents from the database
+        const data = await cabCollection.find({},{image:0});
+        res.json(data);
+    } catch (err) {
+        res.status(500);
+        logger.error("Encountered an error when retrieving all cab names", { error: err, fileName: CURRENT_FILE });
+    }
+}
+
 const getNonAssignedNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
         res.status(401).json({ message: "User Not authorised" });
@@ -46,9 +60,32 @@ const getCab = async (req, res) => {
         logger.error("Encountered an error when retrieving the cab " + req.body.registration_no, { error: err, fileName: CURRENT_FILE });
     }
 }
+const updateCab=async(req,res)=>{
+    console.log(req.body);
+    if (!req.userFromToken || !req.userFromToken.isAuth || (req.userFromToken.email != 'ADMIN' )) {
+        res.status(401).json({ message: "User Not authorised" });
+        return;
+    }
+    console.log(req.body);
+        const filter = { _id: req.body.id };
+        const update = { $set: req.body };
+        try
+        {
+            const response = await cabCollection.updateOne(filter, update);
+            res.send(response);
+        }
+        catch
+        (err) {
+            res.status(500);
+            logger.error("Encountered an error when updating the cab " , { error: err, fileName: CURRENT_FILE });
+        }
+    
 
+}
 module.exports = {
     getNames,
     getNonAssignedNames,
-    getCab
+    getCab,
+    getCabDataWithoutImages,
+    updateCab
 }

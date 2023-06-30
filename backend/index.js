@@ -54,7 +54,8 @@ app.post('/checkCabExists', auth, cabAddController.checkCabExists);
 app.get('/cabNames', [auth, cache(10)], cabUpdationController.getNames);
 app.get('/cabNonAssignedNames', [auth, cache(10)], cabUpdationController.getNonAssignedNames);
 app.post('/getCab', auth, cabUpdationController.getCab);
-
+app.get('/cabDataWithoutImages', [auth, cache(10)], cabUpdationController.getCabDataWithoutImages);
+app.post('/updateCab', [auth, cache(10)], cabUpdationController.updateCab);
 app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
 app.post('/checkDriverAssigned', auth, AssignmentController.checkDriverAssigned);
 app.post('/assignCab', auth, AssignmentController.assignCab);
