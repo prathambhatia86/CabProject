@@ -82,10 +82,47 @@ const updateCab=async(req,res)=>{
     
 
 }
+const deleteCab=async (req,res)=>{
+
+    if (!req.userFromToken || !req.userFromToken.isAuth || (req.userFromToken.email != 'ADMIN')) {
+        res.status(401).json({ message: "User Not authorised" });
+    }
+    try {
+    
+        const filter = { _id: req.body.id };
+        data = await cabCollection.deleteOne(filter);
+        //If the document was deleted send back status OK else if no deletion occured send no resource found
+        res.status(data ? 200 : 404).json({
+            message: data.deletedCount ? "User deleted" : "User Not found",
+        });
+    } catch (e) {
+        //Log the error
+        logger.error('Deleting cab '  + ' failed due to error', { error: e, fileName: CURRENT_FILE });
+        //Send internal server error code  and message in case of any error.
+        res.status(500).json({
+            result: e.toString(),
+        });
+    }
+}
+const cabDataForDeletion=async (req,res)=>{
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
+        res.status(401).json({ message: "User Not authorised" });
+    }
+    try {
+        //Fetch all documents from the database
+        const data = await cabCollection.find({},{image:0,insurance:0,pollution:0});
+        res.json(data);
+    } catch (err) {
+        res.status(500);
+        logger.error("Encountered an error when retrieving all cab names", { error: err, fileName: CURRENT_FILE });
+    }
+}
 module.exports = {
     getNames,
     getNonAssignedNames,
     getCab,
     getCabDataWithoutImages,
-    updateCab
+    updateCab,
+    deleteCab,
+    cabDataForDeletion
 }

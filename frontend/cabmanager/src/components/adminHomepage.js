@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "../css/adminHomepage.module.css"
 import AddCab from "./cab/AddCab";
 import UpdateCab from "./cab/UpdateCab"
+import DeleteCab from "./cab/DeleteCab"
 import AddDriver from "./driver/AddDriver";
 import UpdateDriver from "./driver/UpdateDriver";
 import RemoveDriver from "./driver/DeleteDriver";
@@ -147,7 +148,7 @@ export default function AdminHomepage(props) {
 				{selectedState == 3 ? <RemoveDriver /> : ''}
 				{selectedState == 4 ? <AddCab /> : ''}
 				{selectedState == 5 ? <UpdateCab /> : ''}
-				{/*[TODO] Add a component for update cab, delete cab*/}
+				{selectedState == 6 ? <DeleteCab /> : ''}
 				{selectedState == 7 ? <DriverAssignments /> : ''}
 				{selectedState == 8 ? <CabAssignments /> : ''}
 			</div>
