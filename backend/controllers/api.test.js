@@ -1,18 +1,13 @@
 const request = require("supertest");
 const { server_test } = require("../index")
 const db = require("../config/db");
+const Driver_collection = require("../models/drivers.model");
 
 
 describe('Assignment API Tests', () => {
     beforeAll(async () => {
         await db();
     });
-    afterAll(() => {
-        //Terminate after all tests.
-        setTimeout((function () {
-            return process.kill(process.pid);
-        }), 100);
-    })
 
     //Token for making authenticated requests.
     let DriverToken = null;
@@ -160,5 +155,119 @@ describe('Assignment API Tests', () => {
                 .send(credentials).expect('false');
         })
     });
+});
 
+describe('driverRegistration and driverUpdation API Tests', () => {
+    afterAll(() => {
+        //Terminate after all tests.
+        setTimeout((function () {
+            return process.kill(process.pid);
+        }), 100);
+    })
+
+    //Token for making authenticated requests.
+    let AdminToken = null;
+
+    //Login
+    describe('TEST POST/adminLogin', () => {
+        test('It should respond with 200 code', async () => {
+            const credentials = {
+                email: process.env.ADMIN_EMAIL,
+                password: process.env.ADMIN_PASSWORD
+            }
+            const res = await request(server_test)
+                .post('/adminlogin')
+                .send(credentials)
+                .expect(200);
+            AdminToken = res.body.user.token;
+        })
+    });
+
+    //Create a new Driver
+    describe('TEST POST/driverRegistration', () => {
+        test('It should respond with true if driver is created ', async () => {
+            const credentials = {
+                email: 'Sample@gmail.com',
+                password: 'SamplePassword',
+                contact: '0123456789',
+                name: 'Driver'
+            }
+            await request(server_test)
+                .post('/driverRegistration')
+                .set('x-auth-token', AdminToken)
+                .send(credentials).expect('true');
+        })
+    });
+    //Check email exists now
+    describe('TEST POST/checkDriverLogin', () => {
+        test('It should respond with true if driver exists ', async () => {
+            const credentials = {
+                email: 'Sample@gmail.com'
+            }
+            await request(server_test)
+                .post('/checkDriverLogin')
+                .set('x-auth-token', AdminToken)
+                .send(credentials).expect('true');
+        })
+    });
+    //Get all drivers and check the current driver exists in it.
+    describe('TEST POST/getNames', () => {
+        test('It should contain created driver', async () => {
+            const res = await request(server_test)
+                .get('/driverNames')
+                .set('x-auth-token', AdminToken);
+            let exists = false;
+            for (let k of res.body) {
+                if (k.email === 'Sample@gmail.com') exists = true;
+            }
+            expect(exists).toBe(true);
+        })
+    });
+    //Update Driver Name
+    describe('TEST POST/driverUpdate', () => {
+        test('It should contain created driver', async () => {
+            const doc = await Driver_collection.findOne({ email: 'Sample@gmail.com' });
+            const credentials = {
+                id: doc._id,
+                email: 'Sample@gmail.com',
+                password: 'SamplePassword',
+                contact: '0123456789',
+                name: 'Driver 2'
+            }
+            const res = await request(server_test)
+                .post('/driverUpdate')
+                .set('x-auth-token', AdminToken)
+                .send(credentials);
+            expect(res.body.matchedCount).toBeGreaterThan(0);
+        })
+    });
+    //Get all non assigned drivers and check the current driver exists in it with the new na,e.
+    describe('TEST POST/driverNonAssignedNames', () => {
+        test('It should contain created driver', async () => {
+            const res = await request(server_test)
+                .get('/driverNonAssignedNames')
+                .set('x-auth-token', AdminToken);
+            let exists = false;
+            let name = null;
+            for (let k of res.body) {
+                if (k.email === 'Sample@gmail.com') exists = true, name = k.name;
+            }
+            expect(exists).toBe(true);
+            expect(name).toBe('Driver 2');
+        })
+    });
+
+    //Cannot be tested without knowing _id
+    describe('TEST DELETE/deleteDriver', () => {
+        test('It should respond with true if driver is deleted ', async () => {
+            const doc = await Driver_collection.findOne({ email: 'Sample@gmail.com' });
+            const credentials = {
+                id: doc._id
+            }
+            await request(server_test)
+                .delete('/deleteDriver')
+                .set('x-auth-token', AdminToken)
+                .send(credentials).expect(200);
+        })
+    });
 });
