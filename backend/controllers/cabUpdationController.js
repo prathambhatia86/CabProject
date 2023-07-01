@@ -31,7 +31,20 @@ const getCabDataWithoutImages = async (req, res) => {
         logger.error("Encountered an error when retrieving all cab names", { error: err, fileName: CURRENT_FILE });
     }
 }
-
+const cabImage = async (req, res) => {
+    const filter = { _id: req.body.id };
+    if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
+        res.status(401).json({ message: "User Not authorised" });
+    }
+    try {
+        //Fetch all documents from the database
+        const data = await cabCollection.find(filter, { image: 1 });
+        res.json(data);
+    } catch (err) {
+        res.status(500);
+        logger.error("Encountered an error when retrieving all cab names", { error: err, fileName: CURRENT_FILE });
+    }
+}
 const getNonAssignedNames = async (req, res) => {
     if (!req.userFromToken || !req.userFromToken.isAuth || req.userFromToken.email != 'ADMIN') {
         res.status(401).json({ message: "User Not authorised" });
@@ -120,5 +133,6 @@ module.exports = {
     getCabDataWithoutImages,
     updateCab,
     deleteCab,
-    cabDataForDeletion
+    cabDataForDeletion,
+    cabImage
 }

@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux'
 import axios from 'axios';
 import { motion } from "framer-motion";
 import { RotatingLines } from 'react-loader-spinner';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 //Url to make API request from our server
 const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
@@ -42,6 +44,7 @@ export default function UpdateCab(props) {
 	const [formState, changeFormState] = useState(false);
 	const [checkReg, changeCheckReg] = useState(null); //store original email to prevent it from being deemed invalid
 	const [id, getId] = useState(null);
+	const [defaultImage,changeDefaultImage]=useState(null);
 	//OnClick functions to change value of states on User input.
 	const Numberaltered = (event) => {
 		changeNum(event.target.value);
@@ -356,6 +359,42 @@ export default function UpdateCab(props) {
 			toast("something wrong has happened");
 		}
 	}
+  
+
+
+	const getImageForPreview = async (event) => {
+if(defaultImage!=null)
+{
+	document.getElementById("imageId").click();
+	return;
+}
+		let values = {
+			id: id,
+			
+					}
+		try {
+			const response = await axios.post(`${API_URL}/getCabImage`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user ? user.token : null
+				}
+			}
+			);
+			if (response && response.data) {
+				changeDefaultImage(response.data[0].image);
+				document.getElementById("imageId").click();
+				
+			}
+			else {
+				toast("something wrong has happened");
+				document.getElementById('addCabSubmit').disabled = false;
+			}
+		} catch (err) {
+			toast("something wrong has happened");
+		}
+	}
+
+
 
 	return (
 		<>
@@ -475,14 +514,25 @@ export default function UpdateCab(props) {
 													{/* Text which will only be visible when format is not adhered to */}
 													<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidReading == true ? 'block' : 'none') }}>Please enter the correct reading</span>
 													<hr className="mx-n3" />
+													
+
+										
+									
 													<div className="row align-items-center py-3">
 														<div className="col-md-3 ps-5">
-
+													
 															<h6 className="mb-0 fw-bolder">Cab Image</h6>
-
+															<button type="button" class="btn btn-outline-primary btn-sm"  onClick={getImageForPreview}>View existing image</button>
+															<PhotoProvider>
+      														<PhotoView src={defaultImage}> 
+															<button type="button" id="imageId" style={{display:'none'}} class="btn btn-outline-primary btn-sm"></button>
+															</PhotoView>
+    														</PhotoProvider>
 														</div>
 														<div className="col-md-9 pe-5">
+											
 															<input type="file" className="form-control form-control-lg" ref={ref} accept="image/*" onChange={ImageAltered} />
+															
 														</div>
 													</div>
 
