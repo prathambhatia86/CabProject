@@ -6,7 +6,7 @@ import axios from "axios";
 import { useSelector } from 'react-redux'
 import { motion } from "framer-motion";
 import { RotatingLines } from 'react-loader-spinner'
-
+import styles from "../../css/driverPageAdmin.module.css"
 const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
 export default function UpdateDriver(props) {
@@ -23,10 +23,12 @@ export default function UpdateDriver(props) {
 	//React states for the data fields of the driver
 	const [id, changeId] = useState("");
 	const [email, changeEmail] = useState("");
+	const [emailAlreadyExist, trackEmailAlreadyExist] = useState(false);
 	const [password, changePassword] = useState("");
 	const [name, changeName] = useState("");
 	const [contact, changeContact] = useState("");
 	const [formState, changeFormState] = useState(false);
+	const[originalEmail,changeOriginalEmail]=useState(null);
 	const nameAltered = (event) => {
 		changeName(event.target.value);
 	}
@@ -69,15 +71,43 @@ export default function UpdateDriver(props) {
 		getResponse();
 
 	}, [formState, getResponse])
+	const checkEmailAlreadyExist = useCallback(async (email) => {
+		const values = {
+			email: email,
+		}
+		try {
+			return await axios.post(`${API_URL}/checkDriverlogin`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+					"x-auth-token": user ? user.token : null
+				},
+			}
+			);
+		} catch (err) {
+			toast("something wrong has happened when connecting to our servers");
+		}
+	}, [user]);
 	useEffect(() => {
 
-		let timer = setTimeout(() => {
+		let timer = setTimeout(async() => {
 			let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-			if (!email.match(pattern)) {
+			if(email==originalEmail)
+			{
+				trackInvalidEmail(false);
+				trackEmailAlreadyExist(false);
+			}
+			else if (!email.match(pattern)) {
 				trackInvalidEmail(true);
 			}
-			else
+			else {
+				const response = await checkEmailAlreadyExist(email);
+				if (response && response.data)
+					trackEmailAlreadyExist(true);
+				else {
+					trackEmailAlreadyExist(false);
+				}
 				trackInvalidEmail(false);
+			}
 			if (password.trim().length < 6) {
 				trackInvalidPassword(true);
 			}
@@ -109,6 +139,7 @@ export default function UpdateDriver(props) {
 		if (!formState)
 			changeFormState(true);
 		changeEmail(selectedValue[0].email);
+		changeOriginalEmail(selectedValue[0].email)
 		changePassword(selectedValue[0].password);
 		changeName(selectedValue[0].name);
 		changeContact(selectedValue[0].contact.toString());
@@ -132,13 +163,15 @@ export default function UpdateDriver(props) {
 			}
 			)
 			if (response)
-				toast("form updated");   //alert
+				{toast("form updated");  
+				changeFormState(false);
+		 } //alert
 			else
 				toast("something wrong has occured");
 		} catch (err) {
 			toast("Some error occured, Please try again later");
 		}
-		changeFormState(false);
+		
 	}
 	return (
 		<>
@@ -203,7 +236,9 @@ export default function UpdateDriver(props) {
 
 										</div>
 									</div>
-									<span className="help-block" style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
+										{/* Text which will only be visible when format is not adhered to */}
+								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
+								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (emailAlreadyExist == true ? 'block' : 'none') }}>Sorry!This email already exists.</span>
 									<hr className="mx-n3" />
 								
 								
