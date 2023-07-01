@@ -40,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 //Logical Controllers for requests.
 app.post('/adminlogin', loginController.adminLogin);
 app.post('/driverlogin', loginController.driverLogin);
+app.post('/forgotPassword', loginController.forgotPassword);
 
 app.post('/driverRegistration', auth, driverRegistrationController.driverRegistration);
 app.post('/checkDriverLogin', auth, driverRegistrationController.checkLogin);

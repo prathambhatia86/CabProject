@@ -55,7 +55,7 @@ export default function Login(props) {
                                 <button className="btn btn-primary btn-lg btn-block" type="submit">Login</button>
                             </Form>
                             <hr className="my-4" />
-                            <Link to='/fgtpwd'><h6>Forgot Password?</h6></Link>
+                            {props.curr ? <Link to='/fgtpwd'><h6>Forgot Password?</h6></Link> : ''}
                         </div>
                     </div>
                 </div>

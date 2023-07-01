@@ -2,6 +2,9 @@ const Driver_collection = require('../models/drivers.model');
 const jwt = require('jsonwebtoken');
 const logger = require('../logger');
 const bcrypt = require('bcrypt');
+const mailgen = require('mailgen');
+const passwordMaker = require('generate-password');
+const nodemailer = require("nodemailer");
 const CURRENT_FILE = 'loginController.js';
 
 const adminLogin = async (req, res) => {
@@ -59,6 +62,48 @@ const driverLogin = async (req, res) => {
         });
 }
 
+const forgotPassword = async (req, res) => {
+    try {
+        var password = passwordMaker.generate({
+            length: 6,
+            numbers: true
+        });
+        let config = {
+            service: 'gmail',
+            auth: {
+                user: '',
+                pass: ''
+            }
+        }
+        let transporter = nodemailer.createTransport(config);
+        let mail_generator = new mailgen({
+            theme: "default",
+            product: {
+                name: "Mailgen",
+                link: 'https://mailgen.js'
+            }
+        })
+        let response = {
+            body: {
+                intro: "Your password has been reset your new password is: " + password,
+            }
+        }
+        let mail = mail_generator.generate(response);
+        let message = {
+            from: '',
+            to: req.body.email,
+            html: mail
+        }
+        console.log(password);
+        transporter.sendMail(message);
+        const hashedPasswd = await bcrypt.hash(password, 10);
+        let result = await Driver_collection.updateOne({ email: req.body.email }, { $set: { password: hashedPasswd } });
+        if (result.modifiedCount) res.send(true);
+        else res.send(false);
+    } catch (err) {
+        logger.error("Error when updating password for driver " + req.body.email, { error: err, fileName: CURRENT_FILE });
+    }
+}
 module.exports = {
-    adminLogin, driverLogin
+    adminLogin, driverLogin, forgotPassword
 }
