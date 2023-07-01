@@ -205,20 +205,8 @@ export default function UpdateDriver(props) {
 									</div>
 									<span className="help-block" style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
 									<hr className="mx-n3" />
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-
-											<h6 className="mb-0 fw-bolder">Driver password</h6>
-
-										</div>
-										<div className="col-md-9 pe-5">
-
-											<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} />
-
-										</div>
-									</div>
-									<span className="help-block" style={{ display: (invalidPassword == true ? 'block' : 'none') }}>Please enter the correct password</span>
-									<hr className="mx-n3" />
+								
+								
 
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">
