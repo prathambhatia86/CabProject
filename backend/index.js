@@ -38,6 +38,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')))
 
 //Logical Controllers for requests.
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
 app.post('/adminlogin', loginController.adminLogin);
 app.post('/driverlogin', loginController.driverLogin);
 app.post('/forgotPassword', loginController.forgotPassword);
