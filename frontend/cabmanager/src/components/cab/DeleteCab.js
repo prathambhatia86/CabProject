@@ -24,31 +24,31 @@ export default function DeleteCab(props) {
 	const [color, changeColor] = useState("");
 	const [capacity, changeCapacity] = useState("");
 	const [reading, changeReading] = useState("");
-    const [loading, changeLoading] = useState(true);
-    const [formState, changeFormState] = useState(false);
-	const [id,getId]=useState(null);
-	
-	//States which track if any of the data field still does not match the required format
-	
-	const [userData, changeUserData] = useState(null);//userdata fetched from database
-    const [selectedUser, changeSelectedUser] = useState(null); //selected in the typeahead
+	const [loading, changeLoading] = useState(true);
+	const [formState, changeFormState] = useState(false);
+	const [id, getId] = useState(null);
 
-    let userDataSelectedFunction = (selectedValue) => {
+	//States which track if any of the data field still does not match the required format
+
+	const [userData, changeUserData] = useState(null);//userdata fetched from database
+	const [selectedUser, changeSelectedUser] = useState(null); //selected in the typeahead
+
+	let userDataSelectedFunction = (selectedValue) => {
 		if (selectedValue.length == 0)
 			return;
 		if (!formState)
 			changeFormState(true);
-			getId(selectedValue[0]._id)
-            changeNum(selectedValue[0].registration_no);
-            changeModel(selectedValue[0].model);
-            changeCapacity(selectedValue[0].capacity.toString());
-            changeColor(selectedValue[0].color);
-            changeReading(selectedValue[0].odometer.toString());
-           
+		getId(selectedValue[0]._id)
+		changeNum(selectedValue[0].registration_no);
+		changeModel(selectedValue[0].model);
+		changeCapacity(selectedValue[0].capacity.toString());
+		changeColor(selectedValue[0].color);
+		changeReading(selectedValue[0].odometer.toString());
+
 
 	}
 
-    const getResponse = useCallback(async (event) => {
+	const getResponse = useCallback(async (event) => {
 		try {
 			let response = await axios.get(`${API_URL}/cabDataForDeletion`, {
 				headers: {
@@ -68,7 +68,7 @@ export default function DeleteCab(props) {
 			toast("Failed to fetch drivers from our servers");
 		}
 	}, [user]);
-    useEffect(() => {
+	useEffect(() => {
 		getResponse();
 
 	}, [formState, getResponse])
@@ -84,9 +84,9 @@ export default function DeleteCab(props) {
 	const submitResponse = async (event) => {
 		document.getElementById('addCabSubmit').disabled = true;
 		let values = {
-			id:id,
+			id: id,
 		}
-	
+
 		try {
 			const response = await axios.post(`${API_URL}/deleteCab`, JSON.stringify(values), {
 				headers: {
@@ -99,7 +99,7 @@ export default function DeleteCab(props) {
 				toast("form submitted"); //alert
 				document.getElementById('addCabSubmit').disabled = false;
 				changeFormState("false");
-				
+
 
 			}
 			else {
@@ -110,7 +110,7 @@ export default function DeleteCab(props) {
 			toast("something wrong has happened");
 		}
 	}
-    const ConfirmResponse = () => {    //confirmation
+	const ConfirmResponse = () => {    //confirmation
 		confirmAlert({
 			title: 'Confirm to Delete',
 			message: 'Are you sure to remove a CAB.',
@@ -128,13 +128,13 @@ export default function DeleteCab(props) {
 	};
 	return (
 		<>
-		<ToastContainer />
-		<section className="vh-100">
+			<ToastContainer />
+			<section className="vh-100">
 				<div className="container h-100">
 					<div className="row d-flex justify-content-center  h-100">
 						<div className="col-xl-11">
-							
-		{loading &&
+
+							{loading &&
 								<div className="text-center">
 									<RotatingLines
 										strokeColor="grey"
@@ -145,122 +145,122 @@ export default function DeleteCab(props) {
 									/>
 								</div>}
 
-                                {!loading &&
+							{!loading &&
 								<Typeahead
 									id="CabIds"
 									onChange={userDataSelectedFunction}
 									options={userData}
 									placeholder="Delete the cab"
-								
+
 								/>
 							}
-		<motion.section className="vh-100" initial={{ scale: 0 }}
-			animate={{ rotate: 0, scale: 1 }}
-			transition={{
-				ease: "linear",
-				duration: 1,
-				x: { duration: 1 }
-			}} key={formState}>
-			
+							<motion.section className="vh-100" initial={{ scale: 0 }}
+								animate={{ rotate: 0, scale: 1 }}
+								transition={{
+									ease: "linear",
+									duration: 1,
+									x: { duration: 1 }
+								}} key={formState}>
 
-			<div className="container h-100 my-2" >
-				<div className="row d-flex justify-content-center  h-100">
-					<div className="col-xl-11">
-                    
-                            
-						<div className="card my-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" ,display: (formState ? 'block' : 'none')}} >
-							<h1 className="text-yellow mb-4 text-center py-4" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>View Cab Details</h1>
-							<div className="card-body">
-								<div className="row align-items-center pt-4 pb-3">
-									<div className="col-md-3 ps-5">
-										<h6 className=" mb-0 fw-bolder">Cab registration no.</h6>
-										<em className=" mb-0 fw-light"><small>(<a href="https://tinyurl.com/ysuphhm5" target="blank">Format</a> : XX XX XX XXXX)</small></em>
-									</div>
-									<div className="col-md-9 pe-5">
-										<input type="text" className="form-control form-control-lg" disabled  value={regNumber} />
+
+								<div className="container h-100 my-2" >
+									<div className="row d-flex justify-content-center  h-100">
+										<div className="col-xl-11">
+
+
+											<div className="card my-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }} >
+												<h1 className="text-yellow mb-4 text-center py-4" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>View Cab Details</h1>
+												<div className="card-body">
+													<div className="row align-items-center pt-4 pb-3">
+														<div className="col-md-3 ps-5">
+															<h6 className=" mb-0 fw-bolder">Cab registration no.</h6>
+															<em className=" mb-0 fw-light"><small>(<a href="https://tinyurl.com/ysuphhm5" target="blank">Format</a> : XX XX XX XXXX)</small></em>
+														</div>
+														<div className="col-md-9 pe-5">
+															<input type="text" className="form-control form-control-lg" disabled value={regNumber} />
+														</div>
+													</div>
+
+													<hr className="mx-n3" />
+
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Cab model</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+
+															<input type="text" className="form-control form-control-lg" disabled value={model} />
+
+														</div>
+													</div>
+
+
+													<hr className="mx-n3" />
+
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Cab colour</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+
+															<input type="text" className="form-control form-control-lg" disabled value={color} />
+
+														</div>
+													</div>
+
+
+													<hr className="mx-n3" />
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Cab capacity</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+
+															<input type="text" pattern="[0-9]+" className="form-control form-control-lg" disabled required value={capacity} />
+
+														</div>
+													</div>
+
+													<hr className="mx-n3" />
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Current Odometer Reading</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+															<input type="text" className="form-control form-control-lg" disabled value={reading} />
+														</div>
+													</div>
+
+
+													<hr className="mx-n3" />
+
+
+
+
+
+
+
+													<div className="col-sm-8">
+														<button type="submit" className="btn btn-primary btn-lg" onClick={ConfirmResponse} id='addCabSubmit'>Delete</button>
+													</div>
+
+
+												</div>
+											</div>
+
+										</div>
 									</div>
 								</div>
-								
-								<hr className="mx-n3" />
-
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Cab model</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-
-										<input type="text" className="form-control form-control-lg" disabled value={model} />
-
-									</div>
-								</div>
-								
-
-								<hr className="mx-n3" />
-
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Cab colour</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-
-										<input type="text" className="form-control form-control-lg" disabled value={color} />
-
-									</div>
-								</div>
-								
-
-								<hr className="mx-n3" />
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Cab capacity</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-
-										<input type="text" pattern="[0-9]+" className="form-control form-control-lg" disabled required value={capacity} />
-
-									</div>
-								</div>
-								
-								<hr className="mx-n3" />
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Current Odometer Reading</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-										<input type="text" className="form-control form-control-lg" disabled value={reading} />
-									</div>
-								</div>
-							
-								
-								<hr className="mx-n3" />
-
-									
-									
-									
-									
-								
-									
-									<div className="col-sm-8">
-										<button type="submit" className="btn btn-primary btn-lg"  onClick={ConfirmResponse} id='addCabSubmit'>Delete</button>
-									</div>
-								
-
-							</div>
+							</motion.section>
 						</div>
-
-					</div>
-				</div>
-			</div>
-		</motion.section>
-		</div>
 					</div>
 				</div>
 			</section>

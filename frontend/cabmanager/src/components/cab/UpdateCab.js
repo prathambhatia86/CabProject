@@ -38,10 +38,10 @@ export default function UpdateCab(props) {
 	const [pollutionExpirationDate, changePollutionExpiration] = useState('');
 	const [image, changeImage] = useState(null);
 	const [invalidImage, trackInvalidImage] = useState(true);
-    const [loading, changeLoading] = useState(true);
-    const [formState, changeFormState] = useState(false);
-	const [checkReg,changeCheckReg]=useState(null); //store original email to prevent it from being deemed invalid
-	const [id,getId]=useState(null);
+	const [loading, changeLoading] = useState(true);
+	const [formState, changeFormState] = useState(false);
+	const [checkReg, changeCheckReg] = useState(null); //store original email to prevent it from being deemed invalid
+	const [id, getId] = useState(null);
 	//OnClick functions to change value of states on User input.
 	const Numberaltered = (event) => {
 		changeNum(event.target.value);
@@ -110,36 +110,36 @@ export default function UpdateCab(props) {
 	const [invalidPollutionID, trackInvalidPollutionID] = useState(true);
 	const [invalidPollutionExpiry, trackInvalidPollutionExpiry] = useState(true);
 	const [userData, changeUserData] = useState(null);//userdata fetched from database
-    const [selectedUser, changeSelectedUser] = useState(null); //selected in the typeahead
-    const [isInsuredAtStart,changeInsuredAtStart]=useState(false); //to block the user from unselecting it
-    const [isPollutionAtStart,changePollutionAtStart]=useState(false);
-    let userDataSelectedFunction = (selectedValue) => {
+	const [selectedUser, changeSelectedUser] = useState(null); //selected in the typeahead
+	const [isInsuredAtStart, changeInsuredAtStart] = useState(false); //to block the user from unselecting it
+	const [isPollutionAtStart, changePollutionAtStart] = useState(false);
+	let userDataSelectedFunction = (selectedValue) => {
 		if (selectedValue.length == 0)
 			return;
 		if (!formState)
 			changeFormState(true);
-			getId(selectedValue[0]._id)
-            changeNum(selectedValue[0].registration_no);
-			changeCheckReg(selectedValue[0].registration_no);
-            changeModel(selectedValue[0].model);
-            changeCapacity(selectedValue[0].capacity.toString());
-            changeColor(selectedValue[0].color);
-            changeReading(selectedValue[0].odometer.toString());
-            if("insurance" in selectedValue[0])
-            { changeInsured(true);
-                changeInsuranceNo(selectedValue[0].insurance.policy_number);
-                changeInsuranceCompany(selectedValue[0].insurance.company);
-                changeInsuranceExpiration(selectedValue[0].insurance.expires);
-                changeNextPayment(selectedValue[0].insurance.next_payment);
-                changeInsuranceAmount(selectedValue[0].insurance.amount.toString());
-				changeInsuredAtStart(true);
-            }
-            if("pollution" in selectedValue[0])
-            {changePollutionAtStart(true);
-                changePollution(true);
-                changePollutionID(selectedValue[0].pollution.id);
-                changePollutionExpiration(selectedValue[0].pollution.expires);
-            }
+		getId(selectedValue[0]._id)
+		changeNum(selectedValue[0].registration_no);
+		changeCheckReg(selectedValue[0].registration_no);
+		changeModel(selectedValue[0].model);
+		changeCapacity(selectedValue[0].capacity.toString());
+		changeColor(selectedValue[0].color);
+		changeReading(selectedValue[0].odometer.toString());
+		if ("insurance" in selectedValue[0]) {
+			changeInsured(true);
+			changeInsuranceNo(selectedValue[0].insurance.policy_number);
+			changeInsuranceCompany(selectedValue[0].insurance.company);
+			changeInsuranceExpiration(selectedValue[0].insurance.expires);
+			changeNextPayment(selectedValue[0].insurance.next_payment);
+			changeInsuranceAmount(selectedValue[0].insurance.amount.toString());
+			changeInsuredAtStart(true);
+		}
+		if ("pollution" in selectedValue[0]) {
+			changePollutionAtStart(true);
+			changePollution(true);
+			changePollutionID(selectedValue[0].pollution.id);
+			changePollutionExpiration(selectedValue[0].pollution.expires);
+		}
 
 	}
 	//Check for duplicacy in Cab registration Number.
@@ -159,7 +159,7 @@ export default function UpdateCab(props) {
 			toast("something wrong has happened when connecting to servers");
 		}
 	}, [user]);
-    const getResponse = useCallback(async (event) => {
+	const getResponse = useCallback(async (event) => {
 		try {
 			let response = await axios.get(`${API_URL}/cabDataWithoutImages`, {
 				headers: {
@@ -179,7 +179,7 @@ export default function UpdateCab(props) {
 			toast("Failed to fetch drivers from our servers");
 		}
 	}, [user]);
-    useEffect(() => {
+	useEffect(() => {
 		getResponse();
 
 	}, [formState, getResponse])
@@ -189,9 +189,8 @@ export default function UpdateCab(props) {
 		let timer = setTimeout(async () => {
 			//Regular expression for Indian commercial vehicles
 			let pattern = /^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/;
-		
-			if(regNumber===checkReg)
-			{
+
+			if (regNumber === checkReg) {
 				trackInvalidRegNumber(false);
 				trackCabAlreadyExist(false);
 			}
@@ -200,7 +199,7 @@ export default function UpdateCab(props) {
 				trackCabAlreadyExist(false);
 			}
 			else {
-				
+
 				//Validate that the same cab hasnt been added to the database already.
 				const response = await checkCabAlreadyExist(regNumber);
 				if (response && response.data) {
@@ -281,7 +280,7 @@ export default function UpdateCab(props) {
 	if (!user || !user.isAuth) return;
 
 	//State which helps to disable button if any format still mismatches
-	let blockButton = (invalidRegNumber | invalidModel | invalidCapacity | invalidColor | cabAlreadyExist | invalidReading );
+	let blockButton = (invalidRegNumber | invalidModel | invalidCapacity | invalidColor | cabAlreadyExist | invalidReading);
 	blockButton |= (isInsured ? (invalidInsuranceNo | invalidInsuranceAmount | invalidInsuranceExpiry | invalidInsuranceNext | invalidInsuranceCompany) : false);
 	blockButton |= (isPollution ? (invalidPollutionID | invalidPollutionExpiry) : false);
 
@@ -290,7 +289,7 @@ export default function UpdateCab(props) {
 	const submitResponse = async (event) => {
 		document.getElementById('addCabSubmit').disabled = true;
 		let values = {
-			id:id,
+			id: id,
 			registration_no: regNumber,
 			model: model,
 			capacity: capacity,
@@ -360,12 +359,12 @@ export default function UpdateCab(props) {
 
 	return (
 		<>
-		<ToastContainer />
-		<section className="vh-100">
+			<ToastContainer />
+			<section className="vh-100">
 				<div className="container h-100">
 					<div className="row d-flex justify-content-center  h-100">
 						<div className="col-xl-11">
-		{loading &&
+							{loading &&
 								<div className="text-center">
 									<RotatingLines
 										strokeColor="grey"
@@ -376,7 +375,7 @@ export default function UpdateCab(props) {
 									/>
 								</div>}
 
-                                {!loading &&
+							{!loading &&
 								<Typeahead
 									id="CabIds"
 									onChange={userDataSelectedFunction}
@@ -385,213 +384,213 @@ export default function UpdateCab(props) {
 									selected={selectedUser}
 								/>
 							}
-		<motion.section className="vh-100" initial={{ scale: 0 }}
-			animate={{ rotate: 0, scale: 1 }}
-			transition={{
-				ease: "linear",
-				duration: 1,
-				x: { duration: 1 }
-			}} key={formState}>
-		
+							<motion.section className="vh-100" initial={{ scale: 0 }}
+								animate={{ rotate: 0, scale: 1 }}
+								transition={{
+									ease: "linear",
+									duration: 1,
+									x: { duration: 1 }
+								}} key={formState}>
 
-			<div className="container h-100 my-2" >
-				<div className="row d-flex justify-content-center  h-100">
-					<div className="col-xl-11">
-                            
-						<div className="card my-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" ,display: (formState ? 'block' : 'none')}} >
-							<h1 className="text-yellow mb-4 text-center py-4" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Enter Cab Details</h1>
-							<div className="card-body">
-								<div className="row align-items-center pt-4 pb-3">
-									<div className="col-md-3 ps-5">
-										<h6 className=" mb-0 fw-bolder">Cab registration no.</h6>
-										<em className=" mb-0 fw-light"><small>(<a href="https://tinyurl.com/ysuphhm5" target="blank">Format</a> : XX XX XX XXXX)</small></em>
-									</div>
-									<div className="col-md-9 pe-5">
-										<input type="text" className="form-control form-control-lg" onChange={Numberaltered} value={regNumber} />
+
+								<div className="container h-100 my-2" >
+									<div className="row d-flex justify-content-center  h-100">
+										<div className="col-xl-11">
+
+											<div className="card my-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", display: (formState ? 'block' : 'none') }} >
+												<h1 className="text-yellow mb-4 text-center py-4" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>Enter Cab Details</h1>
+												<div className="card-body">
+													<div className="row align-items-center pt-4 pb-3">
+														<div className="col-md-3 ps-5">
+															<h6 className=" mb-0 fw-bolder">Cab registration no.</h6>
+															<em className=" mb-0 fw-light"><small>(<a href="https://tinyurl.com/ysuphhm5" target="blank">Format</a> : XX XX XX XXXX)</small></em>
+														</div>
+														<div className="col-md-9 pe-5">
+															<input type="text" className="form-control form-control-lg" onChange={Numberaltered} value={regNumber} />
+														</div>
+													</div>
+													{/* Text which will only be visible when format is not adhered to */}
+													<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidRegNumber == true ? 'block' : 'none') }}>Please enter the correct number</span>
+													<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (cabAlreadyExist == true ? 'block' : 'none') }}>Sorry!This Cab already exists.</span>
+													<hr className="mx-n3" />
+
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Cab model</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+
+															<input type="text" className="form-control form-control-lg" onChange={ModelAltered} value={model} />
+
+														</div>
+													</div>
+													{/* Text which will only be visible when format is not adhered to */}
+													<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidModel == true ? 'block' : 'none') }}>Please enter the correct model</span>
+
+													<hr className="mx-n3" />
+
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Cab colour</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+
+															<input type="text" className="form-control form-control-lg" onChange={ColorAltered} value={color} />
+
+														</div>
+													</div>
+													{/* Text which will only be visible when format is not adhered to */}
+													<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct color</span>
+
+													<hr className="mx-n3" />
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Cab capacity</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+
+															<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered} required value={capacity} />
+
+														</div>
+													</div>
+													{/* Text which will only be visible when format is not adhered to */}
+													<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidCapacity == true ? 'block' : 'none') }}>Please enter the correct capacity(1-99)</span>
+													<hr className="mx-n3" />
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Current Odometer Reading</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+															<input type="text" className="form-control form-control-lg" onChange={ReadingAltered} value={reading} />
+														</div>
+													</div>
+													{/* Text which will only be visible when format is not adhered to */}
+													<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidReading == true ? 'block' : 'none') }}>Please enter the correct reading</span>
+													<hr className="mx-n3" />
+													<div className="row align-items-center py-3">
+														<div className="col-md-3 ps-5">
+
+															<h6 className="mb-0 fw-bolder">Cab Image</h6>
+
+														</div>
+														<div className="col-md-9 pe-5">
+															<input type="file" className="form-control form-control-lg" ref={ref} accept="image/*" onChange={ImageAltered} />
+														</div>
+													</div>
+
+													<hr className="mx-n3" />
+													<div className='container border border-warning-subtle rounded' id='Insurancediv' style={{ display: (isInsured ? 'block' : 'none') }}>
+														<div className="row align-items-center py-3">
+															<div className="col-md-3 ps-5">
+																<h6 className="mb-0 fw-bolder">Policy Number</h6>
+															</div>
+															<div className="col-md-9 pe-5">
+																<input type="text" className="form-control form-control-lg" onChange={insuranceNumberAltered} value={insuranceNo} />
+															</div>
+														</div>
+														{/* Text which will only be visible when format is not adhered to */}
+														<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceNo == true ? 'block' : 'none') }}>Please enter the correct number</span>
+														<div className="row align-items-center py-3">
+															<div className="col-md-3 ps-5">
+																<h6 className="mb-0 fw-bolder">Company</h6>
+															</div>
+															<div className="col-md-9 pe-5">
+																<input type="text" className="form-control form-control-lg" onChange={insuranceCompanyAltered} value={insuranceCompany} />
+															</div>
+														</div>
+														{/* Text which will only be visible when format is not adhered to */}
+														<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceCompany == true ? 'block' : 'none') }}>Please enter the correct company</span>
+														<div className="row align-items-center py-3">
+															<div className="col-md-3 ps-5">
+																<h6 className="mb-0 fw-bolder">Amount</h6>
+															</div>
+															<div className="col-md-9 pe-5">
+																<input type="text" className="form-control form-control-lg" onChange={insuranceAmountAltered} value={insuranceAmount} />
+															</div>
+														</div>
+														{/* Text which will only be visible when format is not adhered to */}
+														<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceAmount == true ? 'block' : 'none') }}>Please enter the correct amount</span>
+														<div className="row align-items-center py-3">
+															<div className="col-md-3 ps-5">
+																<h6 className="mb-0 fw-bolder">Expiration Date</h6>
+															</div>
+															<div className="col-md-9 pe-5">
+																<input type="date" className="form-control form-control-lg" value={insuranceExpirationDate} onChange={insuranceExpirationAltered} />
+															</div>
+														</div>
+														{/* Text which will only be visible when format is not adhered to */}
+														<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceExpiry == true ? 'block' : 'none') }}>Please Choose a valid date</span>
+														<div className="row align-items-center py-3">
+															<div className="col-md-3 ps-5">
+																<h6 className="mb-0 fw-bolder">Next Payment On</h6>
+															</div>
+															<div className="col-md-9 pe-5">
+																<input type="date" className="form-control form-control-lg" value={insuranceNextPayment} onChange={insurancePaymentAltered} />
+															</div>
+														</div>
+														{/* Text which will only be visible when format is not adhered to */}
+														<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceNext == true ? 'block' : 'none') }}>Please Choose a valid date</span>
+													</div>
+													<div className='container border border-warning-subtle rounded my-2' id='Pollutiondiv' style={{ display: (isPollution ? 'block' : 'none') }}>
+														<div className="row align-items-center py-3">
+															<div className="col-md-3 ps-5">
+																<h6 className="mb-0 fw-bolder">Pollution Certificate ID</h6>
+															</div>
+															<div className="col-md-9 pe-5">
+																<input type="text" className="form-control form-control-lg" onChange={pollutionIDAltered} value={pollutionId} />
+															</div>
+														</div>
+														{/* Text which will only be visible when format is not adhered to */}
+														<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidPollutionID == true ? 'block' : 'none') }}>Please enter the correct ID</span>
+														<div className="row align-items-center py-3">
+															<div className="col-md-3 ps-5">
+																<h6 className="mb-0 fw-bolder">Expiration Date</h6>
+															</div>
+															<div className="col-md-9 pe-5">
+																<input type="date" id="expire" className="form-control form-control-lg" value={pollutionExpirationDate} onChange={pollutionExpirationAltered} />
+															</div>
+														</div>
+														{/* Text which will only be visible when format is not adhered to */}
+														<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidPollutionExpiry == true ? 'block' : 'none') }}>Please Choose a Valid date</span>
+													</div>
+
+													<div className="px-5 py-4 text-center row">
+														<div className="col-sm-2 my-2">
+															<input className="form-check-input" type="checkbox" checked={isInsured} disabled={isInsuredAtStart} id="insuranceCheckbox" onClick={handleInsuranceCheckbox} readOnly />
+															<label className="form-check-label" htmlFor="insuranceCheckbox">
+																Cab Insured?
+															</label>
+														</div>
+														<div className="col-sm-2 my-2">
+															<input className="form-check-input" type="checkbox" checked={isPollution} disabled={isPollutionAtStart} id="PollutionCheckbox" onClick={handlePollutionCheckbox} readOnly />
+															<label className="form-check-label" htmlFor="PollutionCheckbox">
+																Pollution
+															</label>
+														</div>
+														<div className="col-sm-8">
+															<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={submitResponse} id='addCabSubmit'>Update</button>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
 									</div>
 								</div>
-								{/* Text which will only be visible when format is not adhered to */}
-								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidRegNumber == true ? 'block' : 'none') }}>Please enter the correct number</span>
-								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (cabAlreadyExist == true ? 'block' : 'none') }}>Sorry!This Cab already exists.</span>
-								<hr className="mx-n3" />
-
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Cab model</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-
-										<input type="text" className="form-control form-control-lg" onChange={ModelAltered} value={model} />
-
-									</div>
-								</div>
-								{/* Text which will only be visible when format is not adhered to */}
-								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidModel == true ? 'block' : 'none') }}>Please enter the correct model</span>
-
-								<hr className="mx-n3" />
-
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Cab colour</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-
-										<input type="text" className="form-control form-control-lg" onChange={ColorAltered} value={color} />
-
-									</div>
-								</div>
-								{/* Text which will only be visible when format is not adhered to */}
-								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidColor == true ? 'block' : 'none') }}>Please enter the correct color</span>
-
-								<hr className="mx-n3" />
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Cab capacity</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-
-										<input type="text" pattern="[0-9]+" className="form-control form-control-lg" onChange={CapacityAltered} required value={capacity} />
-
-									</div>
-								</div>
-								{/* Text which will only be visible when format is not adhered to */}
-								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidCapacity == true ? 'block' : 'none') }}>Please enter the correct capacity(1-99)</span>
-								<hr className="mx-n3" />
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Current Odometer Reading</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-										<input type="text" className="form-control form-control-lg" onChange={ReadingAltered} value={reading} />
-									</div>
-								</div>
-								{/* Text which will only be visible when format is not adhered to */}
-								<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidReading == true ? 'block' : 'none') }}>Please enter the correct reading</span>
-								<hr className="mx-n3" />
-								<div className="row align-items-center py-3">
-									<div className="col-md-3 ps-5">
-
-										<h6 className="mb-0 fw-bolder">Cab Image</h6>
-
-									</div>
-									<div className="col-md-9 pe-5">
-										<input type="file" className="form-control form-control-lg" ref={ref} accept="image/*" onChange={ImageAltered} />
-									</div>
-								</div>
-								
-								<hr className="mx-n3" />
-								<div className='container border border-warning-subtle rounded' id='Insurancediv' style={{ display: (isInsured ? 'block' : 'none') }}>
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-											<h6 className="mb-0 fw-bolder">Policy Number</h6>
-										</div>
-										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={insuranceNumberAltered} value={insuranceNo} />
-										</div>
-									</div>
-									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceNo == true ? 'block' : 'none') }}>Please enter the correct number</span>
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-											<h6 className="mb-0 fw-bolder">Company</h6>
-										</div>
-										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={insuranceCompanyAltered} value={insuranceCompany} />
-										</div>
-									</div>
-									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceCompany == true ? 'block' : 'none') }}>Please enter the correct company</span>
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-											<h6 className="mb-0 fw-bolder">Amount</h6>
-										</div>
-										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={insuranceAmountAltered} value={insuranceAmount} />
-										</div>
-									</div>
-									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceAmount == true ? 'block' : 'none') }}>Please enter the correct amount</span>
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
-										</div>
-										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" value={insuranceExpirationDate} onChange={insuranceExpirationAltered} />
-										</div>
-									</div>
-									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceExpiry == true ? 'block' : 'none') }}>Please Choose a valid date</span>
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-											<h6 className="mb-0 fw-bolder">Next Payment On</h6>
-										</div>
-										<div className="col-md-9 pe-5">
-											<input type="date" className="form-control form-control-lg" value={insuranceNextPayment} onChange={insurancePaymentAltered} />
-										</div>
-									</div>
-									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidInsuranceNext == true ? 'block' : 'none') }}>Please Choose a valid date</span>
-								</div>
-								<div className='container border border-warning-subtle rounded my-2' id='Pollutiondiv' style={{ display: (isPollution ? 'block' : 'none') }}>
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-											<h6 className="mb-0 fw-bolder">Pollution Certificate ID</h6>
-										</div>
-										<div className="col-md-9 pe-5">
-											<input type="text" className="form-control form-control-lg" onChange={pollutionIDAltered} value={pollutionId} />
-										</div>
-									</div>
-									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidPollutionID == true ? 'block' : 'none') }}>Please enter the correct ID</span>
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-											<h6 className="mb-0 fw-bolder">Expiration Date</h6>
-										</div>
-										<div className="col-md-9 pe-5">
-											<input type="date" id="expire" className="form-control form-control-lg" value={pollutionExpirationDate} onChange={pollutionExpirationAltered} />
-										</div>
-									</div>
-									{/* Text which will only be visible when format is not adhered to */}
-									<span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidPollutionExpiry == true ? 'block' : 'none') }}>Please Choose a Valid date</span>
-								</div>
-
-								<div className="px-5 py-4 text-center row">
-									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" checked={isInsured} disabled={isInsuredAtStart} id="insuranceCheckbox" onClick={handleInsuranceCheckbox} readOnly />
-										<label className="form-check-label" htmlFor="insuranceCheckbox">
-											Cab Insured?
-										</label>
-									</div>
-									<div className="col-sm-2 my-2">
-										<input className="form-check-input" type="checkbox" checked={isPollution} disabled={isPollutionAtStart} id="PollutionCheckbox" onClick={handlePollutionCheckbox} readOnly />
-										<label className="form-check-label" htmlFor="PollutionCheckbox">
-											Pollution
-										</label>
-									</div>
-									<div className="col-sm-8">
-										<button type="submit" className="btn btn-primary btn-lg" disabled={blockButton} onClick={submitResponse} id='addCabSubmit'>Update</button>
-									</div>
-								</div>
-
-							</div>
+							</motion.section>
 						</div>
-
-					</div>
-				</div>
-			</div>
-		</motion.section>
-		</div>
 					</div>
 				</div>
 			</section>
-			</>
+		</>
 	)
 }

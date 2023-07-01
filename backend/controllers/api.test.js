@@ -2,6 +2,7 @@ const request = require("supertest");
 const { server_test } = require("../index")
 const db = require("../config/db");
 const Driver_collection = require("../models/drivers.model");
+const Cab_collection = require("../models/cabs.model");
 
 
 describe('Assignment API Tests', () => {
@@ -158,12 +159,6 @@ describe('Assignment API Tests', () => {
 });
 
 describe('driverRegistration and driverUpdation API Tests', () => {
-    afterAll(() => {
-        //Terminate after all tests.
-        setTimeout((function () {
-            return process.kill(process.pid);
-        }), 100);
-    })
 
     //Token for making authenticated requests.
     let AdminToken = null;
@@ -268,6 +263,146 @@ describe('driverRegistration and driverUpdation API Tests', () => {
                 .delete('/deleteDriver')
                 .set('x-auth-token', AdminToken)
                 .send(credentials).expect(200);
+        })
+    });
+});
+
+describe('cabRegistration and cabUpdation API Tests', () => {
+    afterAll(() => {
+        //Terminate after all tests.
+        setTimeout((function () {
+            return process.kill(process.pid);
+        }), 100);
+    })
+
+    //Token for making authenticated requests.
+    let AdminToken = null;
+
+    //Login
+    describe('TEST POST/adminLogin', () => {
+        test('It should respond with 200 code', async () => {
+            const credentials = {
+                email: process.env.ADMIN_EMAIL,
+                password: process.env.ADMIN_PASSWORD
+            }
+            const res = await request(server_test)
+                .post('/adminlogin')
+                .send(credentials)
+                .expect(200);
+            AdminToken = res.body.user.token;
+        })
+    });
+    let today = new Date();
+    today.setDate(today.getDate() + 10);
+    //Create a new Driver
+    describe('TEST POST/addCab', () => {
+        test('It should respond with true if cab is created ', async () => {
+            let values = {
+                registration_no: 'HR 23 HR 2332',
+                model: 'Toyota',
+                capacity: 12,
+                color: 'Red',
+                odometer: 423
+            }
+            values.insurance = {
+                policy_number: '3244',
+                company: 'Company',
+                expires: today,
+                next_payment: today,
+                amount: 1000,
+            }
+            values.pollution = {
+                id: 'Sample ID',
+                expires: today,
+            }
+            await request(server_test)
+                .post('/addCab')
+                .set('x-auth-token', AdminToken)
+                .send(values).expect('true');
+        })
+    });
+    //Check email exists now
+    describe('TEST POST/checkCabExists', () => {
+        test('It should respond with true if cab exists ', async () => {
+            let values = {
+                registration_no: 'HR 23 HR 2332',
+                model: 'Toyota',
+                capacity: 12,
+                color: 'Red',
+                odometer: 423
+            }
+            values.insurance = {
+                policy_number: '3244',
+                company: 'Company',
+                expires: today,
+                next_payment: today,
+                amount: 1000,
+            }
+            values.pollution = {
+                id: 'Sample ID',
+                expires: today,
+            }
+            await request(server_test)
+                .post('/checkCabExists')
+                .set('x-auth-token', AdminToken)
+                .send(values).expect('true');
+        })
+    });
+    //Get all cabs and check the current cab exists in it.
+    describe('TEST POST/cabNames', () => {
+        test('It should contain created driver', async () => {
+            const res = await request(server_test)
+                .get('/cabNames')
+                .set('x-auth-token', AdminToken);
+            let exists = false;
+            for (let k of res.body) {
+                if (k.registration_no === 'HR 23 HR 2332') exists = true;
+            }
+            expect(exists).toBe(true);
+        })
+    });
+    //Update Driver Name
+    describe('TEST POST/updateCab', () => {
+        test('It should contain created driver', async () => {
+            const doc = await Cab_collection.findOne({ registration_no: 'HR 23 HR 2332' });
+            let values = {
+                id: doc._id,
+                registration_no: 'HR 23 HR 2332',
+                model: 'Toyota',
+                capacity: 12,
+                color: 'Blue',
+                odometer: 423
+            }
+            values.insurance = {
+                policy_number: '3244',
+                company: 'Company',
+                expires: today,
+                next_payment: today,
+                amount: 1000,
+            }
+            values.pollution = {
+                id: 'Sample ID',
+                expires: today,
+            }
+            const res = await request(server_test)
+                .post('/updateCab')
+                .set('x-auth-token', AdminToken)
+                .send(values);
+            expect(res.body.matchedCount).toBeGreaterThan(0);
+        })
+    });
+
+    //Cannot be tested without knowing _id
+    describe('TEST DELETE/deleteCab', () => {
+        test('It should respond with true if driver is deleted ', async () => {
+            const doc = await Cab_collection.findOne({ registration_no: 'HR 23 HR 2332' });
+            let values = {
+                id: doc._id
+            }
+            await request(server_test)
+                .post('/deleteCab')
+                .set('x-auth-token', AdminToken)
+                .send(values).expect(200);
         })
     });
 });
