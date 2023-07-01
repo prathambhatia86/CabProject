@@ -58,6 +58,7 @@ app.get('/cabDataWithoutImages', [auth, cache(10)], cabUpdationController.getCab
 app.get('/cabDataForDeletion', [auth, cache(10)], cabUpdationController.cabDataForDeletion);
 app.post('/updateCab', auth, cabUpdationController.updateCab);
 app.post('/deleteCab', auth, cabUpdationController.deleteCab);
+app.post('/getCabImage', auth, cabUpdationController.cabImage);
 
 app.post('/checkCabAssigned', auth, AssignmentController.checkCabAssigned);
 app.post('/checkDriverAssigned', auth, AssignmentController.checkDriverAssigned);
