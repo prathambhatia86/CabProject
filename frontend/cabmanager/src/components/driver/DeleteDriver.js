@@ -14,7 +14,6 @@ export default function DeleteDriver(props) {
 	const user = useSelector(state => state.user.user);
 
 	const [loading, changeLoading] = useState(true);
-	console.log(loading);
 
 	//React state for data of current driver selected for updation
 	const [userData, changeUserData] = useState(null);
@@ -25,7 +24,6 @@ export default function DeleteDriver(props) {
 	//React states for the data fields of the driver
 	const [id, changeId] = useState("");
 	const [email, changeEmail] = useState("");
-	const [password, changePassword] = useState("");
 	const [name, changeName] = useState("");
 	const [contact, changeContact] = useState("");
 	const [formState, changeFormState] = useState(false);
@@ -35,17 +33,11 @@ export default function DeleteDriver(props) {
 	const emailAltered = (event) => {
 		changeEmail(event.target.value);
 	}
-	const passwordAltered = (event) => {
-
-		changePassword(event.target.value);
-
-	}
 	const contactAltered = (event) => {
 		event.target.value = event.target.value.replace(/[^0-9]/g, '');
 		changeContact(event.target.value);
 	}
 	const [invalidEmail, trackInvalidEmail] = useState(false);
-	const [invalidPassword, trackInvalidPassword] = useState(false);
 	const [invalidName, trackInvalidName] = useState(false);
 	const [invalidContact, trackInvalidContact] = useState(false);
 	const getResponse = useCallback(async (event) => {
@@ -82,11 +74,6 @@ export default function DeleteDriver(props) {
 			}
 			else
 				trackInvalidEmail(false);
-			if (password.trim().length < 6) {
-				trackInvalidPassword(true);
-			}
-			else
-				trackInvalidPassword(false);
 			if (name.trim().length == 0) {
 				trackInvalidName(true);
 			}
@@ -102,20 +89,19 @@ export default function DeleteDriver(props) {
 			clearTimeout(timer);
 		};
 	},
-		[email, password, name, contact]
+		[email, name, contact]
 	);
 	//Return if not authorised
 	if (!user || !user.isAuth) return;
 
 
-	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
+	let blockButton = (invalidContact | invalidEmail | invalidName);
 	let userDataSelectedFunction = (selectedValue) => {
 		if (selectedValue.length == 0)
 			return;
 		if (!formState)
 			changeFormState(true);
 		changeEmail(selectedValue[0].email);
-		changePassword(selectedValue[0].password);
 		changeName(selectedValue[0].name);
 		changeContact(selectedValue[0].contact.toString());
 		changeId(selectedValue[0]._id);
@@ -226,20 +212,6 @@ export default function DeleteDriver(props) {
 										</div>
 									</div>
 									<span className="help-block" style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
-									<hr className="mx-n3" />
-									<div className="row align-items-center py-3">
-										<div className="col-md-3 ps-5">
-
-											<h6 className="mb-0 fw-bolder">Driver password</h6>
-
-										</div>
-										<div className="col-md-9 pe-5">
-
-											<input type="password" className="form-control form-control-lg" onChange={passwordAltered} value={password} disabled />
-
-										</div>
-									</div>
-									<span className="help-block" style={{ display: (invalidPassword == true ? 'block' : 'none') }}>Please enter the correct password</span>
 									<hr className="mx-n3" />
 
 									<div className="row align-items-center py-3">

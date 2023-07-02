@@ -74,7 +74,7 @@ app.post('/getAssignedDriver', auth, AssignmentController.getAssignedDriver);
 app.post('/deassignCab', auth, AssignmentController.deassignCab);
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  });
+});
 
 const key_path = path.join(__dirname, 'config', 'key.pem');
 const cert_path = path.join(__dirname, 'config', 'cert.pem');
