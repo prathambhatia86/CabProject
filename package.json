@@ -13,6 +13,7 @@
     "watch": "concurrently 'npm:server' 'npm:client' ",
     "deploy": "npm run build --prefix frontend && npm start --prefix backend",
     "test": "jest --detectOpenHandles"
+  
   },
   "repository": {
     "type": "git",

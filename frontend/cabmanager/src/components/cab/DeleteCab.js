@@ -96,7 +96,7 @@ export default function DeleteCab(props) {
 			}
 			);
 			if (response && response.data) {
-				toast("form submitted"); //alert
+				toast("user deleted"); //alert
 				document.getElementById('addCabSubmit').disabled = false;
 				changeFormState("false");
 
