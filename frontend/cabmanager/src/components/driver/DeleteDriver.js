@@ -136,7 +136,9 @@ export default function DeleteDriver(props) {
 			}
 			)
 			if (response && response.status == 200)
-				toast("form deleted");   //alert
+				{toast("form deleted"); 
+				changeFormState(false);  //alert
+		}
 			else
 				toast("something wrong has occured");
 		} catch (err) {

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "nodemon index.js",
     "build": "npm run build --prefix cabmanager",
-    "start":"npm start --prefix cabmanager"
+    "start":"npm start --prefix cabmanager",
+    "install":"npm install --prefix cabmanager"
   },
   "author": "Pratham Bhatia",
   "license": "ISC"
