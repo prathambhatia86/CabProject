@@ -41,9 +41,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')))
 
 //Logical Controllers for requests.
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  });
+
 app.post('/adminlogin', loginController.adminLogin);
 app.post('/driverlogin', loginController.driverLogin);
 app.post('/forgotPassword', loginController.forgotPassword);
@@ -75,7 +73,9 @@ app.post('/getAssignedCab', auth, AssignmentController.getAssignedCab);
 app.post('/getAssignedDriver', auth, AssignmentController.getAssignedDriver);
 app.post('/deassignCab', auth, AssignmentController.deassignCab);
 
-
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 const key_path = path.join(__dirname, 'config', 'key.pem');
 const cert_path = path.join(__dirname, 'config', 'cert.pem');
 const port = 5000;

@@ -24,26 +24,21 @@ export default function UpdateDriver(props) {
 	const [id, changeId] = useState("");
 	const [email, changeEmail] = useState("");
 	const [emailAlreadyExist, trackEmailAlreadyExist] = useState(false);
-	const [password, changePassword] = useState("");
 	const [name, changeName] = useState("");
 	const [contact, changeContact] = useState("");
 	const [formState, changeFormState] = useState(false);
-	const[originalEmail,changeOriginalEmail]=useState(null);
+	const [originalEmail, changeOriginalEmail] = useState(null);
 	const nameAltered = (event) => {
 		changeName(event.target.value);
 	}
 	const emailAltered = (event) => {
 		changeEmail(event.target.value);
 	}
-	const passwordAltered = (event) => {
-		changePassword(event.target.value);
-	}
 	const contactAltered = (event) => {
 		event.target.value = event.target.value.replace(/[^0-9]/g, '');
 		changeContact(event.target.value);
 	}
 	const [invalidEmail, trackInvalidEmail] = useState(false);
-	const [invalidPassword, trackInvalidPassword] = useState(false);
 	const [invalidName, trackInvalidName] = useState(false);
 	const [invalidContact, trackInvalidContact] = useState(false);
 	const getResponse = useCallback(async (event) => {
@@ -89,10 +84,9 @@ export default function UpdateDriver(props) {
 	}, [user]);
 	useEffect(() => {
 
-		let timer = setTimeout(async() => {
+		let timer = setTimeout(async () => {
 			let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-			if(email==originalEmail)
-			{
+			if (email == originalEmail) {
 				trackInvalidEmail(false);
 				trackEmailAlreadyExist(false);
 			}
@@ -108,11 +102,6 @@ export default function UpdateDriver(props) {
 				}
 				trackInvalidEmail(false);
 			}
-			if (password.trim().length < 6) {
-				trackInvalidPassword(true);
-			}
-			else
-				trackInvalidPassword(false);
 			if (name.trim().length == 0) {
 				trackInvalidName(true);
 			}
@@ -128,11 +117,11 @@ export default function UpdateDriver(props) {
 			clearTimeout(timer);
 		};
 	},
-		[email, password, name, contact]
+		[email, name, contact]
 	);
 	//Return if not authorised
 	if (!user || !user.isAuth) return;
-	let blockButton = (invalidContact | invalidEmail | invalidName | invalidPassword);
+	let blockButton = (invalidContact | invalidEmail | invalidName);
 	let userDataSelectedFunction = (selectedValue) => {
 		if (selectedValue.length == 0)
 			return;
@@ -140,7 +129,6 @@ export default function UpdateDriver(props) {
 			changeFormState(true);
 		changeEmail(selectedValue[0].email);
 		changeOriginalEmail(selectedValue[0].email)
-		changePassword(selectedValue[0].password);
 		changeName(selectedValue[0].name);
 		changeContact(selectedValue[0].contact.toString());
 		changeId(selectedValue[0]._id);
@@ -151,7 +139,6 @@ export default function UpdateDriver(props) {
 			id: id,
 			name: name,
 			email: email,
-			password: password,
 			contact: contact,
 		}
 		try {
@@ -162,16 +149,16 @@ export default function UpdateDriver(props) {
 				}
 			}
 			)
-			if (response)
-				{toast("form updated");  
+			if (response) {
+				toast("form updated");
 				changeFormState(false);
-		 } //alert
+			} //alert
 			else
 				toast("something wrong has occured");
 		} catch (err) {
 			toast("Some error occured, Please try again later");
 		}
-		
+
 	}
 	return (
 		<>
@@ -236,12 +223,12 @@ export default function UpdateDriver(props) {
 
 										</div>
 									</div>
-										{/* Text which will only be visible when format is not adhered to */}
-								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
-								<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (emailAlreadyExist == true ? 'block' : 'none') }}>Sorry!This email already exists.</span>
+									{/* Text which will only be visible when format is not adhered to */}
+									<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (invalidEmail == true ? 'block' : 'none') }}>Please enter the correct email</span>
+									<span className={`${styles.blink} help-block text-danger text-center`} style={{ display: (emailAlreadyExist == true ? 'block' : 'none') }}>Sorry!This email already exists.</span>
 									<hr className="mx-n3" />
-								
-								
+
+
 
 									<div className="row align-items-center py-3">
 										<div className="col-md-3 ps-5">

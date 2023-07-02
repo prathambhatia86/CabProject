@@ -10,8 +10,7 @@ const getNames = async (req, res) => {
     }
     try {
         //Fetch all documents from the database
-        const data = await driverCollection.find({});
-       
+        const data = await driverCollection.find({}, { password: 0 });
         res.json(data);
     } catch (err) {
         res.status(500);
@@ -31,15 +30,12 @@ const driverUpdate = async (req, res) => {
             const filter = { _id: req.body.id };
             const update = { $set: req.body };
             let email = req.body.email;
-            let password = req.body.password;
             let contact = req.body.contact;
             let name = req.body.name;
             let ok = true;
             //Match the email regex.
             let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
             if (!email.match(pattern)) ok = false;
-            //Minimum password length is 6
-            if (password.trim().length < 6) ok = false;
             //Name must have non-zero length
             if (name.trim().length == 0) ok = false;
             //Contact length must be 10 digits
