@@ -5,7 +5,7 @@ const atlasURI=`mongodb+srv://cab-api:${process.env.database_password}@cluster0.
 const connectToMongo = async () => {
     mongoose.connect(atlasURI).then(() => {
         logger.info('Connected to mongoose Success');
-     
+
     }).catch(err => {
         logger.error("Connection to mongodb failed with error code: " + err.code);
     })

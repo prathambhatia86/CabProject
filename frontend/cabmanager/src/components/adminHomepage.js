@@ -101,7 +101,7 @@ export default function AdminHomepage(props) {
 				<i className={`${styles.closebtn}`} onClick={toggleNav}>×</i>
 				<br />
 				<div>
-					<span data-toggle="collapse" data-target="#driverSidebar">
+					<span data-bs-toggle="collapse" data-bs-target="#driverSidebar">
 						Driver ↧
 					</span>
 					<div className="container-fluid collapse row " id="driverSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
@@ -118,7 +118,7 @@ export default function AdminHomepage(props) {
 				</div>
 				<br />
 				<div className="container">
-					<span data-toggle="collapse" data-target="#cabSidebar">
+					<span data-bs-toggle="collapse" data-bs-target="#cabSidebar">
 						Cab ↧
 					</span>
 					<div className="container-fluid collapse row" id="cabSidebar" style={{ backgroundColor: 'rgb(255, 250, 149)' }}>
