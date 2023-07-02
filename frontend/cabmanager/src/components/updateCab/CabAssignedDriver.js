@@ -24,7 +24,7 @@ export default function CabAssignedDriver({ cab, onDeassign }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const values = { registration_no: cab.registration_no };
+                const values = { registration_no: cab };
                 let response = await axios.post(`${API_URL}/getAssignedDriver`, JSON.stringify(values), {
                     headers: {
                         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export default function CabAssignedDriver({ cab, onDeassign }) {
             return;
         }
         try {
-            const values = { email: driver.email, registration_no: cab.registration_no };
+            const values = { email: driver.email, registration_no: cab };
             let response = await axios.post(`${API_URL}/deassignCab`, JSON.stringify(values), {
                 headers: {
                     "Content-Type": "application/json",

@@ -10,7 +10,10 @@ const getNames = async (req, res) => {
     }
     try {
         //Fetch all documents from the database
-        const data = await cabCollection.find({}).select('registration_no').exec();
+        let data = await cabCollection.find({}).select('registration_no insurance pollution').exec();
+        data = (data.filter((elem) => {
+            return elem.insurance && elem.pollution;
+        }));
         res.json(data);
     } catch (err) {
         res.status(500);
@@ -52,7 +55,7 @@ const getNonAssignedNames = async (req, res) => {
     try {
         //Fetch all documents from the database
         const assigned = (await Assignment_collection.find({})).map(a => { return a.registration_no });
-        const data = await cabCollection.find({ registration_no: { $nin: assigned } }).select('registration_no').exec();
+        let data = await cabCollection.find({ registration_no: { $nin: assigned } }).select('registration_no insurance pollution').exec();
         data = data.filter((elem) => {
             return elem.insurance && elem.pollution;
         });

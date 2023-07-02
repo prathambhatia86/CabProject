@@ -62,7 +62,7 @@ export default function SearchDriver({ cab, onAssignment, goback }) {
         try {
             const values = {
                 email: currUserData.email,
-                registration_no: cab.registration_no
+                registration_no: cab
             }
             let response = await axios.post(`${API_URL}/assignDriver`, JSON.stringify(values), {
                 headers: {
@@ -70,7 +70,10 @@ export default function SearchDriver({ cab, onAssignment, goback }) {
                     "x-auth-token": user ? user.token : null
                 },
             });
-            if (response.data) onAssignment(currUserData);
+            if (response.data) {
+                onAssignment(currUserData);
+                changeFormState(false);
+            }
             else toast("Failed to assign this driver");
         }
         catch {
@@ -79,7 +82,7 @@ export default function SearchDriver({ cab, onAssignment, goback }) {
     }
 
     //Return if not authorised
-    if (!user || !user.isAuth) return;
+    if (!user || !user.isAuth || !cab) return;
     return (
         <>
             <div className="col-xl-11">

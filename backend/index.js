@@ -48,19 +48,19 @@ app.post('/forgotPassword', loginController.forgotPassword);
 
 app.post('/driverRegistration', auth, driverRegistrationController.driverRegistration);
 app.post('/checkDriverLogin', auth, driverRegistrationController.checkLogin);
-app.get('/driverNames', [auth, cache(10)], driverUpdationController.getNames);
-app.get('/driverNonAssignedNames', [auth, cache(10)], driverUpdationController.getNonAssignedNames);
+app.get('/driverNames', [auth, cache(3)], driverUpdationController.getNames);
+app.get('/driverNonAssignedNames', [auth, cache(2)], driverUpdationController.getNonAssignedNames);
 app.post('/driverUpdate', auth, driverUpdationController.driverUpdate);
 app.post('/changePassword', auth, driverUpdationController.changePassword);
 app.delete('/deleteDriver', auth, driverUpdationController.deleteDriver);
 
 app.post('/addCab', auth, cabAddController.addCab);
 app.post('/checkCabExists', auth, cabAddController.checkCabExists);
-app.get('/cabNames', [auth, cache(10)], cabUpdationController.getNames);
-app.get('/cabNonAssignedNames', [auth, cache(10)], cabUpdationController.getNonAssignedNames);
+app.get('/cabNames', [auth, cache(3)], cabUpdationController.getNames);
+app.get('/cabNonAssignedNames', [auth, cache(2)], cabUpdationController.getNonAssignedNames);
 app.post('/getCab', auth, cabUpdationController.getCab);
-app.get('/cabDataWithoutImages', [auth, cache(10)], cabUpdationController.getCabDataWithoutImages);
-app.get('/cabDataForDeletion', [auth, cache(10)], cabUpdationController.cabDataForDeletion);
+app.get('/cabDataWithoutImages', [auth, cache(3)], cabUpdationController.getCabDataWithoutImages);
+app.get('/cabDataForDeletion', [auth, cache(2)], cabUpdationController.cabDataForDeletion);
 app.post('/updateCab', auth, cabUpdationController.updateCab);
 app.post('/deleteCab', auth, cabUpdationController.deleteCab);
 app.post('/getCabImage', auth, cabUpdationController.cabImage);

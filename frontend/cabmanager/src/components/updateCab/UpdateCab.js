@@ -57,7 +57,7 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
     const checkAssignedDriver = useCallback(async () => {
         if (!currUserData) changeDriverAssigned(false);
         try {
-            const values = { registration_no: currUserData.registration_no };
+            const values = { registration_no: currUserData };
             let response = await axios.post(`${API_URL}/checkDriverAssigned`, JSON.stringify(values), {
                 headers: {
                     "Content-Type": "application/json",

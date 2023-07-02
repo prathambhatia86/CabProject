@@ -11,6 +11,7 @@ import { RotatingLines } from 'react-loader-spinner'
 const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
 export default function DeleteDriver(props) {
+
 	const user = useSelector(state => state.user.user);
 
 	const [loading, changeLoading] = useState(true);
@@ -63,8 +64,7 @@ export default function DeleteDriver(props) {
 
 	useEffect(() => {
 		getResponse();
-
-	}, [formState, getResponse])
+	}, [formState, getResponse]);
 	useEffect(() => {
 
 		let timer = setTimeout(() => {
@@ -121,15 +121,15 @@ export default function DeleteDriver(props) {
 				data: JSON.stringify(values)
 			}
 			)
-			if (response && response.status == 200)
+			if (response && response.status == 200) {
 				toast("form deleted");   //alert
+			}
 			else
 				toast("something wrong has occured");
 		} catch (err) {
 			toast("Some error occured, Please try again later");
 		}
 		changeFormState(false);
-
 	}
 	const ConfirmResponse = () => {    //confirmation
 		confirmAlert({
