@@ -1,11 +1,12 @@
-FROM node:lts-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
 COPY . .
 
+RUN npm run installs
 
-USER node
+
 
 CMD [ "npm", "run", "server" ]
 

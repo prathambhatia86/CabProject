@@ -13,6 +13,7 @@
     "watch": "concurrently 'npm:server' 'npm:client' ",
     "deploy": "npm run build --prefix frontend && npm start --prefix backend",
     "test": "jest --detectOpenHandles",
+    "build":"npm run build --prefix frontend",
     "install-backend":"cd backend &&npm i",
     "install-frontend":"cd frontend/cabmanager &&npm i",
     "installs":"npm run install-backend && npm run install-frontend"
