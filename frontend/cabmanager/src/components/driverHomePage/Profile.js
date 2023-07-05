@@ -4,6 +4,7 @@ import styles from "../../css/driverPageAdmin.module.css"
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import { change } from '../store/user';
+import { motion } from "framer-motion"
 
 const API_URL = 'https://localhost:5000';
 
@@ -132,69 +133,77 @@ export default function Profile() {
     }
 
     return (
-        <div className="card mx-5 px-5 mb-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", height: "95%" }} >
-            <div className='h3 text-black fw-bolder text-center py-5'>
-                Your Profile
-            </div>
-            <ToastContainer />
-            <div className="col-lg-12">
-                <div className="card mb-5 " >
-                    <div className="card-body">
-                        <div className="row">
-                            <div className="col-sm-3">
-                                <label htmlFor="DriverName" className="mb-0 fw-bolder text-center">Name</label>
+        <motion.section initial={{ scale: 0 }}
+            animate={{ rotate: 0, scale: 1 }}
+            transition={{
+                ease: "linear",
+                duration: 1,
+                x: { duration: 1 }
+            }}>
+            <div className="card mx-5 px-5 mb-4" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)", height: "95%" }} >
+                <div className='h3 text-black fw-bolder text-center py-5'>
+                    Your Profile
+                </div>
+                <ToastContainer />
+                <div className="col-lg-12">
+                    <div className="card mb-5 " >
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-sm-3">
+                                    <label htmlFor="DriverName" className="mb-0 fw-bolder text-center">Name</label>
+                                </div>
+                                <div className="col-sm-9">
+                                    <input type="text" data-toggle="tooltip" title="NOT allowed to edit names" name="name" className="form-control" id="DriverName" value={name} placeholder="Enter Name" onChange={nameAltered} readOnly />
+                                </div>
                             </div>
-                            <div className="col-sm-9">
-                                <input type="text" data-toggle="tooltip" title="NOT allowed to edit names" name="name" className="form-control" id="DriverName" value={name} placeholder="Enter Name" onChange={nameAltered} readOnly />
+                            <span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct Name</span>
+                            <hr />
+                            <div className="row">
+                                <div className="col-sm-3">
+                                    <label htmlFor="DriverEmail" className="mb-0 fw-bolder text-center">Email</label>
+                                </div>
+                                <div className="col-sm-9">
+                                    <input type="email" className="form-control" id="DriverEmail" name="email" value={email} placeholder="Enter Email" readOnly />
+                                </div>
                             </div>
-                        </div>
-                        <span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidName == true ? 'block' : 'none') }}>Please enter the correct Name</span>
-                        <hr />
-                        <div className="row">
-                            <div className="col-sm-3">
-                                <label htmlFor="DriverEmail" className="mb-0 fw-bolder text-center">Email</label>
+                            <span className={`help-block text-info text-center ${styles.blink}`} style={{ display: 'block' }}>Emails Cannot be Edited</span>
+                            <hr />
+                            <div className="row">
+                                <div className="col-sm-3">
+                                    <label htmlFor="DriverContact" className="mb-0 fw-bolder text-center">Phone Number</label>
+                                </div>
+                                <div className="col-sm-9">
+                                    <input type="text" className="form-control" id="DriverContact" name="contact" value={contact} placeholder="Enter Contact" onChange={contactAltered} pattern="[0-9]{10}" readOnly />
+                                </div>
                             </div>
-                            <div className="col-sm-9">
-                                <input type="email" className="form-control" id="DriverEmail" name="email" value={email} placeholder="Enter Email" readOnly />
+                            <span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidContact == true ? 'block' : 'none') }}>Please enter the correct Contact</span>
+                            <hr />
+                            <div className='text-center my-2'>
+                                <div className="btn-group align-content-center" role="group" aria-label="Basic example">
+                                    <button type="button" className="btn btn-primary rounded mx-1" onClick={enableEditing} disabled={editingMode}>Edit Details</button>
+                                    <button type="button" className="btn btn-primary rounded mx-1" data-bs-toggle="modal" data-bs-target="#Changepwd">Change Password</button>
+                                    <input type="submit" value="Save Changes" className="btn btn-primary rounded mx-1" onClick={saveChanges} disabled={editingMode ? (detailsChanged || invalidDetails) : true} />
+                                </div>
                             </div>
-                        </div>
-                        <span className={`help-block text-info text-center ${styles.blink}`} style={{ display: 'block' }}>Emails Cannot be Edited</span>
-                        <hr />
-                        <div className="row">
-                            <div className="col-sm-3">
-                                <label htmlFor="DriverContact" className="mb-0 fw-bolder text-center">Phone Number</label>
-                            </div>
-                            <div className="col-sm-9">
-                                <input type="text" className="form-control" id="DriverContact" name="contact" value={contact} placeholder="Enter Contact" onChange={contactAltered} pattern="[0-9]{10}" readOnly />
-                            </div>
-                        </div>
-                        <span className={`help-block text-danger text-center ${styles.blink}`} style={{ display: (invalidContact == true ? 'block' : 'none') }}>Please enter the correct Contact</span>
-                        <hr />
-                        <div className='text-center my-2'>
-                            <div className="btn-group align-content-center" role="group" aria-label="Basic example">
-                                <button type="button" className="btn btn-primary rounded mx-1" onClick={enableEditing} disabled={editingMode}>Edit Details</button>
-                                <button type="button" className="btn btn-primary rounded mx-1" data-bs-toggle="modal" data-bs-target="#Changepwd">Change Password</button>
-                                <input type="submit" value="Save Changes" className="btn btn-primary rounded mx-1" onClick={saveChanges} disabled={editingMode ? (detailsChanged || invalidDetails) : true} />
-                            </div>
-                        </div>
-                        <div className='modal' id="Changepwd">
-                            <div className="modal-dialog modal-dialog-centered">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="staticBackdropLabel">Change Password</h5>
-                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <label htmlFor="OldPassword" className="mb-0 fw-bolder text-center">Enter Old Password</label>
-                                        <input type="password" className="form-control" id="OldPassword" name="OldPassword" onChange={oldAltered} placeholder="Enter Password" />
-                                        <label htmlFor="NewPassword" className="mb-0 fw-bolder text-center">Enter New Password</label>
-                                        <input type="password" className="form-control" id="NewPassword" name="NewPassword" onChange={newAltered} placeholder="Enter Password" />
-                                        <label htmlFor="confirmPassword" className="mb-0 fw-bolder text-center">Confirm new Password</label>
-                                        <input type="password" className="form-control" id="confirmPassword" name="NewPassword" onChange={confirmAltered} placeholder="Enter Password" />
-                                        <button type="button" className="btn btn-primary" onClick={ChangePassword} disabled={!allowPasswordChange}>ChangePassword</button>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" id='close' className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <div className='modal' id="Changepwd">
+                                <div className="modal-dialog modal-dialog-centered">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id="staticBackdropLabel">Change Password</h5>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <label htmlFor="OldPassword" className="mb-0 fw-bolder text-center">Enter Old Password</label>
+                                            <input type="password" className="form-control" id="OldPassword" name="OldPassword" onChange={oldAltered} placeholder="Enter Password" />
+                                            <label htmlFor="NewPassword" className="mb-0 fw-bolder text-center">Enter New Password</label>
+                                            <input type="password" className="form-control" id="NewPassword" name="NewPassword" onChange={newAltered} placeholder="Enter Password" />
+                                            <label htmlFor="confirmPassword" className="mb-0 fw-bolder text-center">Confirm new Password</label>
+                                            <input type="password" className="form-control" id="confirmPassword" name="NewPassword" onChange={confirmAltered} placeholder="Enter Password" />
+                                            <button type="button" className="btn btn-primary" onClick={ChangePassword} disabled={!allowPasswordChange}>ChangePassword</button>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" id='close' className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -202,6 +211,6 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.section>
     )
 }

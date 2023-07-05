@@ -3,7 +3,7 @@ import React from 'react'
 export default function CabDetail({ cab, driver }) {
     return (
         <div className="row g-0 justify-content-center">
-            <div className="col-md-4 col-lg-3 col-sm-8 mx-2 ">
+            <div className="col-md-4 col-lg-3 col-sm-8 mx-2 " >
                 <img src={cab.image} className="img-fluid rounded-start px-4 py-1" alt="..." style={{ width: '100%' }} />
             </div>
             <div className="col-md-8 px-5">

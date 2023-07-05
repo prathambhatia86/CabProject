@@ -44,7 +44,7 @@ export default function CabCard({ data, index, clicked }) {
                 </div>
             }
             {cab &&
-                <div className='my-1 g-0' style={{ display: 'flex' }} onClick={() => clicked(reg)}>
+                <div className='my-1 g-0 rounded' style={{ display: 'flex', border: '0.5px solid' }} onClick={() => clicked(reg)}>
                     <div className="col-6">
                         <img src={cab.image} className="img-fluid rounded-start" alt="..." />
                     </div>

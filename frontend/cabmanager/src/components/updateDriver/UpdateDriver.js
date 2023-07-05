@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSelector } from 'react-redux'
 import DriverAssignedCab from "./DriverAssignedCab";
 import SearchCab from "./SearchCab";
+import { motion } from "framer-motion"
 
 const API_URL = 'https://localhost:5000';
 /* eslint-disable eqeqeq */
@@ -89,7 +90,13 @@ export default function UpdateDriverAssignments(props) {
     //Return if not authorised
     if (!user || !user.isAuth) return;
     return (
-        <>
+        <motion.section initial={{ scale: 0 }}
+            animate={{ rotate: 0, scale: 1 }}
+            transition={{
+                ease: "linear",
+                duration: 1,
+                x: { duration: 1 }
+            }}>
             <ToastContainer />
             {userData && (
                 <>
@@ -152,6 +159,6 @@ export default function UpdateDriverAssignments(props) {
                     </section>
                 </>)
             }
-        </>
+        </motion.section>
     )
 }

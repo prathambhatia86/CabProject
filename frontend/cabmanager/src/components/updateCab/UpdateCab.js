@@ -10,6 +10,7 @@ import SearchDriver from "./SearchDriver";
 import CabAssignedDriver from "./CabAssignedDriver";
 import { RotatingLines } from 'react-loader-spinner';
 import { FixedSizeList } from "react-window";
+import { motion } from "framer-motion"
 const API_URL = 'https://localhost:5000';
 
 export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
@@ -101,79 +102,88 @@ export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
                     />
                 </div>
             }
-            {!cabsLoading &&
-                <>
-                    <ToastContainer />
-                    <section className="vh-100" style={{ display: 'block' }}>
-                        <div className="row">
-                            <div className="container">
-                                <div className="row d-flex justify-content-center">
-                                    {!currUserData &&
-                                        <div className="col-xl-11">
-                                            <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
-                                                <h2 className="text-yellow mb-4 py-4 text-center me-5" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>
-                                                    {goback && <button className='btn btn-danger' onClick={goback}>&lt;</button>}
-                                                    Select a Cab
-                                                </h2>
-                                                <div className="card-body text-center">
-                                                    {userData &&
-                                                        <>
-                                                            <Typeahead
-                                                                id="DriverIds"
-                                                                onChange={userDataSelectedFunction}
-                                                                options={userData}
-                                                                placeholder="Search For Cab"
-                                                                selected={selectedUser}
-                                                            />
-                                                            <hr />
-                                                        </>
-                                                    }
-                                                    {!userData && toast("Failed to fetch any cab")}
-                                                    <div className="card mb-3" >
-                                                        <div className="row g-0">
-                                                            {userData &&
-                                                                <div className="row">
-                                                                    <div className="text-center col-md-2 col-lg-3">
-                                                                    </div>
-                                                                    <div className="text-center col-md-8 col-lg-6">
-                                                                        <FixedSizeList
-                                                                            className="List d-flex"
-                                                                            height={500}
-                                                                            itemCount={userData.length}
-                                                                            itemSize={50}
-                                                                            itemData={userData}
-                                                                            width='100%'
-                                                                        >
+            <motion.section initial={{ scale: 0 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{
+                    ease: "linear",
+                    duration: 1,
+                    x: { duration: 1 }
+                }}>
 
-                                                                            {(props) => CabCard({ ...props, clicked: (elem) => changeCurrUserData(elem) })}
+                {!cabsLoading &&
+                    <>
+                        <ToastContainer />
+                        <section className="vh-100" style={{ display: 'block' }}>
+                            <div className="row">
+                                <div className="container">
+                                    <div className="row d-flex justify-content-center">
+                                        {!currUserData &&
+                                            <div className="col-xl-11">
+                                                <div className="card my-2" style={{ borderRadius: '15px', boxShadow: "2px 2px 4px rgb(104, 104, 0)" }}>
+                                                    <h2 className="text-yellow mb-4 py-4 text-center me-5" style={{ textShadow: "0.5px 0.5px 0.5px Yellow" }}>
+                                                        {goback && <button className='btn btn-danger' onClick={goback}>&lt;</button>}
+                                                        Select a Cab
+                                                    </h2>
+                                                    <div className="card-body text-center">
+                                                        {userData &&
+                                                            <>
+                                                                <Typeahead
+                                                                    id="DriverIds"
+                                                                    onChange={userDataSelectedFunction}
+                                                                    options={userData}
+                                                                    placeholder="Search For Cab"
+                                                                    selected={selectedUser}
+                                                                />
+                                                                <hr />
+                                                            </>
+                                                        }
+                                                        {!userData && toast("Failed to fetch any cab")}
+                                                        <div className="card mb-3" >
+                                                            <div className="row g-0">
+                                                                {userData &&
+                                                                    <div className="row">
+                                                                        <div className="text-center col-md-2 col-lg-3">
+                                                                        </div>
+                                                                        <div className="text-center col-md-8 col-lg-6">
+                                                                            <FixedSizeList
+                                                                                className="List d-flex"
+                                                                                height={500}
+                                                                                itemCount={userData.length}
+                                                                                itemSize={50}
+                                                                                itemData={userData}
+                                                                                width='100%'
+                                                                            >
 
-                                                                        </FixedSizeList>
+                                                                                {(props) => CabCard({ ...props, clicked: (elem) => changeCurrUserData(elem) })}
+
+                                                                            </FixedSizeList>
+                                                                        </div>
+                                                                        <div className="text-center col-md-2 col-lg-3">
+                                                                        </div>
                                                                     </div>
-                                                                    <div className="text-center col-md-2 col-lg-3">
-                                                                    </div>
-                                                                </div>
-                                                            }
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
-                                    {currUserData && <SelectedCab registration_no={currUserData} goback={() => { changeCurrUserData(null); changeDriverAssigned(false); }} />}
+                                        }
+                                        {currUserData && <SelectedCab registration_no={currUserData} goback={() => { changeCurrUserData(null); changeDriverAssigned(false); }} />}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="container">
-                                <div className="row d-flex justify-content-center  h-100">
-                                    {/* Depending upon any cab is assigned or not we will either show that cab or show a search component */}
-                                    {currUserData && (driverAssigned ? <CabAssignedDriver cab={currUserData} onDeassign={() => changeDriverAssigned(null)} /> : <SearchDriver cab={currUserData} onAssignment={() => changeDriverAssigned(true)} />)}
+                            <div className="row">
+                                <div className="container">
+                                    <div className="row d-flex justify-content-center  h-100">
+                                        {/* Depending upon any cab is assigned or not we will either show that cab or show a search component */}
+                                        {currUserData && (driverAssigned ? <CabAssignedDriver cab={currUserData} onDeassign={() => changeDriverAssigned(null)} /> : <SearchDriver cab={currUserData} onAssignment={() => changeDriverAssigned(true)} />)}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-                </>
-            }
+                        </section>
+                    </>
+                }
+            </motion.section>
         </>
     )
 }
