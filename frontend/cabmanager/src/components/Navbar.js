@@ -13,10 +13,10 @@ export default function Navbar(props) {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item active">
-                            <div className="nav-link" onClick={() => { props.changeCurr(0); }}>Admin Login<span className="sr-only">{!props.curr ? "(current)" : ""}</span></div>
+                            <div className="nav-link" style={{cursor:'pointer'}} onClick={() => { props.changeCurr(0); }}>Admin Login<span className="sr-only">{!props.curr ? "(current)" : ""}</span></div>
                         </li>
                         <li className="nav-item">
-                            <div className="nav-link" onClick={() => { props.changeCurr(1); }}>Drivers Login<span className="sr-only">{props.curr ? "(current)" : ""}</span></div>
+                            <div className="nav-link" style={{cursor:'pointer'}} onClick={() => { props.changeCurr(1); }}>Drivers Login<span className="sr-only">{props.curr ? "(current)" : ""}</span></div>
                         </li>
                     </ul>
                 </div>
