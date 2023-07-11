@@ -8,7 +8,7 @@ import axios from "axios";
 import { useSelector } from 'react-redux'
 import { motion } from "framer-motion";
 import { RotatingLines } from 'react-loader-spinner'
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 /* eslint-disable eqeqeq */
 export default function DeleteDriver(props) {
 

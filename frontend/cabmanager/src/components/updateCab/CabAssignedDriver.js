@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import SearchDriver from "./SearchDriver";
 import DriverDetail from "./DriverDetail";
 import { RotatingLines } from 'react-loader-spinner'
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function CabAssignedDriver({ cab, onDeassign }) {
     const user = useSelector(state => state.user.user);

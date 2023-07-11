@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import { motion } from "framer-motion";
 import { RotatingLines } from 'react-loader-spinner'
 import styles from "../../css/driverPageAdmin.module.css"
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 /* eslint-disable eqeqeq */
 export default function UpdateDriver(props) {
 	const user = useSelector(state => state.user.user);

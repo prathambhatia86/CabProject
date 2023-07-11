@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import axios from 'axios';
 import { motion } from "framer-motion";
 //Url to make API request from our server
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 /* eslint-disable eqeqeq */
 export default function Cab(props) {
 	const user = useSelector(state => state.user.user);

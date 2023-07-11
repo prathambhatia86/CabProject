@@ -3,7 +3,7 @@ import { Form, useNavigate } from 'react-router-dom'
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import styles from "../../css/driverPageAdmin.module.css"
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function Forgot(props) {
     let navigate = useNavigate();

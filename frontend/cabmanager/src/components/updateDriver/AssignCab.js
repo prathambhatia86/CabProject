@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { RotatingLines } from 'react-loader-spinner';
 import 'react-toastify/dist/ReactToastify.css';
 
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 /* eslint-disable eqeqeq */
 
 export default function AssignCab({ registration_no, goback, driver, onAssignment }) {

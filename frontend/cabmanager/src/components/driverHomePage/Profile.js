@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { change } from '../store/user';
 import { motion } from "framer-motion"
 
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function Profile() {
     const user = useSelector(state => state.user.user);

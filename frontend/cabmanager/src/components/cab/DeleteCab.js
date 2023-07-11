@@ -10,7 +10,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import { motion } from "framer-motion";
 import { RotatingLines } from 'react-loader-spinner';
 //Url to make API request from our server
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 /* eslint-disable eqeqeq */
 export default function DeleteCab(props) {
 	const user = useSelector(state => state.user.user);

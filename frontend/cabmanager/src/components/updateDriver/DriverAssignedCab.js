@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import SearchCab from "./SearchCab";
 import CabDetail from "../cabCard/cabDetail";
 import { RotatingLines } from 'react-loader-spinner';
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 
 export default function DriverAssignedCab({ driver, onDeassign }) {

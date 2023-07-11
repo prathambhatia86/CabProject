@@ -11,7 +11,7 @@ import CabAssignedDriver from "./CabAssignedDriver";
 import { RotatingLines } from 'react-loader-spinner';
 import { FixedSizeList } from "react-window";
 import { motion } from "framer-motion"
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function UpdateCabAssignments({ driver, goback, onAssignment }) {
     const user = useSelector(state => state.user.user);

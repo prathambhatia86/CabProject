@@ -10,7 +10,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 //Url to make API request from our server
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 /* eslint-disable eqeqeq */
 export default function UpdateCab(props) {
 	const user = useSelector(state => state.user.user);

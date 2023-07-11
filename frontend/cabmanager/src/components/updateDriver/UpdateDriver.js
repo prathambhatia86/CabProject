@@ -8,7 +8,7 @@ import DriverAssignedCab from "./DriverAssignedCab";
 import SearchCab from "./SearchCab";
 import { motion } from "framer-motion"
 
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 /* eslint-disable eqeqeq */
 
 export default function UpdateDriverAssignments(props) {

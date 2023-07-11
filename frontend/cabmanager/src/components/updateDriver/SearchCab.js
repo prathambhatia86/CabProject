@@ -8,7 +8,7 @@ import CabCard from './CabCard';
 import AssignCab from "./AssignCab";
 import { RotatingLines } from 'react-loader-spinner';
 import { FixedSizeList } from "react-window";
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function SearchCab({ driver, goback, onAssignment }) {
     const user = useSelector(state => state.user.user);

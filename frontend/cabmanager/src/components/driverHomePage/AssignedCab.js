@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import { motion } from "framer-motion";
 
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function AssignedCab() {
     const user = useSelector(state => state.user.user);

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useSelector } from 'react-redux'
 import { RotatingLines } from 'react-loader-spinner'
 import DriverDetail from "./DriverDetail";
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function SearchDriver({ cab, onAssignment, goback }) {
     const user = useSelector(state => state.user.user);

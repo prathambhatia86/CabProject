@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import axios from "axios";
 
-const API_URL = 'https://localhost:5000';
+const API_URL = '';
 
 export default function CabCard({ data, index, clicked }) {
     const user = useSelector(state => state.user.user);
